@@ -35,7 +35,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-	return
+	    return
     
     def autonomousInit(self): 
         return
