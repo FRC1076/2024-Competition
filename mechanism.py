@@ -14,6 +14,15 @@ class Mechanism:
         #motors in the shooter
         self.leftShootingMotor = rev.CANSparkMax(99,"brushless") #fix the device id later
         self.rightShootingMotor = rev.CANSparkMax(99,"brushless")
+
+        #intake motor (pulls the notes in)
+        self.intakeMotor = rev.CANSparkMax(99,"brushless")
+
+        #intake up or down motor
+        self.intakeUpDownMotor = rev.CANSparkMax(99,"brushless")
+
+        #motor that moves the hood
+        self.moveHoodMotor = rev.CANSparkMax(99,"brushless")
         return
     
     def moveHood(self,position):
@@ -35,6 +44,12 @@ class Mechanism:
         #action is intake or eject
 
         #L1 is intake, R1 is eject
+        return
+    
+    def intakeUpDown(self,position):
+        #move the intake piece up or down
+
+        #D-pad up for up, D-pad down for down
         return
 
     def transportNote(self,direction):
