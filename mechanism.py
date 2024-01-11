@@ -5,8 +5,17 @@ from wpimath.controller import PIDController
 import rev
 from wpilib import DoubleSolenoid
 import ctre
+import rev
 
 class Mechanism:
+    def __init__(self, config) -> None:
+        self.config = config
+
+        #motors in the shooter
+        self.leftShootingMotor = rev.CANSparkMax(99,"brushless") #fix the device id later
+        self.rightShootingMotor = rev.CANSparkMax(99,"brushless")
+        return
+    
     def moveHood(self,position):
         #move the hood (part that allows scoring in the amp)
         #position is forward or back
@@ -18,6 +27,7 @@ class Mechanism:
         #do the sequence that shoots the note
 
         #a shoots the note
+
         return
 
     def intakeNote(self,action):
