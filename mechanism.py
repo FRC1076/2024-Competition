@@ -7,4 +7,28 @@ from wpilib import DoubleSolenoid
 import ctre
 
 class Mechanism:
-    pass
+    def moveHood(self,position):
+        #move the hood (part that allows scoring in the amp)
+        #position is forward or back
+        
+        #b is hood back, x is hood forward
+        pass
+
+    def shootNote(self):
+        #do the sequence that shoots the note
+
+        #a shoots the note
+        pass
+
+    def intakeNote(self,action):
+        #intake a note
+        #action is intake or eject
+
+        #L1 is intake, R1 is eject
+        pass
+
+    def transportNote(self,direction):
+        #direction is up or down
+
+        #L2 is up, R2 is down
+        pass
