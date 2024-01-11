@@ -12,23 +12,23 @@ class Mechanism:
         #position is forward or back
         
         #b is hood back, x is hood forward
-        pass
+        return
 
     def shootNote(self):
         #do the sequence that shoots the note
 
         #a shoots the note
-        pass
+        return
 
     def intakeNote(self,action):
         #intake a note
         #action is intake or eject
 
         #L1 is intake, R1 is eject
-        pass
+        return
 
     def transportNote(self,direction):
         #direction is up or down
 
         #L2 is up, R2 is down
-        pass
+        return
