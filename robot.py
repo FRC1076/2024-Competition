@@ -7,12 +7,14 @@ import rev
 import ctre
 
 from controller import Controller
+from mechanism import Mechanism
 
 class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
         controllers = self.controllersInit(robotconfig["CONTROLLERS"])
         self.driver = controllers[0]
         self.operator = controllers[1]
+        self.mechanism = Mechanism(robotconfig["MECHANISM"])
         return
     
     def controllerInit(self, config):
@@ -35,7 +37,11 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        if self.operator.xboxController.getAButton:
+            self.mechanism.shootNote()
+        
         return
+
     
     def autonomousInit(self): 
         return
