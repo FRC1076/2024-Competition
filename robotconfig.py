@@ -1,6 +1,3 @@
-from collections import namedtuple
-import wpilib
-
 controllerConfig = {
     "DRIVER": {
         "ID": 0,
@@ -17,14 +14,14 @@ controllerConfig = {
 }
 
 mechanismConfig = {
-    "RIGHT_SHOOTING_MOTOR_ID": 1,
-    "LEFT_SHOOTING_MOTOR_ID": 2,
-    "RIGHT_EJECT_SPEED": 0.1,
-    "LEFT_EJECT_SPEED": -0.1,
+    "RIGHT_SHOOTING_MOTOR_ID": 99,
+    "LEFT_SHOOTING_MOTOR_ID": 99,
+    "RIGHT_EJECT_SPEED": -1.0,
+    "LEFT_EJECT_SPEED": 0.85,
 }
 
 robotConfig = {
     "CONTROLLERS": controllerConfig,
-    "MECHANISM": mechanismConfig
+    "MECHANISM": mechanismConfig,
 }
 
