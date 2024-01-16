@@ -1,3 +1,5 @@
+DEADZONE = 0.1
+
 controllerConfig = {
     "DRIVER": {
         "ID": 0,
@@ -14,8 +16,8 @@ controllerConfig = {
 }
 
 mechanismConfig = {
-    "RIGHT_SHOOTING_MOTOR_ID": 99,
-    "LEFT_SHOOTING_MOTOR_ID": 99,
+    "LEFT_SHOOTING_MOTOR_ID": 61,
+    "RIGHT_SHOOTING_MOTOR_ID": 62,
     "RIGHT_EJECT_SPEED": -1.0,
     "LEFT_EJECT_SPEED": 0.85,
 }

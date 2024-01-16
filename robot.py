@@ -6,15 +6,16 @@ from wpilib import interfaces
 import rev
 import ctre
 
+from robotconfig import robotConfig
 from controller import Controller
 from mechanism import Mechanism
 
 class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
-        controllers = self.controllersInit(robotconfig["CONTROLLERS"])
+        controllers = self.controllerInit(robotConfig["CONTROLLERS"])
         self.driver = controllers[0]
         self.operator = controllers[1]
-        self.mechanism = Mechanism(robotconfig["MECHANISM"])
+        self.mechanism = Mechanism(robotConfig["MECHANISM"])
         return
     
     def controllerInit(self, config):
@@ -37,9 +38,11 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        if self.operator.xboxController.getAButton:
+        if self.operator.xboxController.getAButton():
             self.mechanism.shootNote()
-        
+            print("A button pressed")
+        else:
+            self.mechanism.stopShooting()
         return
 
     
