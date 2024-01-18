@@ -38,9 +38,22 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        #intake motor
         if self.operator.xboxController.getAButton():
+            self.mechanism.intakeNote()
+
+        #indexer motor
+        elif self.operator.xboxController.getXButton():
+            self.mechanism.transportNote()
+
+        #shooter motor and hood
+        elif self.operator.xboxController.getBButton():
             self.mechanism.shootNote()
-            print("A button pressed")
+
+        #toggle hood
+        elif self.operator.xboxController.getYButton():
+            self.mechanism.moveHood()
+
         else:
             self.mechanism.stopShooting()
         return

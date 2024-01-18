@@ -11,57 +11,41 @@ class Mechanism:
     def __init__(self, config) -> None:
         self.config = config
         motor_type_brushless = rev.CANSparkMaxLowLevel.MotorType.kBrushless
+        motor_type_brushed = rev.CANSparkMaxLowLevel.MotorType.kBrushed
 
-        #motors in the shooter
-        self.leftShootingMotor = rev.CANSparkMax(config["LEFT_SHOOTING_MOTOR_ID"], motor_type_brushless) #fix the device id later
-        self.rightShootingMotor = rev.CANSparkMax(config["RIGHT_SHOOTING_MOTOR_ID"], motor_type_brushless)
+        self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
+        self.transportMotor = rev.CANSparkMax(config["TRANSPORT_MOTOR_ID"], motor_type_brushed)
+        self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
+        self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
+        self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
+        return
 
-        #intake motor (pulls the notes in)
-        #self.intakeMotor = rev.CANSparkMax(3, motor_type_brushless)
+    #action is intake or eject, L1 is intake, R1 is eject
+    def intakeNote(self,action):
+        self.intakeMotor.set(self.config["INTAKE_SPEED"])
+        return
 
-        #intake up or down motor
-        #self.intakeUpDownMotor = rev.CANSparkMax(4, motor_type_brushless)
-
-        #motor that moves the hood
-        #self.moveHoodMotor = rev.CANSparkMax(5, motor_type_brushless)
+    #moves note across the indexer
+    def transportNote(self,direction):
+        self.transportMotor.set(self.config["TRANSPORT_SPEED"])
         return
     
-    def moveHood(self,position):
-        #move the hood (part that allows scoring in the amp)
-        #position is forward or back
-        
-        #b is hood back, x is hood forward
-        return
-
+    #do the sequence that shoots the note
+    #a shoots the note
     def shootNote(self):
-        #do the sequence that shoots the note
-        print("shooting")
-        #a shoots the note
-        self.leftShootingMotor.set(self.config["LEFT_EJECT_SPEED"])
-        self.rightShootingMotor.set(self.config["RIGHT_EJECT_SPEED"])
+        self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
+        self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
+    #move the hood (part that allows scoring in the amp)
+    #position is forward or back
+    #b is hood back, x is hood forward
+    def moveHood(self,position):
+        self.moveHoodMotor.set(self.config["HOOD_SPEED"])
+        return
+    
+    #forces stop because motor doesn't always go to 0 by itself
     def stopShooting(self):
         self.leftShootingMotor.set(0)
         self.rightShootingMotor.set(0)
-        return
-
-    def intakeNote(self,action):
-        #intake a note
-        #action is intake or eject
-        print("hola amogis :)")
-
-        #L1 is intake, R1 is eject
-        return
-    
-    def intakeUpDown(self,position):
-        #move the intake piece up or down
-
-        #D-pad up for up, D-pad down for down
-        return
-
-    def transportNote(self,direction):
-        #direction is up or down
-
-        #L2 is up, R2 is down
         return

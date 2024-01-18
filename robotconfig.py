@@ -15,11 +15,18 @@ controllerConfig = {
     }
 }
 
+#all unknown values equal 0
 mechanismConfig = {
-    "LEFT_SHOOTING_MOTOR_ID": 61,
-    "RIGHT_SHOOTING_MOTOR_ID": 62,
-    "RIGHT_EJECT_SPEED": -1.0,
-    "LEFT_EJECT_SPEED": 0.85,
+    "INTAKE_MOTOR_ID": 0,
+    "INTAKE_SPEED": 0,
+    "TRANSPORT_MOTOR_ID": 0,
+    "TRANSPORT_SPEED": 0,
+    "SHOOTER_LEFT_MOTOR_ID": 61,
+    "SHOOTER_RIGHT_MOTOR_ID": 62,
+    "SHOOTER_LEFT_SPEED": 0.85,
+    "SHOOTER_RIGHT_SPEED": -1.0,
+    "HOOD_MOTOR_ID": 0,
+    "HOOD_SPEED": 0,
 }
 
 robotConfig = {
