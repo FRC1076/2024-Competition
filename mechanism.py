@@ -6,13 +6,15 @@ import rev
 from wpilib import DoubleSolenoid
 import ctre
 import rev
+from beambreak import BeamBreak
 
 class Mechanism:
     def __init__(self, config) -> None:
         self.config = config
+
         motor_type_brushless = rev.CANSparkMaxLowLevel.MotorType.kBrushless
         motor_type_brushed = rev.CANSparkMaxLowLevel.MotorType.kBrushed
-
+        self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
         self.transportMotor = rev.CANSparkMax(config["TRANSPORT_MOTOR_ID"], motor_type_brushed)
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
@@ -23,6 +25,8 @@ class Mechanism:
     #action is intake or eject, L1 is intake, R1 is eject
     def intakeNote(self,action):
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
+        if self.intakeBeamBreak.beamBroken():
+            print("note inside intake")
         return
 
     #moves note across the indexer

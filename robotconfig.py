@@ -17,6 +17,7 @@ controllerConfig = {
 
 #all unknown values equal 0
 mechanismConfig = {
+    "INTAKE_BEAMBREAK_PIN": 0,
     "INTAKE_MOTOR_ID": 0,
     "INTAKE_SPEED": 0,
     "TRANSPORT_MOTOR_ID": 0,
@@ -27,6 +28,7 @@ mechanismConfig = {
     "SHOOTER_RIGHT_SPEED": -1.0,
     "HOOD_MOTOR_ID": 0,
     "HOOD_SPEED": 0,
+    
 }
 
 robotConfig = {

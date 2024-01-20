@@ -55,16 +55,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.moveHood()
 
         else:
-            self.mechanism.stopShooting()
-
-
-        beam = wpilib.DigitalInput(0)
-        option = beam.get()
-        if option:
-            print("connected!")  
-        else:
-            print("broken!")  
-        
+            self.mechanism.stopShooting()   
         return
 
     
