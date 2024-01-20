@@ -23,7 +23,7 @@ class Mechanism:
         return
 
     #action is intake or eject, L1 is intake, R1 is eject
-    def intakeNote(self,action):
+    def intakeNote(self):
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
         if self.intakeBeamBreak.beamBroken():
             print("note inside intake")
