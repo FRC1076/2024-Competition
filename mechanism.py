@@ -16,6 +16,8 @@ class Mechanism:
         self.leftShootingMotor = rev.CANSparkMax(config["LEFT_SHOOTING_MOTOR_ID"], motor_type_brushless) #fix the device id later
         self.rightShootingMotor = rev.CANSparkMax(config["RIGHT_SHOOTING_MOTOR_ID"], motor_type_brushless)
 
+        self.leftShootingEncoder = self.leftShootingMotor.getEncoder()
+        self.rightShootingEncoder = self.rightShootingMotor.getEncoder()
         #intake motor (pulls the notes in)
         #self.intakeMotor = rev.CANSparkMax(3, motor_type_brushless)
 
@@ -35,7 +37,7 @@ class Mechanism:
 
     def shootNote(self):
         #do the sequence that shoots the note
-        print("shooting")
+
         #a shoots the note
         self.leftShootingMotor.set(self.config["LEFT_EJECT_SPEED"])
         self.rightShootingMotor.set(self.config["RIGHT_EJECT_SPEED"])
@@ -45,6 +47,9 @@ class Mechanism:
         self.leftShootingMotor.set(0)
         self.rightShootingMotor.set(0)
         return
+
+    def shootingMotorRPMs(self):
+        return self.leftShootingEncoder.getVelocity(), self.rightShootingEncoder.getVelocity()
 
     def intakeNote(self,action):
         #intake a note
