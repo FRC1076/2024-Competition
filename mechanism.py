@@ -1,3 +1,4 @@
+
 import wpilib
 import wpilib.drive
 import wpimath.controller
@@ -16,10 +17,11 @@ class Mechanism:
         motor_type_brushed = rev.CANSparkMaxLowLevel.MotorType.kBrushed
         self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
-        self.transportMotor = rev.CANSparkMax(config["TRANSPORT_MOTOR_ID"], motor_type_brushed)
+        self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushed)
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
-        self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
+        # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
+        self.sprocketMotor = rev.CANSparkMax(config["SPROCKET_MOTOR_ID"], motor_type_brushless)
         return
 
     #action is intake or eject, L1 is intake, R1 is eject
@@ -27,29 +29,34 @@ class Mechanism:
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
         if self.intakeBeamBreak.beamBroken():
             print("note inside intake")
+        self.indexMotor.set(self.config["INDEX_SPEED"])
         return
-
-    #moves note across the indexer
-    def transportNote(self,direction):
-        self.transportMotor.set(self.config["TRANSPORT_SPEED"])
+    
+    def ejectNote(self):
+        self.intakeMotor.set(-1*self.config["INTAKE_SPEED"])
         return
     
     #do the sequence that shoots the note
     #a shoots the note
-    def shootNote(self):
+    def launchNote(self):
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
-    #move the hood (part that allows scoring in the amp)
-    #position is forward or back
-    #b is hood back, x is hood forward
-    def moveHood(self,position):
-        self.moveHoodMotor.set(self.config["HOOD_SPEED"])
+    def launchReverse(self):
+        self.leftShootingMotor.set(-1*self.config["SHOOTER_LEFT_SPEED"])
+        self.rightShootingMotor.set(-1*self.config["SHOOTER_RIGHT_SPEED"])
         return
     
     #forces stop because motor doesn't always go to 0 by itself
     def stopShooting(self):
         self.leftShootingMotor.set(0)
         self.rightShootingMotor.set(0)
+        return
+    def sprocketUp(self): #moves the shooter away from the intake
+        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_UP"])
+        return
+    
+    def sprocketDown(self): #moves the shooter back to the intake
+        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
         return

@@ -1,3 +1,4 @@
+
 DEADZONE = 0.1
 
 controllerConfig = {
@@ -20,15 +21,15 @@ mechanismConfig = {
     "INTAKE_BEAMBREAK_PIN": 0,
     "INTAKE_MOTOR_ID": 0,
     "INTAKE_SPEED": 0,
-    "TRANSPORT_MOTOR_ID": 1,
-    "TRANSPORT_SPEED": 0,
+    "INDEX_MOTOR_ID": 1,
+    "INDEX_SPEED": 0,
     "SHOOTER_LEFT_MOTOR_ID": 61,
     "SHOOTER_RIGHT_MOTOR_ID": 62,
     "SHOOTER_LEFT_SPEED": 0.85,
     "SHOOTER_RIGHT_SPEED": -1.0,
-    "HOOD_MOTOR_ID": 2,
-    "HOOD_SPEED": 0,
-    
+    "SPROCKET_MOTOR_ID": 2,
+    "SPROCKET_MOTOR_UP": 1,
+    "SPROCKET_MOTOR_DOWN": -1,
 }
 
 robotConfig = {

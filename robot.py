@@ -1,5 +1,5 @@
-import sys
 
+import sys
 import wpilib
 import wpimath.controller
 from wpilib import interfaces
@@ -39,20 +39,27 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopPeriodic(self):
         #intake motor
-        if self.operator.xboxController.getAButton():
+        if self.operator.xboxController.getLeftBumper():
             self.mechanism.intakeNote()
+            self.mechanism.intakeNote()
+        
+        #shooter motor and sprocket
+        elif self.operator.xboxController.getRightBumper():
+            self.mechanism.launchNote()
+        
+        #rotate sprocketDown
+        elif self.operator.xboxController.getLeftTriggerAxis():
+            self.mechanism.sprocketDown()
 
-        #indexer motor
-        elif self.operator.xboxController.getXButton():
-            self.mechanism.transportNote()
-
-        #shooter motor and hood
+        #rotate sprocket down
+        elif self.operator.xboxController.getRightTriggerAxis():
+            self.mechanism.sprocketUp()
+        
         elif self.operator.xboxController.getBButton():
-            self.mechanism.shootNote()
+            self.mechanism.eject()
 
-        #toggle hood
         elif self.operator.xboxController.getYButton():
-            self.mechanism.moveHood()
+            self.mechanism.launchReverse()
 
         else:
             self.mechanism.stopShooting()   
