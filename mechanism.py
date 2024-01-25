@@ -22,6 +22,8 @@ class Mechanism:
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
         # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
         self.sprocketMotor = rev.CANSparkMax(config["SPROCKET_MOTOR_ID"], motor_type_brushless)
+
+        self.sprocketPID = PIDController(config["SPROCKET_PID_KP"], config["SPROCKET_PID_KI"], config["SPROCKET_PID_KD"])
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -59,4 +61,9 @@ class Mechanism:
     
     def sprocketDown(self): #moves the shooter back to the intake
         self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
+        return
+    
+    def sprocketToPosition(self, targetPosition):
+        self.sprocketMotorSpeed = self.sprocketPID.calculate(self.sprocketMotor.getEncoder().getPosition(), targetPosition)
+        self.sprocketMotor.set(self.sprocketMotorSpeed)
         return

@@ -23,13 +23,20 @@ mechanismConfig = {
     "INTAKE_SPEED": 0,
     "INDEX_MOTOR_ID": 1,
     "INDEX_SPEED": 0,
+    
     "SHOOTER_LEFT_MOTOR_ID": 61,
     "SHOOTER_RIGHT_MOTOR_ID": 62,
     "SHOOTER_LEFT_SPEED": 0.85,
+    
     "SHOOTER_RIGHT_SPEED": -1.0,
     "SPROCKET_MOTOR_ID": 2,
+    #Up and down speeds for the Sprocket Motor
     "SPROCKET_MOTOR_UP": 1,
     "SPROCKET_MOTOR_DOWN": -1,
+    #Tune values for the Sprocket Motor's PID
+    "SPROCKET_PID_KP": 0,
+    "SPROCKET_PID_KI": 0,
+    "SPROCKET_PID_KD": 0,
 }
 
 robotConfig = {
