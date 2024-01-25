@@ -24,7 +24,7 @@ class Mechanism:
         self.sprocketMotor = rev.CANSparkMax(config["SPROCKET_MOTOR_ID"], motor_type_brushless)
         return
 
-    #action is intake or eject, L1 is intake, R1 is eject
+    #action is intake or eject, L1 is intake, B is eject
     def intakeNote(self):
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
         if self.intakeBeamBreak.beamBroken():
@@ -37,7 +37,7 @@ class Mechanism:
         return
     
     #do the sequence that shoots the note
-    #a shoots the note
+    #r1 shoots the note
     def launchNote(self):
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])

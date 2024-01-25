@@ -41,7 +41,6 @@ class MyRobot(wpilib.TimedRobot):
         #intake motor
         if self.operator.xboxController.getLeftBumper():
             self.mechanism.intakeNote()
-            self.mechanism.intakeNote()
         
         #shooter motor and sprocket
         elif self.operator.xboxController.getRightBumper():
