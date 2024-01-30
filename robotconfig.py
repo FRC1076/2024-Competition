@@ -27,10 +27,9 @@ mechanismConfig = {
     "SHOOTER_LEFT_MOTOR_ID": 61,
     "SHOOTER_RIGHT_MOTOR_ID": 62,
     "SHOOTER_LEFT_SPEED": 0.85,
-    
     "SHOOTER_RIGHT_SPEED": -1.0,
-    "SPROCKET_MOTOR_ID": 2,
     #Up and down speeds for the Sprocket Motor
+    "SPROCKET_MOTOR_ID": 2,
     "SPROCKET_MOTOR_UP": 1,
     "SPROCKET_MOTOR_DOWN": -1,
     #Tune values for the Sprocket Motor's PID

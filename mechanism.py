@@ -41,6 +41,8 @@ class Mechanism:
     #do the sequence that shoots the note
     #r1 shoots the note
     def launchNote(self):
+        self.leftShootingMotor.enableVoltageCompensation()
+        self.rightShootingMotor.enableVoltageCompensation()
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
