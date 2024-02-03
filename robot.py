@@ -61,7 +61,8 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.launchReverse()
 
         else:
-            self.mechanism.stopShooting()   
+            self.mechanism.stopShooting()
+            self.mechanism.stopIndexing()   
         return
 
     

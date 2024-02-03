@@ -17,7 +17,7 @@ class Mechanism:
         motor_type_brushed = rev.CANSparkMaxLowLevel.MotorType.kBrushed
         self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
-        self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushed)
+        self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
         # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
@@ -41,8 +41,8 @@ class Mechanism:
     #do the sequence that shoots the note
     #r1 shoots the note
     def launchNote(self):
-        self.leftShootingMotor.enableVoltageCompensation()
-        self.rightShootingMotor.enableVoltageCompensation()
+        self.leftShootingMotor.enableVoltageCompensation(12)
+        self.rightShootingMotor.enableVoltageCompensation(12)
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
@@ -68,4 +68,7 @@ class Mechanism:
     def sprocketToPosition(self, targetPosition):
         self.sprocketMotorSpeed = self.sprocketPID.calculate(self.sprocketMotor.getEncoder().getPosition(), targetPosition)
         self.sprocketMotor.set(self.sprocketMotorSpeed)
+        return
+    def stopIndexing(self):
+        self.indexMotor.set(0)
         return
