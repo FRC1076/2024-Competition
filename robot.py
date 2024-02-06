@@ -9,6 +9,7 @@ import ctre
 from robotconfig import robotConfig
 from controller import Controller
 from mechanism import Mechanism
+from notedetector import NoteDetector
 
 class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
@@ -16,6 +17,7 @@ class MyRobot(wpilib.TimedRobot):
         self.driver = controllers[0]
         self.operator = controllers[1]
         self.mechanism = Mechanism(robotConfig["MECHANISM"])
+        self.notedetector = NoteDetector()
         return
     
     def controllerInit(self, config):
