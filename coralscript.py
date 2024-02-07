@@ -4,6 +4,11 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 from networktables import NetworkTables
 
+"""To Do:
+Find where to put run_inference
+Find where to input video
+Find where to do interpreter.invoke (if needed)
+Use 'try' to prevent crashing/use networktables to send ready signal"""
 #see if I need a server (put this in main?)
 NetworkTables.initialize()
 notePub = NetworkTables.getTable('noteDetector')
@@ -21,9 +26,9 @@ def publishBBox(bbox):
     return
 
 def main():
-    model
-    source
-    threshold
+    model = "~/notedetector29/edgetpu.tflite"
+    source = "/dev/video1:YUY2:800x600:20/1"
+    threshold = "0.75"
 
     interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
