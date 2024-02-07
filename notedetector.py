@@ -1,20 +1,20 @@
-from networktables import Networktables
+from networktables import NetworkTables
 
 class NoteDetector:
     def __init__ (self):
-        Networktables.initialize()
-        self.noteSub = Networktables.getTable('noteDetector')
+        NetworkTables.initialize()
+        self.noteSub = NetworkTables.getTable('noteDetector')
     
-    def getXMin():
+    def getXMin(self):
         return self.noteSub.getNumber('xmin', 0)
-    def getXMax():
+    def getXMax(self):
         return self.noteSub.getNumber('xmax', 0)
-    def getYMin():
+    def getYMin(self):
         return self.noteSub.getNumber('ymin', 0)
-    def getYMax():
+    def getYMax(self):
         return self.noteSub.getNumber('ymax', 0)
-    def getTestMessage():
-        return self.noteSub.getString('testKey')
+    def getTestMessage(self):
+        return self.noteSub.getString('testKey', "nothing")
     
 
     
