@@ -2,11 +2,11 @@ from pycoral.adapters.detect import get_objects
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
-from networktables import Networktables
+from networktables import NetworkTables
 
 #see if I need a server (put this in main?)
-Networktables.initialize()
-notePub = Networktables.getTable('noteDetector')
+NetworkTables.initialize()
+notePub = NetworkTables.getTable('noteDetector')
 
 def getClosestNote(objs):
     objs.sort(key=lambda bbox: bbox.area)
