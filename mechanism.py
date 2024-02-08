@@ -71,6 +71,13 @@ class Mechanism:
         return
     
     def rotateSprocket(self, speed):
+        """
+        if (getSprocketAngle() > 0 and getSprocketAngle < 150):
+            self.sprocketMotor.set(speed)
+
+
+        #this is in a comment because the angles in the if statement need to be adjusted in testing
+        """
         self.sprocketMotor.set(speed)
         return
 
