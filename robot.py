@@ -58,7 +58,10 @@ class MyRobot(wpilib.TimedRobot):
         #rotate sprocket down
         if self.operator.xboxController.getRightTriggerAxis():
             self.mechanism.sprocketUp()
-            
+
+        if self.operator.xboxController.getLeftY():
+            self.mechanism.rotateSprocket(self.operator.xboxController.getLeftY()) #assumes that the minimum and maximum values for the axis are -1 and 1
+
         return
 
     

@@ -70,6 +70,10 @@ class Mechanism:
         self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
         return
     
+    def rotateSprocket(self, speed):
+        self.sprocketMotor.set(speed)
+        return
+
     def sprocketToPosition(self, targetPosition):
         self.sprocketMotorSpeed = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
         self.sprocketMotor.set(self.sprocketMotorSpeed)
