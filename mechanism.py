@@ -62,12 +62,15 @@ class Mechanism:
         self.rightShootingMotor.set(0)
         return
     
+    
     def sprocketUp(self): #moves the shooter away from the intake
-        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_UP"])
+        if(self.getSprocketAngle < self.config["SPROCKET_MOTOR_MAX_ANGLE"]):    
+            self.sprocketMotor.set(self.config["SPROCKET_MOTOR_UP"])
         return
     
     def sprocketDown(self): #moves the shooter back to the intake
-        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
+        if (self.getSprocketAngle > self.config["SPROCKET_MOTOR_MIN_ANGLE"]):
+            self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
         return
     
     def rotateSprocket(self, speed):
