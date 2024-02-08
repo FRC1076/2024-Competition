@@ -40,9 +40,11 @@ mechanismConfig = {
     "SPROCKET_PID_KP": 0,
     "SPROCKET_PID_KI": 0,
     "SPROCKET_PID_KD": 0,
-    #Min and max angles for sprocket motor, need to be adjusted
-    "SPROCKET_MOTOR_MIN_ANGLE": 0,
+    #Min and max angles for sprocket motor, NEED TO BE ADJUSTED
+    "SPROCKET_MOTOR_MIN_ANGLE": 30,
     "SPROCKET_MOTOR_MAX_ANGLE": 360,
+    "SPROCKET_MOTOR_INTAKE_ANGLE": 30,
+    "SPROCKET_MOTOR_SPEAKER_SHOOTING_ANGLE": 150,
 }
 
 robotConfig = {
