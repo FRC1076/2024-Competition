@@ -75,8 +75,9 @@ class Mechanism:
     
     def rotateSprocket(self, speed):
         currentSprocketAngle = self.getSprocketAngle()
-        if (currentSprocketAngle > self.config["SPROCKET_MOTOR_MIN_ANGLE"] and currentSprocketAngle < self.config["SPROCKET_MOTOR_MAX_ANGLE"]):
-            self.sprocketMotor.set(speed)
+        #if (currentSprocketAngle > self.config["SPROCKET_MOTOR_MIN_ANGLE"] and currentSprocketAngle < self.config["SPROCKET_MOTOR_MAX_ANGLE"]):
+        #    self.sprocketMotor.set(speed)
+        self.sprocketMotor.set(speed)
         return
 
     def sprocketToPosition(self, targetPosition):
