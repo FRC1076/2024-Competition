@@ -40,6 +40,14 @@ mechanismConfig = {
     "SPROCKET_PID_KP": 0,
     "SPROCKET_PID_KI": 0,
     "SPROCKET_PID_KD": 0,
+    #Tune values for the Sprocket Motor's Feedforward
+    "SPROCKET_FEEDFORWARD_KS": 0,
+    "SPROCKET_FEEDFORWARD_KG": 0,
+    "SPROCKET_FEEDFORWARD_KV": 0,
+    "SPROCKET_FEEDFORWARD_KA": 0,
+    "SPROCKET_FEEDFORWARD_VELOCITY": 0, #in radians
+    "SPROCKET_FEEDFORWARD_ACCELERATION": 0, #in radians/second^2
+
 }
 
 robotConfig = {
