@@ -1,7 +1,7 @@
 import wpilib
 class Autonomous:
 
-    def __init__(self, config, team_is_red, field_start_position, drivetrain):
+    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism):
         taskListName = ""
         if team_is_red:
             taskListName += "TASK_RED"
@@ -13,16 +13,27 @@ class Autonomous:
             taskListName += "_B"
         else:
             taskListName += "_C"
-        self.taskList = config[taskListName]
+        self.taskList = []
+        for cmd in config[taskListName]:
+            if cmd[0] == 'NOTE':
+                for noteCmd in config["noteConfig"]["NOTE " + str(cmd[1])]:
+                    self.taskList.append(noteCmd)
+                pass
+            else:
+                self.taskList.append(cmd)
         self.taskListCounter = 0
+
         self.autonTimer = wpilib.Timer()
         self.autonHasStarted = False
         self.drivetrain = drivetrain
+        self.mechanism = mechanism
         self.lastTime = -1
 
     def executeAuton(self):
+        print(self.taskListCounter)
         if not self.autonHasStarted:
             self.autonTimer.start()
+            self.autonHasStarted = True
 
         if self.taskListCounter >= len(self.taskList):
             self.drivetrain.set_fwd(0)
@@ -62,6 +73,30 @@ class Autonomous:
         elif self.autonTask[0] == 'UPDATE_POSE':
             #self.drivetrain.visionUpdatePose()
             self.taskListCounter += 1
+        
+        elif self.autonTask[0] == 'START_INTAKE':
+            self.mechanism.intakeNote()
+            self.mechanism.reverseIndex()
+            self.taskListCounter += 1
+        
+        elif self.autonTask[0] == 'STOP_INTAKE':
+            self.mechanism.stopIntake()
+            self.mechanism.stopIndexing()
+            self.taskListCounter += 1
+
+        elif self.autonTask[0] == 'SHOOT_NOTE':
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+                self.mechanism.shootNote()
+            if(self.autonTimer.get() - self.lastTime > 1):
+                self.mechanism.indexNote()
+            if(self.autonTimer.get() - self.lastTime > 1.5):
+                self.mechanism.stopIndexing()
+                self.mechanism.stopShooting()
+                self.lastTime = -1
+                self.taskListCounter += 1
+
+
 
         return False
     

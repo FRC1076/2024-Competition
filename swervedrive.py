@@ -684,9 +684,11 @@ class SwerveDrive:
         
         # Get current pose                    
         currentX, currentY, currentBearing = self.swervometer.getCOF()
-        
-        if self.target_x_pid_controller.atSetpoint() and self.target_y_pid_controller.atSetpoint(): 
-            self.update_smartdash()
+        if (abs(self.target_x_pid_controller.getVelocityError()) < self.target_x_pid_controller.getVelocityTolerance() 
+            and abs(self.target_y_pid_controller.getVelocityError()) < self.target_y_pid_controller.getVelocityTolerance()
+            and abs(self.target_x_pid_controller.getPositionError()) < self.target_x_pid_controller.getPositionTolerance()
+            and abs(self.target_y_pid_controller.getPositionError()) < self.target_y_pid_controller.getPositionTolerance()): 
+            #self.update_smartdash()
             return True
         else:
             self.move(x_error, y_error, 0, bearing)
