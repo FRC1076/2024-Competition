@@ -43,11 +43,19 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.intakeNote()
         else:
             self.mechanism.stopIntake()
-            self.mechanism.stopIndexing()   
-        
+               
+        if self.operator.xboxController.getAButton():
+            self.mechanism.indexNote()
+        elif self.operator.xboxController.getBButton():
+            self.mechanism.reverseIndex()
+        else:
+            self.mechanism.stopIndexing()
+            
         #shooter motor and sprocket
         if self.operator.xboxController.getRightBumper():
             self.mechanism.shootNote()
+        elif self.operator.xboxController.getYButton():
+            self.mechanism.shootReverse()
         else:
             self.mechanism.stopShooting()
         
