@@ -1,3 +1,4 @@
+
 DEADZONE = 0.1
 
 controllerConfig = {
@@ -15,11 +16,30 @@ controllerConfig = {
     }
 }
 
+#all unknown values equal 0
 mechanismConfig = {
-    "LEFT_SHOOTING_MOTOR_ID": 61,
-    "RIGHT_SHOOTING_MOTOR_ID": 62,
-    "RIGHT_EJECT_SPEED": -1.0,
-    "LEFT_EJECT_SPEED": 0.85,
+    "INTAKE_BEAMBREAK_PIN": 0,
+    "INTAKE_MOTOR_ID": 0,
+    "INTAKE_SPEED": 0,
+    "INDEX_MOTOR_ID": 8,
+    "INDEX_SPEED": 0.5,
+    
+    "SHOOTER_LEFT_MOTOR_ID": 28,
+    "SHOOTER_RIGHT_MOTOR_ID": 61,
+    "SHOOTER_LEFT_SPEED": 0.425, #0.6 - good value for accuracy (on compliant wheels)
+    "SHOOTER_RIGHT_SPEED": -.50, #1 - good value for accuracy (on compliant wheels)
+    #Up and down speeds for the Sprocket Motor
+    "SPROCKET_MOTOR_ID": 2,
+    "SPROCKET_MOTOR_UP": 1,
+    "SPROCKET_MOTOR_DOWN": -1,
+    #DIO channel for through bore encoder
+    "SPROCKET_ENCODER_ID": 0,
+    #Value of sprocket encoder at 0 (in deg)
+    "SPROCKET_ENCODER_ZERO": 0,
+    #Tune values for the Sprocket Motor's PID
+    "SPROCKET_PID_KP": 0,
+    "SPROCKET_PID_KI": 0,
+    "SPROCKET_PID_KD": 0,
 }
 
 robotConfig = {

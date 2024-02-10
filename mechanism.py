@@ -1,3 +1,4 @@
+
 import wpilib
 import wpilib.drive
 import wpimath.controller
@@ -6,67 +7,77 @@ import rev
 from wpilib import DoubleSolenoid
 import ctre
 import rev
+from beambreak import BeamBreak
 
 class Mechanism:
     def __init__(self, config) -> None:
         self.config = config
+
         motor_type_brushless = rev.CANSparkMaxLowLevel.MotorType.kBrushless
+        motor_type_brushed = rev.CANSparkMaxLowLevel.MotorType.kBrushed
+        self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
+        self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
+        self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
+        self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
+        self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
+        self.leftShootingMotor.enableVoltageCompensation(12)
+        self.rightShootingMotor.enableVoltageCompensation(12)
+        # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
+        self.sprocketMotor = rev.CANSparkMax(config["SPROCKET_MOTOR_ID"], motor_type_brushless)
+        self.sprocketPID = PIDController(config["SPROCKET_PID_KP"], config["SPROCKET_PID_KI"], config["SPROCKET_PID_KD"])
+        self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
+        self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
+        return
 
-        #motors in the shooter
-        self.leftShootingMotor = rev.CANSparkMax(config["LEFT_SHOOTING_MOTOR_ID"], motor_type_brushless) #fix the device id later
-        self.rightShootingMotor = rev.CANSparkMax(config["RIGHT_SHOOTING_MOTOR_ID"], motor_type_brushless)
-
-        self.leftShootingEncoder = self.leftShootingMotor.getEncoder()
-        self.rightShootingEncoder = self.rightShootingMotor.getEncoder()
-        #intake motor (pulls the notes in)
-        #self.intakeMotor = rev.CANSparkMax(3, motor_type_brushless)
-
-        #intake up or down motor
-        #self.intakeUpDownMotor = rev.CANSparkMax(4, motor_type_brushless)
-
-        #motor that moves the hood
-        #self.moveHoodMotor = rev.CANSparkMax(5, motor_type_brushless)
+    #action is intake or eject, L1 is intake, B is eject
+    def intakeNote(self):
+        self.intakeMotor.set(self.config["INTAKE_SPEED"])
+        if self.intakeBeamBreak.beamBroken():
+            print("note inside intake")
+        self.indexMotor.set(self.config["INDEX_SPEED"])
         return
     
-    def moveHood(self,position):
-        #move the hood (part that allows scoring in the amp)
-        #position is forward or back
-        
-        #b is hood back, x is hood forward
+    def stopIntake(self):
+        self.intakeMotor.set(0)
+    
+    def ejectNote(self):
+        self.intakeMotor.set(-1*self.config["INTAKE_SPEED"])
         return
-
+    
+    #do the sequence that shoots the note
+    #r1 shoots the note
     def shootNote(self):
-        #do the sequence that shoots the note
-
-        #a shoots the note
-        self.leftShootingMotor.set(self.config["LEFT_EJECT_SPEED"])
-        self.rightShootingMotor.set(self.config["RIGHT_EJECT_SPEED"])
+        self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
+        self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
+    def shootReverse(self):
+        self.leftShootingMotor.set(-1*self.config["SHOOTER_LEFT_SPEED"])
+        self.rightShootingMotor.set(-1*self.config["SHOOTER_RIGHT_SPEED"])
+        return
+    
+    #forces stop because motor doesn't always go to 0 by itself
     def stopShooting(self):
         self.leftShootingMotor.set(0)
         self.rightShootingMotor.set(0)
         return
-
-    def shootingMotorRPMs(self):
-        return self.leftShootingEncoder.getVelocity(), self.rightShootingEncoder.getVelocity()
-
-    def intakeNote(self,action):
-        #intake a note
-        #action is intake or eject
-        print("hola amogis :)")
-
-        #L1 is intake, R1 is eject
+    
+    def sprocketUp(self): #moves the shooter away from the intake
+        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_UP"])
         return
     
-    def intakeUpDown(self,position):
-        #move the intake piece up or down
-
-        #D-pad up for up, D-pad down for down
+    def sprocketDown(self): #moves the shooter back to the intake
+        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
         return
-
-    def transportNote(self,direction):
-        #direction is up or down
-
-        #L2 is up, R2 is down
+    
+    def sprocketToPosition(self, targetPosition):
+        self.sprocketMotorSpeed = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
+        self.sprocketMotor.set(self.sprocketMotorSpeed)
         return
+    
+    def stopIndexing(self):
+        self.indexMotor.set(0)
+        return
+    
+    def getSprocketAngle(self):
+        return self.sprocketAbsoluteEncoder.getAbsolutePosition() * 360 - self.sprocketEncoderZero
