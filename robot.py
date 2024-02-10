@@ -41,27 +41,24 @@ class MyRobot(wpilib.TimedRobot):
         #intake motor
         if self.operator.xboxController.getLeftBumper():
             self.mechanism.intakeNote()
+        else:
+            self.mechanism.stopIntake()
+            self.mechanism.stopIndexing()   
         
         #shooter motor and sprocket
-        elif self.operator.xboxController.getRightBumper():
-            self.mechanism.launchNote()
+        if self.operator.xboxController.getRightBumper():
+            self.mechanism.shootNote()
+        else:
+            self.mechanism.stopShooting()
         
         #rotate sprocketDown
-        elif self.operator.xboxController.getLeftTriggerAxis():
+        if self.operator.xboxController.getLeftTriggerAxis():
             self.mechanism.sprocketDown()
 
         #rotate sprocket down
-        elif self.operator.xboxController.getRightTriggerAxis():
+        if self.operator.xboxController.getRightTriggerAxis():
             self.mechanism.sprocketUp()
-        
-        elif self.operator.xboxController.getBButton():
-            self.mechanism.eject()
-
-        elif self.operator.xboxController.getYButton():
-            self.mechanism.launchReverse()
-
-        else:
-            self.mechanism.stopShooting()   
+            
         return
 
     
