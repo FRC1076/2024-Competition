@@ -38,10 +38,16 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        print(mechanism.shootingMotorRPMs)
-
+        if self.operator.xboxController.getRightTriggerAxis() >= 0.5:
+            self.mechanism.transportNote("up")
+        elif self.operator.xboxController.getLeftTriggerAxis() >= 0.5:
+            self.mechanism.transportNote("down")
+        else:
+            self.mechanism.stopTransporting()
+        
         if self.operator.xboxController.getAButton():
             self.mechanism.shootNote()
+            print(self.mechanism.getShooterMotorCurrentsAsGraph())
         else:
             self.mechanism.stopShooting()
         return

@@ -15,6 +15,7 @@ class Mechanism:
         #motors in the shooter
         self.leftShootingMotor = rev.CANSparkMax(config["LEFT_SHOOTING_MOTOR_ID"], motor_type_brushless) #fix the device id later
         self.rightShootingMotor = rev.CANSparkMax(config["RIGHT_SHOOTING_MOTOR_ID"], motor_type_brushless)
+        self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
 
         self.leftShootingEncoder = self.leftShootingMotor.getEncoder()
         self.rightShootingEncoder = self.rightShootingMotor.getEncoder()
@@ -66,7 +67,26 @@ class Mechanism:
         return
 
     def transportNote(self,direction):
+        self.direction = direction
         #direction is up or down
+        if self.direction == "up":
+            self.indexMotor.set(self.config["INDEX_MOTOR_UP_SPEED"])
+            print("transporting up")
+        elif self.direction =="down":
+            self.indexMotor.set(self.config["INDEX_MOTOR_DOWN_SPEED"])
+            print("transporting down")
+        else:
+            print("invalid index direction")
 
         #L2 is up, R2 is down
         return
+    
+    def stopTransporting(self):
+        self.indexMotor.set(0)
+    
+    def getShooterMotorCurrentsAsGraph(self):
+        return ("{}".format(
+            "*"*(int(10*self.leftShootingMotor.getOutputCurrent())),
+            )
+        )
+        #return (self.leftShootingMotor.getOutputCurrent(), self.rightShootingMotor.getOutputCurrent())

@@ -16,10 +16,14 @@ controllerConfig = {
 }
 
 mechanismConfig = {
-    "LEFT_SHOOTING_MOTOR_ID": 61,
-    "RIGHT_SHOOTING_MOTOR_ID": 62,
-    "RIGHT_EJECT_SPEED": -1.0,
-    "LEFT_EJECT_SPEED": 0.85,
+    "LEFT_SHOOTING_MOTOR_ID": 8,
+    "RIGHT_SHOOTING_MOTOR_ID": 28,
+    "RIGHT_EJECT_SPEED": 1.0,
+    "LEFT_EJECT_SPEED": -0.6,
+
+    "INDEX_MOTOR_ID": 17,
+    "INDEX_MOTOR_UP_SPEED": -0.5,
+    "INDEX_MOTOR_DOWN_SPEED": 0.5,
 }
 
 robotConfig = {
