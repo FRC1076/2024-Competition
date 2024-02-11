@@ -25,7 +25,8 @@ class Mechanism:
         self.leftShootingMotor.enableVoltageCompensation(12)
         self.rightShootingMotor.enableVoltageCompensation(12)
         # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
-        self.sprocketMotor = rev.CANSparkMax(config["SPROCKET_MOTOR_ID"], motor_type_brushless)
+        self.sprocketLeftMotor = rev.CANSparkMax(config["SPROCKET_LEFT_MOTOR_ID"], motor_type_brushless)
+        self.sprocketRightMotor = rev.CANSparkMax(config["SPROCKET_RIGHT_MOTOR_ID"], motor_type_brushless)
         self.sprocketPID = PIDController(config["SPROCKET_PID_KP"], config["SPROCKET_PID_KI"], config["SPROCKET_PID_KD"])
         self.sprocketFeedforward = ArmFeedforward(config["SPROCKET_FEEDFORWARD_KS"],config["SPROCKET_FEEDFORWARD_KG"],config["SPROCKET_FEEDFORWARD_KV"],config["SPROCKET_FEEDFORWARD_KA"])
         self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
@@ -37,7 +38,6 @@ class Mechanism:
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
         if self.intakeBeamBreak.beamBroken():
             print("note inside intake")
-        self.indexMotor.set(self.config["INDEX_SPEED"])
         return
     
     def stopIntake(self):
@@ -55,8 +55,8 @@ class Mechanism:
         return
     
     def shootReverse(self):
-        self.leftShootingMotor.set(-1*self.config["SHOOTER_LEFT_SPEED"])
-        self.rightShootingMotor.set(-1*self.config["SHOOTER_RIGHT_SPEED"])
+        self.leftShootingMotor.set(self.config["SHOOTER_LEFT_REVERSE_SPEED"])
+        self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_REVERSE_SPEED"])
         return
     
     #forces stop because motor doesn't always go to 0 by itself
@@ -66,11 +66,15 @@ class Mechanism:
         return
     
     def sprocketUp(self): #moves the shooter away from the intake
-        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_UP"])
+        config = self.config
+        self.sprocketLeftMotor.set(config["SPROCKET_MOTOR_LEFT_UP"])
+        self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_UP"])
         return
     
     def sprocketDown(self): #moves the shooter back to the intake
-        self.sprocketMotor.set(self.config["SPROCKET_MOTOR_DOWN"])
+        config = self.config
+        self.sprocketLeftMotor.set(config["SPROCKET_MOTOR_LEFT_DOWN"])
+        self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_DOWN"])
         return
     
     def sprocketToPosition(self, targetPosition): #test and debug me!
@@ -87,3 +91,12 @@ class Mechanism:
     
     def getSprocketAngle(self):
         return self.sprocketAbsoluteEncoder.getAbsolutePosition() * 360 - self.sprocketEncoderZero
+    
+    def indexNote(self):
+        self.indexMotor.set(self.config["INDEX_SPEED"])
+        return
+    
+    def reverseIndex(self):
+        self.indexMotor.set(-1 * self.config["INDEX_SPEED"])
+        return
+    
