@@ -220,7 +220,7 @@ mechanismConfig = {
     #Value of sprocket encoder at 0 (in deg) (at horizontal)
     "SPROCKET_ENCODER_ZERO": 47.9,
     #Tune values for the Sprocket Motor's PID
-    "SPROCKET_PID_KP": 0.001,
+    "SPROCKET_PID_KP": 0.006,
     "SPROCKET_PID_KI": 0,
     "SPROCKET_PID_KD": 0,
     #Tune values for the Sprocket Motor's Feedforward

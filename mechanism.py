@@ -89,7 +89,7 @@ class Mechanism:
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
         self.sprocketRightMotor.set(-self.sprocketMotorSpeed)
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
-        print(self.sprocketPIDCalculation, self.sprocketFeedforwardCalculation)
+        print(self.getSprocketAngle())
         self.sprocketLimitStop()
         return
     
