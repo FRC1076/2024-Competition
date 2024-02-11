@@ -209,10 +209,10 @@ mechanismConfig = {
     #Up and down speeds for the Sprocket Motor, NEED TO BE SET
     "SPROCKET_LEFT_MOTOR_ID": 6,
     "SPROCKET_RIGHT_MOTOR_ID": 7,
-    "SPROCKET_MOTOR_LEFT_UP": 0.5,
-    "SPROCKET_MOTOR_RIGHT_UP": -0.5,
-    "SPROCKET_MOTOR_LEFT_DOWN": -0.5,
-    "SPROCKET_MOTOR_RIGHT_DOWN": 0.5,
+    "SPROCKET_MOTOR_LEFT_UP": 0.2,
+    "SPROCKET_MOTOR_RIGHT_UP": -0.2,
+    "SPROCKET_MOTOR_LEFT_DOWN": -0.2,
+    "SPROCKET_MOTOR_RIGHT_DOWN": 0.2,
     #DIO channel for through bore encoder
     "SPROCKET_ENCODER_ID": 0,
     #Shift encoder values to avoid wrap around of encoder

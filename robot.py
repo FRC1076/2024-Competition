@@ -311,10 +311,10 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopShooting()
         
         #rotate sprocketDown
-        if self.operator.xboxController.getLeftTriggerAxis():
+        if self.operator.xboxController.getLeftTriggerAxis() > 0.7:
             self.mechanism.sprocketDown()
         #rotate sprocket down
-        elif self.operator.xboxController.getRightTriggerAxis():
+        elif self.operator.xboxController.getRightTriggerAxis() > 0.7:
             self.mechanism.sprocketUp()
         else:
             self.mechanism.stopSprocket()
