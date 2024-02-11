@@ -80,7 +80,7 @@ class Mechanism:
     def sprocketToPosition(self, targetPosition): #test and debug me!
         config = self.config
         self.sprocketPIDCalculation = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
-        self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(targetPosition), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
+        self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(self.getSprocketAngle()), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
         self.sprocketMotor.set(self.sprocketMotorSpeed)
         return
