@@ -82,8 +82,13 @@ class Mechanism:
         self.sprocketPIDCalculation = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
         self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(self.getSprocketAngle()), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
-        self.sprocketMotor.set(self.sprocketMotorSpeed)
+        self.sprocketRightMotor.set(-self.sprocketMotorSpeed)
+        self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
         return
+    
+    def stopSprocket(self):
+        self.sprocketRightMotor.set(0)
+        self.sprocketLeftMotor.set(0)
     
     def stopIndexing(self):
         self.indexMotor.set(0)

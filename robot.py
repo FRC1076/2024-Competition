@@ -311,12 +311,13 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopShooting()
         
         #rotate sprocketDown
-        #if self.operator.xboxController.getLeftTriggerAxis():
-            #self.mechanism.sprocketDown()
-
+        if self.operator.xboxController.getLeftTriggerAxis():
+            self.mechanism.sprocketDown()
         #rotate sprocket down
-        #if self.operator.xboxController.getRightTriggerAxis():
-            #self.mechanism.sprocketUp()
+        elif self.operator.xboxController.getRightTriggerAxis():
+            self.mechanism.sprocketUp()
+        else:
+            self.mechanism.stopSprocket()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
         self.teleopDrivetrain()
