@@ -96,7 +96,9 @@ class Autonomous:
                 self.lastTime = -1
                 self.taskListCounter += 1
 
-
+        elif self.autonTask[0] == 'RAISE_ARM':
+            self.mechanism.sprocketToPosition(self.autonTask[1])
+            self.taskListCounter += 1
 
         return False
     
