@@ -69,12 +69,14 @@ class Mechanism:
         config = self.config
         self.sprocketLeftMotor.set(config["SPROCKET_MOTOR_LEFT_UP"])
         self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_UP"])
+        self.sprocketLimitStop()
         return
     
     def sprocketDown(self): #moves the shooter back to the intake
         config = self.config
         self.sprocketLeftMotor.set(config["SPROCKET_MOTOR_LEFT_DOWN"])
         self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_DOWN"])
+        self.sprocketLimitStop()
         return
     
     def sprocketToPosition(self, targetPosition): #test and debug me!
@@ -84,11 +86,16 @@ class Mechanism:
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
         self.sprocketRightMotor.set(-self.sprocketMotorSpeed)
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
+        self.sprocketLimitStop()
         return
     
     def stopSprocket(self):
         self.sprocketRightMotor.set(0)
         self.sprocketLeftMotor.set(0)
+    
+    def sprocketLimitStop(self):
+        if(self.getSprocketAngle() > 90):
+            self.stopSprocket()
     
     def stopIndexing(self):
         self.indexMotor.set(0)
