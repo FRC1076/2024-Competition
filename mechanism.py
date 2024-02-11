@@ -30,6 +30,7 @@ class Mechanism:
         self.sprocketPID = PIDController(config["SPROCKET_PID_KP"], config["SPROCKET_PID_KI"], config["SPROCKET_PID_KD"])
         self.sprocketFeedforward = ArmFeedforward(config["SPROCKET_FEEDFORWARD_KS"],config["SPROCKET_FEEDFORWARD_KG"],config["SPROCKET_FEEDFORWARD_KV"],config["SPROCKET_FEEDFORWARD_KA"])
         self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
+        self.sprocketEncoderShift = config["SPROCKET_ENCODER_SHIFT"]
         self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
         return
 
@@ -102,7 +103,7 @@ class Mechanism:
         return
     
     def getSprocketAngle(self):
-        return self.sprocketAbsoluteEncoder.getAbsolutePosition() * 360 - self.sprocketEncoderZero
+        return (self.sprocketAbsoluteEncoder.getAbsolutePosition() * 360 + self.sprocketEncoderShift) % 360 - self.sprocketEncoderZero
     
     def indexNote(self):
         self.indexMotor.set(self.config["INDEX_SPEED"])

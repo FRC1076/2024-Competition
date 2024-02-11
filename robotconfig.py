@@ -215,8 +215,10 @@ mechanismConfig = {
     "SPROCKET_MOTOR_RIGHT_DOWN": 0.5,
     #DIO channel for through bore encoder
     "SPROCKET_ENCODER_ID": 0,
-    #Value of sprocket encoder at 0 (in deg)
-    "SPROCKET_ENCODER_ZERO": 0,
+    #Shift encoder values to avoid wrap around of encoder
+    "SPROCKET_ENCODER_SHIFT": 20,
+    #Value of sprocket encoder at 0 (in deg) (at horizontal)
+    "SPROCKET_ENCODER_ZERO": 48.9,
     #Tune values for the Sprocket Motor's PID
     "SPROCKET_PID_KP": 0,
     "SPROCKET_PID_KI": 0,
