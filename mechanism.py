@@ -3,11 +3,13 @@ import wpilib
 import wpilib.drive
 import wpimath.controller
 from wpimath.controller import PIDController
+from wpimath.controller import ArmFeedforward
 import rev
 from wpilib import DoubleSolenoid
 import ctre
 import rev
 from beambreak import BeamBreak
+import math
 
 class Mechanism:
     def __init__(self, config) -> None:
@@ -26,6 +28,7 @@ class Mechanism:
         self.sprocketLeftMotor = rev.CANSparkMax(config["SPROCKET_LEFT_MOTOR_ID"], motor_type_brushless)
         self.sprocketRightMotor = rev.CANSparkMax(config["SPROCKET_RIGHT_MOTOR_ID"], motor_type_brushless)
         self.sprocketPID = PIDController(config["SPROCKET_PID_KP"], config["SPROCKET_PID_KI"], config["SPROCKET_PID_KD"])
+        self.sprocketFeedforward = ArmFeedforward(config["SPROCKET_FEEDFORWARD_KS"],config["SPROCKET_FEEDFORWARD_KG"],config["SPROCKET_FEEDFORWARD_KV"],config["SPROCKET_FEEDFORWARD_KA"])
         self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
         self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
         return
@@ -74,10 +77,12 @@ class Mechanism:
         self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_DOWN"])
         return
     
-    def sprocketToPosition(self, targetPosition):
-        self.sprocketMotorSpeed = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
-        self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
-        self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
+    def sprocketToPosition(self, targetPosition): #test and debug me!
+        config = self.config
+        self.sprocketPIDCalculation = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
+        self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(targetPosition), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
+        self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
+        self.sprocketMotor.set(self.sprocketMotorSpeed)
         return
     
     def stopIndexing(self):
