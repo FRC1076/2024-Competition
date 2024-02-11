@@ -27,6 +27,8 @@ class Mechanism:
         # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
         self.sprocketLeftMotor = rev.CANSparkMax(config["SPROCKET_LEFT_MOTOR_ID"], motor_type_brushless)
         self.sprocketRightMotor = rev.CANSparkMax(config["SPROCKET_RIGHT_MOTOR_ID"], motor_type_brushless)
+        self.sprocketLeftMotor.enableVoltageCompensation(12)
+        self.sprocketRightMotor.enableVoltageCompensation(12)
         self.sprocketPID = PIDController(config["SPROCKET_PID_KP"], config["SPROCKET_PID_KI"], config["SPROCKET_PID_KD"])
         self.sprocketFeedforward = ArmFeedforward(config["SPROCKET_FEEDFORWARD_KS"],config["SPROCKET_FEEDFORWARD_KG"],config["SPROCKET_FEEDFORWARD_KV"],config["SPROCKET_FEEDFORWARD_KA"])
         self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
@@ -77,7 +79,7 @@ class Mechanism:
         config = self.config
         self.sprocketLeftMotor.set(config["SPROCKET_MOTOR_LEFT_DOWN"])
         self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_DOWN"])
-        self.sprocketLimitStop()
+        #self.sprocketLimitStop()
         return
     
     def sprocketToPosition(self, targetPosition): #test and debug me!
@@ -87,12 +89,16 @@ class Mechanism:
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
         self.sprocketRightMotor.set(-self.sprocketMotorSpeed)
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
+        print(self.sprocketPIDCalculation, self.sprocketFeedforwardCalculation)
         self.sprocketLimitStop()
         return
     
     def stopSprocket(self):
-        self.sprocketRightMotor.set(0)
-        self.sprocketLeftMotor.set(0)
+        config = self.config
+        self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(self.getSprocketAngle()), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
+        self.sprocketRightMotor.set(-self.sprocketFeedforwardCalculation)
+        self.sprocketLeftMotor.set(self.sprocketFeedforwardCalculation)
+        #print(self.sprocketFeedforwardCalculation)
     
     def sprocketLimitStop(self):
         if(self.getSprocketAngle() > 90):
