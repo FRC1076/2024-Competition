@@ -1,4 +1,5 @@
 from collections import namedtuple
+import math
 DEADZONE = 0.1
 
 ARCADE = 1
@@ -141,8 +142,8 @@ autonConfig = {
     'noteConfig': {
     #RED TEAM
         'NOTE 1': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 57, 0]],
-        'NOTE 2': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
-        'NOTE 3': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 0, 0], ['MOVE', 230.5, 0, 0]],
+        'NOTE 2': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 57, -90], ['MOVE', 230.5, 114, -90], ['MOVE', 230.5, 114, -(math.atan2(57,63.5) * 180/math.pi)] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
+        'NOTE 3': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 114, 90], ['MOVE', 230.5, 0, 0], ['MOVE', 230.5, 0, (math.atan2(57,63.5) * 180/math.pi)]], #[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 0, 0], ['MOVE', 230.5, 0, 0]],
         'NOTE 4': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -75, 0], ['MOVE', 19.9, -75, 0] ],
         'NOTE 5': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0],['MOVE', 19.9, -9, 0]],
         'NOTE 6 NEGATIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0], ['MOVE', 19.9, 57, 0]],
