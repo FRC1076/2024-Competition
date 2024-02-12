@@ -100,6 +100,20 @@ class Autonomous:
             self.mechanism.sprocketToPosition(self.autonTask[1])
             self.taskListCounter += 1
 
+        elif self.autonTask[0] == 'MOVING_SHOT':
+            if self.lastTime == -1:
+                self.mechanism.sprocketToPosition(-22.9)
+                self.lastTime = self.autonTimer.get()
+            if(self.autonTimer.get() - self.lastTime > 1):
+                self.mechanism.shootNote()
+                self.taskListCounter += 1
+            if(self.autonTimer.get() - self.lastTime > 1.5):
+                self.mechanism.indexNote()
+            if(self.autonTimer.get() - self.lastTime > 2):
+                self.mechanism.stopIndexing()
+                self.mechanism.stopShooting()
+                self.lastTime = -1
+                
         return False
     
     def move(self):
