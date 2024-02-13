@@ -20,6 +20,9 @@ class Mechanism:
         self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
         self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
+        self.indexEncoder = self.indexMotor.getEncoder()
+        self.inARollBack = False
+        self.rollBackStartValue = 0
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
         self.leftShootingMotor.enableVoltageCompensation(12)
@@ -112,10 +115,23 @@ class Mechanism:
         return (self.sprocketAbsoluteEncoder.getAbsolutePosition() * 360 + self.sprocketEncoderShift) % 360 - self.sprocketEncoderZero
     
     def indexNote(self):
+        self.inARollBack = False
         self.indexMotor.set(self.config["INDEX_SPEED"])
         return
     
     def reverseIndex(self):
+        self.inARollBack = False
         self.indexMotor.set(-1 * self.config["INDEX_SPEED"])
         return
     
+    def indexFixedRollBack(self):
+        if not self.inARollBack:
+            self.inARollBack = True
+            self.rollBackStartValue = self.indexEncoder.getPosition()
+    
+    def periodic(self):
+        if self.inARollBack:
+            self.indexMotor.set(-self.config["INDEX_SPEED"])
+            if(self.indexEncoder.getPosition() < self.rollBackStartValue - self.config["INDEX_ROLL_BACK_ROTATIONS"]):
+                self.inARollBack = False
+                self.indexMotor.set(0)

@@ -285,6 +285,7 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
+        self.mechanism.periodic()
         return True
     
     def teleopPeriodic(self):
@@ -295,10 +296,12 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.mechanism.stopIntake()
                
-        if self.operator.xboxController.getAButton():
+        if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
             self.mechanism.indexNote()
-        elif self.operator.xboxController.getBButton():
+        elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
             self.mechanism.reverseIndex()
+        elif self.operator.xboxController.getBButtonReleased():
+            self.mechanism.indexFixedRollBack()
         else:
             self.mechanism.stopIndexing()
             
