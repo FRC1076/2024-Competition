@@ -58,6 +58,9 @@ class MyRobot(wpilib.TimedRobot):
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
 
+        self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
+        self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
+
         dir = ''
         if TEST_MODE:
             dir = os.getcwd() # this doesn't work on mac, will write to python dir. Fix later.
@@ -85,6 +88,7 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.resetGyro()
         return
     
+
     def disabledExit(self):
         self.log("no longer disabled")
         if self.drivetrain:
