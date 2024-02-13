@@ -20,6 +20,7 @@ class Mechanism:
         self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
         self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
+        self.indexEncoder = self.indexMotor.getEncoder()
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
         self.leftShootingMotor.enableVoltageCompensation(12)
@@ -34,6 +35,7 @@ class Mechanism:
         self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
         self.sprocketEncoderShift = config["SPROCKET_ENCODER_SHIFT"]
         self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
+
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -118,4 +120,7 @@ class Mechanism:
     def reverseIndex(self):
         self.indexMotor.set(-1 * self.config["INDEX_SPEED"])
         return
-    
+    def sequenceIndex(self):
+        self.indexMotor.setPosition(0)
+
+        return

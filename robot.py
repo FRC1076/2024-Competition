@@ -296,8 +296,14 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopIntake()
                
         if self.operator.xboxController.getAButton():
+            
             self.mechanism.indexNote()
+
         elif self.operator.xboxController.getBButton():
+            self.mechanism.reverseIndex()
+        elif self.operator.xboxController.getRightY() > 0.7:
+            self.mechanism.indexNote()
+        elif self.operator.xboxController.getRightY() < -0.7:
             self.mechanism.reverseIndex()
         else:
             self.mechanism.stopIndexing()

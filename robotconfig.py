@@ -199,7 +199,7 @@ mechanismConfig = {
     "INTAKE_SPEED": 0.5,
     "INDEX_MOTOR_ID": 61,
     "INDEX_SPEED": 0.5,
-    
+    "INDEX_ROTATIONS": 1.5, #number of rotations that indexer makes when A is pressed, takes note from end of intake and pushes against shooter wheels
     "SHOOTER_LEFT_MOTOR_ID": 8,
     "SHOOTER_RIGHT_MOTOR_ID": 28,
     "SHOOTER_LEFT_SPEED": -0.6, #0.6 - good value for accuracy (on compliant wheels)
