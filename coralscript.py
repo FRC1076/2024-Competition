@@ -28,7 +28,7 @@ def publishBBox(bbox):
     return
 
 def main():
-    model = "~/notedetector29/edgetpu.tflite"
+    model = "/home/mendel/notedetector29/edgetpu.tflite"
     source = "/dev/video1:YUY2:800x600:20/1"
     source_size = "800x600"
     source_format = "RAW"
