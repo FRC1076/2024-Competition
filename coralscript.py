@@ -40,9 +40,9 @@ def publishBBox(bbox):
 
 def main():
     model = "/home/mendel/notedetector29/edgetpu.tflite"
-    source = "/dev/video1:YUY2:800x600:20/1"
+    source = "/dev/video1"
     source_size = (800, 600)
-    source_format = "RAW"
+    source_format = "raw"
     threshold = "0.75"
 
     interpreter = make_interpreter(model)
@@ -55,7 +55,7 @@ def main():
         objs = get_objects(interpreter, threshold)
         publishBBox(getClosestNote(objs))
 
-    gstreamer.run_pipeline(user_callback, src_size=source_size, appsink_size=inference_size, videosrc=source, videofmt=source_format)
+    gstreamer.run_pipeline(user_callback, src_size=source_size, appsink_size=inference_size, videosrc=source, videofmt=source_format, headless=True)
     return
 
 if __name__ == '__main__':
