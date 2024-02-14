@@ -16,7 +16,9 @@ NetworkTables.initialize()
 notePub = NetworkTables.getTable('noteDetector')
 
 def getClosestNote(objs):
+    print('getClosestNote called')
     if objs:
+        print('objs exist')
         objs.sort(key=lambda obj: obj.bbox.area, reverse=True)
         return objs[0]
     else:
@@ -30,8 +32,10 @@ def publishBBox(bbox):
         notePub.putNumber('xmax', bbox.xmax)
         notePub.putNumber('ymin', bbox.ymin)
         notePub.putNumber('ymax', bbox.ymax)
+        print('hasTarget')
     else:
         notePub.putBoolean('hasTarget', False)
+        print('no target detected')
     return
 
 def main():
@@ -47,7 +51,7 @@ def main():
 
     def user_callback(input_tensor, src_size, inference_box):
         run_inference(interpreter, input_tensor)
-
+        print('user_callback called')
         objs = get_objects(interpreter, threshold)
         publishBBox(getClosestNote(objs))
 
