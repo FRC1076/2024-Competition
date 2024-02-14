@@ -16,15 +16,22 @@ NetworkTables.initialize()
 notePub = NetworkTables.getTable('noteDetector')
 
 def getClosestNote(objs):
-    objs.sort(key=lambda obj: obj.bbox.area, reverse=True)
-    return objs[0]
+    if objs:
+        objs.sort(key=lambda obj: obj.bbox.area, reverse=True)
+        return objs[0]
+    else:
+        return False
 
 def publishBBox(bbox):
-    notePub.putString('testKey', "Hello world")
-    notePub.putNumber('xmin', bbox.xmin)
-    notePub.putNumber('xmax', bbox.xmax)
-    notePub.putNumber('ymin', bbox.ymin)
-    notePub.putNumber('ymax', bbox.ymax)
+    if bbox:
+        notePub.putString('testKey', "Hello world")
+        notPub.putBoolean('hasTarget', True)
+        notePub.putNumber('xmin', bbox.xmin)
+        notePub.putNumber('xmax', bbox.xmax)
+        notePub.putNumber('ymin', bbox.ymin)
+        notePub.putNumber('ymax', bbox.ymax)
+    else:
+        notePub.putBoolean('hasTarget', False)
     return
 
 def main():
