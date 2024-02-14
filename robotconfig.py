@@ -137,12 +137,12 @@ autonConfig = {
     'DO_COMMUNITY': False, # Only applies for position B
     'AUTON_OPEN_LOOP_RAMP_RATE': 1, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_A': [['START_INTAKE'], ['SHOOT_NOTE'], ['NOTE', 1], ['SHOOT_NOTE'], ['NOTE', 2], ['SHOOT_NOTE'], ['NOTE', 3], ['SHOOT_NOTE'], ['STOP_INTAKE']], #[['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 230.5, 57, 0], ['WAIT', 1], ['MOVE', 294, 57, 0], ['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0], ['WAIT', 1], ['MOVE', 294, 57, 0], ['WAIT', 1], ['MOVE', 262.25, 0, 0], ['MOVE', 230.5, 0, 0], ['WAIT', 1], ['MOVE', 294, 57, 0]]
+    'TASK_RED_A': [['START_INTAKE'], ['SHOOT_NOTE'], ['NOTE', 1], ['RAISE_ARM', -9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -9],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -9] ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']], #[['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 230.5, 57, 0], ['WAIT', 1], ['MOVE', 294, 57, 0], ['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0], ['WAIT', 1], ['MOVE', 294, 57, 0], ['WAIT', 1], ['MOVE', 262.25, 0, 0], ['MOVE', 230.5, 0, 0], ['WAIT', 1], ['MOVE', 294, 57, 0]]
     'noteConfig': {
-    #RED TEAM
-        'NOTE 1': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 57, 0]],
-        'NOTE 2': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
-        'NOTE 3': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 0, 0], ['MOVE', 230.5, 0, 0]],
+    #RED TEAM,
+        'NOTE 1': 'NOTE 1': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 57, 0]],
+        'NOTE 2': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 57, -90], ['MOVE', 230.5, 114, -90], ['MOVE', 230.5, 114, -(math.atan2(57,63.5) * 180/math.pi)] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
+        'NOTE 3': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 230.5, 114, 90], ['MOVE', 230.5, 0, 0], ['MOVE', 230.5, 0, (math.atan2(57,63.5) * 180/math.pi)]],
         'NOTE 4': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -75, 0], ['MOVE', 19.9, -75, 0] ],
         'NOTE 5': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0],['MOVE', 19.9, -9, 0]],
         'NOTE 6 NEGATIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0], ['MOVE', 19.9, 57, 0]],
