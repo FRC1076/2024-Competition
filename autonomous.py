@@ -28,6 +28,7 @@ class Autonomous:
         self.drivetrain = drivetrain
         self.mechanism = mechanism
         self.lastTime = -1
+        self.hasRolledBack = False
 
     def executeAuton(self):
         print(self.taskListCounter)
@@ -87,22 +88,40 @@ class Autonomous:
         elif self.autonTask[0] == 'SHOOT_NOTE':
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
-                self.mechanism.shootNote()
+            if self.hasRolledBack == False and (self.autonTimer.get() - self.lastTime < 1):
+                self.mechanism.indexFixedRollBack()
+                self.hasRolledBack = True
+            if self.hasRolledBack == True and (self.autonTimer.get() - self.lastTime < 1):
+                return
             if(self.autonTimer.get() - self.lastTime > 1):
+                self.hasRolledBack = False
+                self.mechanism.shootNote()
+            if(self.autonTimer.get() - self.lastTime > 3):
                 self.mechanism.indexNote()
-            if(self.autonTimer.get() - self.lastTime > 1.5):
-                self.mechanism.sprocketToDown()
+            if(self.autonTimer.get() - self.lastTime > 5):
+                self.mechanism.sprocketToPosition(-37)
                 self.mechanism.stopIndexing()
                 self.mechanism.stopShooting()
                 self.lastTime = -1
                 self.taskListCounter += 1
         
         elif self.autonTask[0] == 'RAISE_ARM': 
-            self.mechanism.sprocketToPosition(self.autonTask[1]) 
-            self.taskListCounter += 1
-        elif self.autonTask[0] == 'LOWER_ARM'
-            self.mechanism.sprocketToPosition(self.autonTask[1])
-            self.taskListCounter += 1
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+                self.mechanism.indexNote()
+            if(self.autonTimer.get() - self.lastTime > 1):
+                self.mechanism.indexNote()
+                if self.mechanism.sprocketToPosition(self.autonTask[1]):
+                    self.mechanism.stopSprocket()
+                    self.mechanism.stopIndexing()
+                    self.lastTime = -1
+                    self.taskListCounter += 1
+        elif self.autonTask[0] == 'LOWER_ARM':
+            self.mechanism.indexNote()
+            if self.mechanism.sprocketToPosition(self.autonTask[1]):
+                self.mechanism.stopIndexing()
+                self.mechanism.stopSprocket()
+                self.taskListCounter += 1
 
 
 

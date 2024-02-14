@@ -88,6 +88,7 @@ class Mechanism:
     def sprocketToPosition(self, targetPosition): #test and debug me!
         config = self.config
         self.sprocketPIDCalculation = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
+        self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(self.getSprocketAngle()), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
         if(targetPosition <= -30):
             self.sprocketPIDCalculation /= 2
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
@@ -95,7 +96,7 @@ class Mechanism:
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
         print(self.getSprocketAngle())
         self.sprocketLimitStop()
-        return
+        return abs(targetPosition - self.getSprocketAngle()) < 0.5
     
     def stopSprocket(self):
         config = self.config
