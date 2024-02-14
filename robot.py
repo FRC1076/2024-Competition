@@ -293,8 +293,11 @@ class MyRobot(wpilib.TimedRobot):
         #intake motor
         if self.operator.xboxController.getYButton():
             self.mechanism.intakeNote()
+            self.mechanism.indexNote()
+            self.mechanism.sprocketToPosition(-37)
         else:
             self.mechanism.stopIntake()
+            self.mechanism.stopIndexing()
                
         if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
             self.mechanism.indexNote()
@@ -303,13 +306,12 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getBButtonReleased():
             self.mechanism.indexFixedRollBack()
         else:
-            self.mechanism.stopIndexing()
+            if not self.operator.xboxController.getYButton():
+                self.mechanism.stopIndexing()
             
         #shooter motor and sprocket
         if self.operator.xboxController.getRightBumper():
             self.mechanism.shootNote()
-        elif self.operator.xboxController.getLeftBumper():
-            self.mechanism.shootReverse()
         else:
             self.mechanism.stopShooting()
         
@@ -320,11 +322,22 @@ class MyRobot(wpilib.TimedRobot):
         elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(-10) #-25.9 close up #-9 from stage head on
+            self.mechanism.sprocketToPosition(-9) #-25.9 close up #-9 from stage head on
             self.mechanism.indexNote()
-        
+        elif self.operator.xboxController.getAButton():
+            self.mechanism.sprocketToPosition(-25.9)
+            self.mechanism.indexNote()
+        elif self.operator.xboxController.getLeftBumper():
+            self.mechanism.sprocketToPosition(80)
+            self.mechanism.indexNote()
         else:
-            self.mechanism.stopSprocket()
+            if(not self.operator.xboxController.getYButton()):
+                self.mechanism.stopSprocket()
+
+        #sprocket down for climb
+        if self.operator.xboxController.getRightTriggerAxis() > 0.5 and self.operator.xboxController.getLeftTriggerAxis() > 0.5:
+                self.mechanism.sprocketToPosition(-30)
+
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
         self.teleopDrivetrain()
