@@ -91,10 +91,18 @@ class Autonomous:
             if(self.autonTimer.get() - self.lastTime > 1):
                 self.mechanism.indexNote()
             if(self.autonTimer.get() - self.lastTime > 1.5):
+                self.mechanism.sprocketToDown()
                 self.mechanism.stopIndexing()
                 self.mechanism.stopShooting()
                 self.lastTime = -1
                 self.taskListCounter += 1
+        
+        elif self.autonTask[0] == 'RAISE_ARM': 
+            self.mechanism.sprocketToPosition(self.autonTask[1]) 
+            self.taskListCounter += 1
+        elif self.autonTask[0] == 'LOWER_ARM'
+            self.mechanism.sprocketToPosition(self.autonTask[1])
+            self.taskListCounter += 1
 
 
 

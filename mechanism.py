@@ -88,7 +88,6 @@ class Mechanism:
     def sprocketToPosition(self, targetPosition): #test and debug me!
         config = self.config
         self.sprocketPIDCalculation = self.sprocketPID.calculate(self.getSprocketAngle(), targetPosition)
-        self.sprocketFeedforwardCalculation = self.sprocketFeedforward.calculate(math.radians(self.getSprocketAngle()), config["SPROCKET_FEEDFORWARD_VELOCITY"], config["SPROCKET_FEEDFORWARD_ACCELERATION"])
         if(targetPosition <= -30):
             self.sprocketPIDCalculation /= 2
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
@@ -137,3 +136,4 @@ class Mechanism:
             if(self.indexEncoder.getPosition() < self.rollBackStartValue - self.config["INDEX_ROLL_BACK_ROTATIONS"]):
                 self.inARollBack = False
                 self.indexMotor.set(0)
+
