@@ -17,7 +17,7 @@ class MyRobot(wpilib.TimedRobot):
         self.driver = controllers[0]
         self.operator = controllers[1]
         self.mechanism = Mechanism(robotConfig["MECHANISM"])
-        self.notedetector = NoteDetector()
+        self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
         return
     
     def controllerInit(self, config):

@@ -12,7 +12,7 @@ Find where to input video
 Find where to do interpreter.invoke (if needed)
 Use 'try' to prevent crashing/use networktables to send ready signal"""
 #see if I need a server (put this in main?)
-NetworkTables.initialize()
+NetworkTables.initialize(server='10.10.76.2')
 notePub = NetworkTables.getTable('noteDetector')
 
 def getClosestNote(objs):
@@ -26,7 +26,6 @@ def getClosestNote(objs):
 
 def publishBBox(bbox):
     if bbox:
-        notePub.putString('testKey', "Hello world")
         notPub.putBoolean('hasTarget', True)
         notePub.putNumber('xmin', bbox.xmin)
         notePub.putNumber('xmax', bbox.xmax)
@@ -40,7 +39,7 @@ def publishBBox(bbox):
 
 def main():
     model = "/home/mendel/notedetector29/edgetpu.tflite"
-    source = "/dev/video1"
+    source = "/dev/video0"
     source_size = (800, 600)
     source_format = "raw"
     threshold = "0.75"
@@ -49,12 +48,16 @@ def main():
     interpreter.allocate_tensors()
     inference_size = input_size(interpreter)
 
+    notePub.putString('testKey', "Hello world")
+
     def user_callback(input_tensor, src_size, inference_box):
         run_inference(interpreter, input_tensor)
         print('user_callback called')
         objs = get_objects(interpreter, threshold)
         publishBBox(getClosestNote(objs))
-
+    
+    print("main() called")
+    print(inference_size)
     gstreamer.run_pipeline(user_callback, src_size=source_size, appsink_size=inference_size, videosrc=source, videofmt=source_format, headless=True)
     return
 

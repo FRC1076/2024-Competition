@@ -22,8 +22,13 @@ mechanismConfig = {
     "LEFT_EJECT_SPEED": 0.85,
 }
 
+noteDetectorConfig = {
+    
+}
+
 robotConfig = {
     "CONTROLLERS": controllerConfig,
     "MECHANISM": mechanismConfig,
+    "NOTEDETECTOR": noteDetectorConfig,
 }
 

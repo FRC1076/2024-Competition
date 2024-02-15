@@ -1,10 +1,15 @@
 from networktables import NetworkTables
+import logging
 
 class NoteDetector:
     def __init__ (self, config):
         NetworkTables.initialize()
         self.noteSub = NetworkTables.getTable('noteDetector')
+
+        self.noteSub.putString('testKey', "stuff")
         self.config = config
+
+        logging.basicConfig(level=logging.DEBUG)
     
     def getXMin(self):
         return self.noteSub.getNumber('xmin', 0)
