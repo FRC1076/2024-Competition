@@ -17,23 +17,24 @@ NetworkTables.initialize()
 notePub = NetworkTables.getTable('noteDetector')
 
 def getClosestNote(objs):
-    print('getClosestNote called')
+    #print('getClosestNote called')
     if objs:
-        print('objs exist')
+        #print('objs exist')
         objs.sort(key=lambda obj: obj.bbox.area, reverse=True)
         return objs[0]
     else:
         return False
 
-def publishBBox(bbox):
-    if bbox:
+def publishBBox(obj):
+    if obj:
         notePub.putString('testKey', "Hello world")
-        notPub.putBoolean('hasTarget', True)
-        notePub.putNumber('xmin', bbox.xmin)
-        notePub.putNumber('xmax', bbox.xmax)
-        notePub.putNumber('ymin', bbox.ymin)
-        notePub.putNumber('ymax', bbox.ymax)
-        print('hasTarget')
+        notePub.putBoolean('hasTarget', True)
+        notePub.putNumber('xmin', obj.bbox.xmin)
+        notePub.putNumber('xmax', obj.bbox.xmax)
+        notePub.putNumber('ymin', obj.bbox.ymin)
+        notePub.putNumber('ymax', obj.bbox.ymax)
+        #print('hasTarget')
+        print('target at %f' % obj.bbox.xmin)
     else:
         notePub.putBoolean('hasTarget', False)
         print('no target detected')
@@ -46,15 +47,15 @@ def main():
     source = "/dev/video1"
     source_size = (800, 600)
     source_format = "raw"
-    threshold = "0.75"
+    threshold = 0.75
 
     interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
     inference_size = input_size(interpreter)
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     while cap.isOpened():
-        print("cap opened")
+        #print("cap opened")
         ret, frame = cap.read()
         if not ret:
             print('frame not received')
