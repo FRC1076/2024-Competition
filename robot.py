@@ -290,11 +290,12 @@ class MyRobot(wpilib.TimedRobot):
         return True
 
     def rainbowLED(self):
+        LED_COUNT = 1
         rainbow = 0
         i = 0
-        data = [wpilib.AddressableLED.LEDData(255, 0, 0), for _ in range(30)]
+        data = [wpilib.AddressableLED.LEDData(255, 0, 0) for _ in range(LED_COUNT)]
         for d in data:
-            hue = (rainbow + (i * 180 / 30) % 180))
+            hue = (rainbow + ((i * 180 / LED_COUNT) % 180))
             data[i].setHSV(int(hue), 255, 128)
             i += 1
             if rainbow > 180:
@@ -302,6 +303,7 @@ class MyRobot(wpilib.TimedRobot):
             rainbow += 3
             self.led.setData(data)
         self.led.setData(data)
+        self.led.start()
     
     def teleopPeriodic(self):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
