@@ -1111,10 +1111,11 @@ class SwerveDrive:
         for key in self.modules:
             self.modules[key].idle()
             
+    """
     def update_smartdash(self):
-        """
-        Log current state for telemetry
-        """
+        
+        #Log current state for telemetry
+        
         self.dashboard.putNumber(DASH_PREFIX, '/front_left_req_ang', self._requested_angles['front_left'])
         self.dashboard.putNumber(DASH_PREFIX, '/front_right_req_ang', self._requested_angles['front_right'])
         self.dashboard.putNumber(DASH_PREFIX, '/rear_left_req_ang', self._requested_angles['rear_left'])
@@ -1158,5 +1159,6 @@ class SwerveDrive:
         self.field.setRobotPose(wpimath.geometry.Pose2d((x + 248.625) * 0.0254, (y + 115.25) * 0.0254, wpimath.geometry.Rotation2d(self.getGyroAngle() * math.pi / 180))) #convert our coordinate system to theirs
         self.dashboard.putField(DASH_PREFIX, '/Field', self.field)
                 
+    """
     def log(self, *dataToLog):
         self.logger.log(DASH_PREFIX, dataToLog)   

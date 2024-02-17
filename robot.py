@@ -35,6 +35,9 @@ from dashboard import Dashboard
 from autonomous import Autonomous
 from mechanism import Mechanism
 
+from wpilib.shuffleboard import Shuffleboard
+from wpilib.shuffleboard import BuiltInWidgets
+
 ARCADE = 1
 TANK = 2
 SWERVE = 3
@@ -57,9 +60,10 @@ class MyRobot(wpilib.TimedRobot):
         self.config = robotConfig
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
+        #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
+        #self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
 
-        self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
-        self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
+        self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', True)
 
         dir = ''
         if TEST_MODE:
@@ -88,7 +92,6 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.resetGyro()
         return
     
-
     def disabledExit(self):
         self.log("no longer disabled")
         if self.drivetrain:
@@ -124,12 +127,12 @@ class MyRobot(wpilib.TimedRobot):
             teamGyroAdjustment = 180 # Blue Team faces 0 degrees at start.
             teamMoveAdjustment = -1 # Blue Team start is oriented 180 degrees from field.
 
-        self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', self.team_is_red)
+        #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', self.team_is_red)
 
         self.log("FIELD_START_POSITION:", config['FIELD_START_POSITION'])
 
         if (config['FIELD_START_POSITION'] == 'A'):
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
+            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
             self.fieldStartPosition = 'A'
             if self.team_is_red:
                 starting_position_x = config['FIELD_RED_A_START_POSITION_X']
@@ -140,7 +143,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_y = config['FIELD_BLU_A_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_A_START_ANGLE']
         elif (config['FIELD_START_POSITION'] == 'B'):
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'B')
+            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'B')
             self.fieldStartPosition = 'B'
             if self.team_is_red:
                 starting_position_x = config['FIELD_RED_B_START_POSITION_X']
@@ -151,7 +154,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_y = config['FIELD_BLU_B_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_B_START_ANGLE']
         else: # config['FIELD_START_POSITION'] == 'C'
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'C')
+            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'C')
             self.fieldStartPosition = 'C'
             if self.team_is_red:
                 starting_position_x = config['FIELD_RED_C_START_POSITION_X']
@@ -170,7 +173,7 @@ class MyRobot(wpilib.TimedRobot):
             actual_bumper_dimension_x = 0.0
             actual_bumper_dimension_y = 0.0
 
-        self.dashboard.putBoolean(DASH_PREFIX, 'Has Bumpers Attached', bumpers_attached)
+        #self.dashboard.putBoolean(DASH_PREFIX, 'Has Bumpers Attached', bumpers_attached)
 
         field_cfg = FieldConfig(sd_prefix='Field_Module',
                                 origin_x=config['FIELD_ORIGIN_X'],
@@ -292,7 +295,12 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
+
+        if self.dashboard.getBoolean(DASH_PREFIX,'Team is Red'):
+            print("true")
+        else:
+            print("false")
+        #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         if self.operator.xboxController.getYButton():
             self.mechanism.intakeNote()
@@ -315,13 +323,15 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopShooting()
         
         #rotate sprocketDown
-        if self.operator.xboxController.getLeftTriggerAxis() > 0.7:
+        if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
             self.mechanism.sprocketDown()
         #rotate sprocket down
-        elif self.operator.xboxController.getRightTriggerAxis() > 0.7:
+        elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(0)
+            self.mechanism.sprocketToPosition(-10) #-25.9 close up #-9 from stage head on
+            self.mechanism.indexNote()
+        
         else:
             self.mechanism.stopSprocket()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
