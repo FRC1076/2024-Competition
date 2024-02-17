@@ -322,8 +322,24 @@ class MyRobot(wpilib.TimedRobot):
         #rotate sprocket down
         elif self.operator.xboxController.getRightTriggerAxis() > 0.7:
             self.mechanism.sprocketUp()
-        elif self.operator.xboxController.getXButton():
+        #shooter commands and motor check
+        elif self.operator.xboxController.getXButtonPressed():
             self.mechanism.sprocketToPosition(-22.9)
+            
+            if self.mechanism.indexEncoder >= 0
+                self.mechanism.sequenceIndexStartup()
+            
+        elif self.operator.xboxController.getXbutton():
+
+            if self.mechanism.indexEncoder == 0:
+                self.mechanism.sequenceIndexFirstProgress()
+            
+            elif True:
+                self.mechanism.sequenceIndexSecondProgress()
+            
+        elif self.operator.xboxController.getXbuttonReleased:
+            self.mechanism.sequenceIndexFinishedProgress()
+        
         else:
             self.mechanism.stopSprocket()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])

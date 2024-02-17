@@ -120,7 +120,20 @@ class Mechanism:
     def reverseIndex(self):
         self.indexMotor.set(-1 * self.config["INDEX_SPEED"])
         return
-    def sequenceIndex(self):
+    
+    # sequence definitions that complete parts of the purpose
+    
+    def sequenceIndexStartup(self):
         self.indexMotor.setPosition(0)
-
+        self.indexEncoder.set(0)
+        return
+    
+    def sequenceIndexFirstProgress(self):
+        
+        return
+    
+    def sequenceIndexSecondProgress(self):
+        return
+    
+    def sequenceIndexFinishedProgress(self):
         return
