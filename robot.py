@@ -322,11 +322,10 @@ class MyRobot(wpilib.TimedRobot):
         elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(-9) #-25.9 close up #-9 from stage head on
+            self.mechanism.sprocketToPosition(-3) #-25.9 close up #-9 from stage head on
             self.mechanism.indexNote()
         elif self.operator.xboxController.getAButton():
-            self.mechanism.sprocketToPosition(-25.9)
-            self.mechanism.indexNote()
+            self.mechanism.sprocketToPosition(-20.9)
         elif self.operator.xboxController.getLeftBumper():
             self.mechanism.sprocketToPosition(80)
             self.mechanism.indexNote()
