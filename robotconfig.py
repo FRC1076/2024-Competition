@@ -208,6 +208,7 @@ mechanismConfig = {
     "SHOOTER_RIGHT_SPEED": 1, #1 - good value for accuracy (on compliant wheels)
     "SHOOTER_LEFT_REVERSE_SPEED": 0.2,
     "SHOOTER_RIGHT_REVERSE_SPEED": -0.2,
+    "SHOOTER_OPEN_LOOP_RAMP_RATE": 1,
     #Up and down speeds for the Sprocket Motor, NEED TO BE SET
     "SPROCKET_LEFT_MOTOR_ID": 6,
     "SPROCKET_RIGHT_MOTOR_ID": 7,
@@ -232,6 +233,7 @@ mechanismConfig = {
     "SPROCKET_FEEDFORWARD_KA": 0,
     "SPROCKET_FEEDFORWARD_VELOCITY": 0, #in radians
     "SPROCKET_FEEDFORWARD_ACCELERATION": 0, #in radians/second^2
+
 
 }
 
