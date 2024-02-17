@@ -6,7 +6,6 @@ from wpimath.controller import PIDController
 from wpimath.controller import ArmFeedforward
 import rev
 from wpilib import DoubleSolenoid
-import ctre
 import rev
 from beambreak import BeamBreak
 import math
