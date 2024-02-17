@@ -51,7 +51,11 @@ class MyRobot(wpilib.TimedRobot):
         self.operator = None
         self.auton = None
         self.vision = None
-        self.led = wpilib.AddressableLED(2)
+        self.led = wpilib.AddressableLED(3)
+        self.LED_COUNT = 84
+
+        self.led.setLength(self.LED_COUNT)
+
 
 
         # Even if no drivetrain, defaults to drive phase
@@ -290,12 +294,11 @@ class MyRobot(wpilib.TimedRobot):
         return True
 
     def rainbowLED(self):
-        LED_COUNT = 1
         rainbow = 0
         i = 0
-        data = [wpilib.AddressableLED.LEDData(255, 0, 0) for _ in range(LED_COUNT)]
+        data = [wpilib.AddressableLED.LEDData(255, 0, 0) for _ in range(self.LED_COUNT)]
         for d in data:
-            hue = (rainbow + ((i * 180 / LED_COUNT) % 180))
+            hue = (rainbow + ((i * 180 / self.LED_COUNT) % 180))
             data[i].setHSV(int(hue), 255, 128)
             i += 1
             if rainbow > 180:
