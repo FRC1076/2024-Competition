@@ -26,6 +26,8 @@ class Mechanism:
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
         self.leftShootingMotor.enableVoltageCompensation(12)
         self.rightShootingMotor.enableVoltageCompensation(12)
+        self.leftShootingMotor.setOpenLoopRampRate(config["SHOOTER_OPEN_LOOP_RAMP_RATE"])
+        self.rightShootingMotor.setOpenLoopRampRate(config["SHOOTER_OPEN_LOOP_RAMP_RATE"])
         # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
         self.sprocketLeftMotor = rev.CANSparkMax(config["SPROCKET_LEFT_MOTOR_ID"], motor_type_brushless)
         self.sprocketRightMotor = rev.CANSparkMax(config["SPROCKET_RIGHT_MOTOR_ID"], motor_type_brushless)
