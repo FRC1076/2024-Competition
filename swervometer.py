@@ -51,6 +51,13 @@ class Swervometer:
     
         self.calcLeverArmLengths()
 
+    def startTimer(self):
+        self.timer = wpilib.Timer()
+        self.timer.start()
+
+    def getTimer(self):
+        return self.timer.get()
+
     def getFrameDimensions(self):
         #return self.frame_dimension_x, self.frame_dimension_y
         return self.swerveModuleOffsetX * 2, self.swerveModuleOffsetY * 2
@@ -209,11 +216,11 @@ class Swervometer:
         frontRightModule = modules['front_right'].getSwerveModulePosition()
         rearLeftModule = modules['rear_left'].getSwerveModulePosition()
         rearRightModule = modules['rear_right'].getSwerveModulePosition()
-        self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
+        self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentBearing = gyroAngle
         if(self.vision.hasTargets()):
             self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37
-        print("CURRENT POSE", self.currentX, self.currentY)
+        #print("CURRENT POSE", self.currentX, self.currentY)

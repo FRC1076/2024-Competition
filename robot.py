@@ -83,6 +83,10 @@ class MyRobot(wpilib.TimedRobot):
 
         if self.drivetrain:
             self.drivetrain.resetGyro()
+        
+        self.swervometer.startTimer()
+        self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
+
         return
     
     def disabledExit(self):
@@ -285,6 +289,9 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules)
         self.mechanism.periodic()
         return True
     

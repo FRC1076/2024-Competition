@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'A', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
@@ -138,7 +138,8 @@ autonConfig = {
     'DO_COMMUNITY': False, # Only applies for position B
     'AUTON_OPEN_LOOP_RAMP_RATE': 1, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 1], ['RAISE_ARM', -7], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -10],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -10], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']], #[['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 230.5, 57, 0], ['WAIT', 1], ['MOVE', 294, 57, 0], ['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0], ['WAIT', 1], ['MOVE', 294, 57, 0], ['WAIT', 1], ['MOVE', 262.25, 0, 0], ['MOVE', 230.5, 0, 0], ['WAIT', 1], ['MOVE', 294, 57, 0]]
+    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 1], ['RAISE_ARM', -7], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -10],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -10], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']],
+    'TASK_BLUE_A': [],
     'noteConfig': {
     #RED TEAM,
         'NOTE 1': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 235.5, 57, 0]],

@@ -1091,6 +1091,29 @@ class SwerveDrive:
             self.set_rcw(0)
             self.execute('center')
     
+    def pointToPose(self, x, y):
+        currentX, currentY, currentR = self.swervometer.getCOF()
+        #print(y - currentY, x - currentX)
+        try:
+            #oliver = self.getGyroAngle() - math.atan((y - currentY)/(x - currentX)) * 180/math.pi
+            desiredAngle = 180 - math.atan2((currentY - y - 12 * math.sin(self.getGyroAngle() * math.pi / 180)), (currentX - x - 12 * math.cos(self.getGyroAngle()  * math.pi / 180))) * 180/math.pi
+            #print(self.getGyroAngle() - math.atan((y - currentY)/(x - currentX)) * 180/math.pi)
+            #print(math.atan(-(y - currentY)/(x - currentX)) * 180/math.pi)
+            print(y, currentY, x, currentX)
+            print(desiredAngle)
+            print(self.getGyroAngle())
+            angleMove = self.bearing_pid_controller.calculate(self.getGyroAngle(), desiredAngle)
+            #print(math.atan2(-(y - currentY), (x - currentX)) * 180/math.pi)
+            #print("Gyro", self.getGyroAngle())
+            #print(angleMove)
+            #print(-clamp(angleMove))
+            self.set_rcw(clamp(angleMove))
+        except:
+            pass
+        #print(self.getGyroAngle())
+
+        return
+    
     def visionPeriodic(self):
         if(self.vision.hasTargets()):
             targetErrorAngle = self.vision.getTargetPoseCameraSpace()[4]
@@ -1105,7 +1128,10 @@ class SwerveDrive:
         if(self.vision.hasTargets()):
             newX = self.poseXFilter.calculate(self.vision.getPose()[0])
             newY = self.poseYFilter.calculate(self.vision.getPose()[1])
-            self.swervometer.setCOF(newX, newY, self.getBearing())
+            self.swervometer.setCOF(newX, newY, self.getBearing())  
+
+    def getModules(self):
+        return self.modules
 
     def idle(self):
         for key in self.modules:
