@@ -14,8 +14,8 @@ class Mechanism:
     def __init__(self, config) -> None:
         self.config = config
 
-        motor_type_brushless = rev.CANSparkMaxLowLevel.MotorType.kBrushless
-        motor_type_brushed = rev.CANSparkMaxLowLevel.MotorType.kBrushed
+        motor_type_brushless = rev.CANSparkLowLevel.MotorType.kBrushless
+        motor_type_brushed = rev.CANSparkLowLevel.MotorType.kBrushed
         self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
         self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
