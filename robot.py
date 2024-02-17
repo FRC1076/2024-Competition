@@ -9,7 +9,7 @@ import wpilib.drive
 import wpimath.controller
 from wpilib import interfaces
 import rev
-import ctre
+from phoenix5.sensors import CANCoder
 from navx import AHRS
 from networktables import NetworkTables
 
@@ -249,10 +249,10 @@ class MyRobot(wpilib.TimedRobot):
         rlModule_rotateMotor = rev.CANSparkMax(config['REARLEFT_ROTATEMOTOR'], motor_type)
         rrModule_rotateMotor = rev.CANSparkMax(config['REARRIGHT_ROTATEMOTOR'], motor_type)
 
-        flModule_rotateMotor_encoder = ctre.CANCoder(config['FRONTLEFT_ENCODER'])
-        frModule_rotateMotor_encoder = ctre.CANCoder(config['FRONTRIGHT_ENCODER'])
-        rlModule_rotateMotor_encoder = ctre.CANCoder(config['REARLEFT_ENCODER'])
-        rrModule_rotateMotor_encoder = ctre.CANCoder(config['REARRIGHT_ENCODER'])
+        flModule_rotateMotor_encoder = CANCoder(config['FRONTLEFT_ENCODER'])
+        frModule_rotateMotor_encoder = CANCoder(config['FRONTRIGHT_ENCODER'])
+        rlModule_rotateMotor_encoder = CANCoder(config['REARLEFT_ENCODER'])
+        rrModule_rotateMotor_encoder = CANCoder(config['REARRIGHT_ENCODER'])
 
         frontLeftModule = SwerveModule(flModule_driveMotor, flModule_driveMotor_encoder, flModule_rotateMotor, flModule_rotateMotor_encoder, flModule_cfg)
         frontRightModule = SwerveModule(frModule_driveMotor, frModule_driveMotor_encoder, frModule_rotateMotor, frModule_rotateMotor_encoder, frModule_cfg)
