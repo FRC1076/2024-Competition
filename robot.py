@@ -213,6 +213,7 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [0.3, 0, 0.45, 0, 0, 0])
         return vision
     
     def initDrivetrain(self, config):
