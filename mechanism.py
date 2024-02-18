@@ -24,6 +24,8 @@ class Mechanism:
         self.rollBackStartValue = 0
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
+        self.leftShootingEncoder = self.leftShootingMotor.getEncoder()
+        self.rightShootingEncoder = self.rightShootingMotor.getEncoder()
         self.leftShootingMotor.enableVoltageCompensation(12)
         self.rightShootingMotor.enableVoltageCompensation(12)
         self.leftShootingMotor.setOpenLoopRampRate(config["SHOOTER_OPEN_LOOP_RAMP_RATE"])
@@ -138,4 +140,7 @@ class Mechanism:
             if(self.indexEncoder.getPosition() < self.rollBackStartValue - self.config["INDEX_ROLL_BACK_ROTATIONS"]):
                 self.inARollBack = False
                 self.indexMotor.set(0)
+
+    def getShooterRPM(self):
+        return self.leftShootingEncoder.getVelocity(), self.rightShootingEncoder.getVelocity()
 
