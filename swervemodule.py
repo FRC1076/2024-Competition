@@ -265,7 +265,7 @@ class SwerveModule:
         self.newAngle = self.get_current_angle()
         self.lastPosition = self.newPosition # save it for next time
 
-        self.update_smartdash()
+        #self.update_smartdash()
     
     def testMove(self, driveInput, rotateInput):
         self.driveMotor.set(clamp(driveInput))
