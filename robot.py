@@ -64,34 +64,7 @@ class MyRobot(wpilib.TimedRobot):
         #self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
 
         self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
-
-        self.dashboard.putNumber(DASH_PREFIX, 'kP',0)
-        self.dashboard.putNumber(DASH_PREFIX, 'kI',0)
-        self.dashboard.putNumber(DASH_PREFIX, 'kD',0)
-
-        self.dashboard.putNumber(DASH_PREFIX, 'Starting Location (x)',0)
-        self.dashboard.putNumber(DASH_PREFIX, 'Starting Location (y)',0)
-
-        self.dashboard.putNumber(DASH_PREFIX, 'Auton Plan #',0)
-
-        self.dashboard.putBoolean(DASH_PREFIX, 'Note Inside', False)
-        self.dashboard.putBoolean(DASH_PREFIX, 'Note Detected', True)
-
-        """
-        Recieve:
-        - Limelight video
-        - Is there note on robot
-        - Is there note in sight of cameria
-        - List of visible April tags
-        - Robot Stats
-        - Current sprocket angles
-
-        """
-
-        #self.dashboard.putData(DASH_PREFIX, 'putData',0)
-        #self.dashboard.putField(DASH_PREFIX, 'putField',0)
-        #self.dashboard.putRaw(DASH_PREFIX, 'putRaw',0)
-        
+        self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
 
         dir = ''
         if TEST_MODE:
@@ -323,28 +296,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        
-        print("------------------------------------------")
-        if self.dashboard.getBoolean(DASH_PREFIX,'Team is Red'):
-            print("team red")
-        else:
-            print("team blue")
-
-        print("kP:",self.dashboard.getNumber(DASH_PREFIX, 'kP'))
-        print("kI:",self.dashboard.getNumber(DASH_PREFIX, 'kI'))
-        print("kD:",self.dashboard.getNumber(DASH_PREFIX, 'kD'))
-
-        print("Starting Location: (",self.dashboard.getNumber(DASH_PREFIX, 'Starting Location (x)'),",",
-            self.dashboard.getNumber(DASH_PREFIX, 'Starting Location (y)',0),")")
-
-        print("Auton Plan #"+str(self.dashboard.getNumber(DASH_PREFIX, 'Auton Plan #')))
-
-        print(self.dashboard.getBoolean(DASH_PREFIX, 'Note Inside'))
-        print(self.dashboard.getBoolean(DASH_PREFIX, 'Note Detected'))
-
-        print("------------------------------------------")
-        
-        #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
+        print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         if self.operator.xboxController.getYButton():
             self.mechanism.intakeNote()
