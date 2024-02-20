@@ -23,10 +23,14 @@ class Mechanism:
         self.rollBackStartValue = 0
         self.leftShootingMotor = rev.CANSparkMax(config["SHOOTER_LEFT_MOTOR_ID"], motor_type_brushless)
         self.rightShootingMotor = rev.CANSparkMax(config["SHOOTER_RIGHT_MOTOR_ID"], motor_type_brushless)
+        self.leftShootingEncoder = self.leftShootingMotor.getEncoder()
+        self.rightShootingEncoder = self.rightShootingMotor.getEncoder()
         self.leftShootingMotor.enableVoltageCompensation(12)
         self.rightShootingMotor.enableVoltageCompensation(12)
         self.leftShootingMotor.setOpenLoopRampRate(config["SHOOTER_OPEN_LOOP_RAMP_RATE"])
         self.rightShootingMotor.setOpenLoopRampRate(config["SHOOTER_OPEN_LOOP_RAMP_RATE"])
+        self.leftShooterPID = PIDController(0.0002, 0, 0)
+        self.rightShooterPID = PIDController(0.0003, 0.0001, 0.0001) #0.0007, 0, 0.0005
         # self.moveHoodMotor = rev.CANSparkMax(config["HOOD_MOTOR_ID"], motor_type_brushless)
         self.sprocketLeftMotor = rev.CANSparkMax(config["SPROCKET_LEFT_MOTOR_ID"], motor_type_brushless)
         self.sprocketRightMotor = rev.CANSparkMax(config["SPROCKET_RIGHT_MOTOR_ID"], motor_type_brushless)
@@ -55,8 +59,10 @@ class Mechanism:
     #do the sequence that shoots the note
     #r1 shoots the note
     def shootNote(self):
-        self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
-        self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
+        #self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
+        self.setLeftShooterRPM(-4000)
+        self.setRightShooterRPM(5000)
+        #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
     def shootReverse(self):
@@ -143,3 +149,12 @@ class Mechanism:
                 self.inARollBack = False
                 self.indexMotor.set(0)
 
+    def getShooterRPM(self):
+        return self.leftShootingEncoder.getVelocity(), self.rightShootingEncoder.getVelocity()
+
+    def setLeftShooterRPM(self, rpm):
+        self.leftShootingMotor.set(rpm / 5100 + self.leftShooterPID.calculate(self.leftShootingEncoder.getVelocity(), rpm))
+
+    def setRightShooterRPM(self, rpm):
+        self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+        print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
