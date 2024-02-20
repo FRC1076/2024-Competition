@@ -196,7 +196,7 @@ dashboardConfig = {
 
 #all unknown values equal 0
 mechanismConfig = {
-    "INTAKE_BEAMBREAK_PIN": 1,
+    "INTAKE_BEAMBREAK_PIN": 5,
     "INTAKE_MOTOR_ID": 5,
     "INTAKE_SPEED": 0.75,
     "INDEX_MOTOR_ID": 61,

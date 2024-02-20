@@ -298,8 +298,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopPeriodic(self):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        print(self.mechanism.getShooterRPM())
-        if self.operator.xboxController.getYButton():
+        if self.operator.xboxController.getYButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
             self.mechanism.sprocketToPosition(-37)
@@ -319,10 +318,11 @@ class MyRobot(wpilib.TimedRobot):
             
         #shooter motor and sprocket
         if self.operator.xboxController.getRightBumper():
-            self.mechanism.shootNote()
-        else:
-            self.mechanism.stopShooting()
-        
+            if self.mechanism.indexingBeam.beamBroken() == True:
+                self.mechanism.shootNote()
+            else:
+                self.mechanism.stopShooting()
+
         #rotate sprocketDown
         if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
             self.mechanism.sprocketDown()
@@ -385,7 +385,7 @@ class MyRobot(wpilib.TimedRobot):
         
         # Regular driving, not a maneuver
         if False:
-             print("a")
+            print("a")
         else:
             strafe = self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone)
             fwd = self.deadzoneCorrection(driver.getLeftY() * translational_clutch, self.driver.deadzone)
