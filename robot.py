@@ -17,7 +17,7 @@ class MyRobot(wpilib.TimedRobot):
         self.driver = controllers[0]
         self.operator = controllers[1]
         self.mechanism = Mechanism(robotConfig["MECHANISM"])
-        self.notedetector = NoteDetector()
+        self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
         return
     
     def controllerInit(self, config):
@@ -41,7 +41,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
-        print(self.notedetector.getTestMessage())
+        print('target at ({}, {})'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY()))
 
         if self.operator.xboxController.getAButton():
             self.mechanism.shootNote()

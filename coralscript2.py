@@ -8,12 +8,11 @@ import numpy as np
 import cv2
 
 """To Do:
-Find where to put run_inference
-Find where to input video
-Find where to do interpreter.invoke (if needed)
+When robot code is enabled before coralscript2 runs, robot code crashes upon coralscript2 running
+Account for note height
 Use 'try' to prevent crashing/use networktables to send ready signal"""
 #see if I need a server (put this in main?)
-NetworkTables.initialize()
+NetworkTables.initialize(server='10.10.76.2')
 notePub = NetworkTables.getTable('noteDetector')
 
 def getClosestNote(objs):
@@ -27,14 +26,15 @@ def getClosestNote(objs):
 
 def publishBBox(obj):
     if obj:
-        notePub.putString('testKey', "Hello world")
+        notePub.putString('testKey', 'Hello world')
         notePub.putBoolean('hasTarget', True)
         notePub.putNumber('xmin', obj.bbox.xmin)
         notePub.putNumber('xmax', obj.bbox.xmax)
         notePub.putNumber('ymin', obj.bbox.ymin)
         notePub.putNumber('ymax', obj.bbox.ymax)
-        #print('hasTarget')
-        print('target at %f' % obj.bbox.xmin)
+
+        message = 'target at ({}, {})'
+        print(message.format(((obj.bbox.xmin + obj.bbox.xmax)/2), ((obj.bbox.ymin + obj.bbox.ymax)/2)))
     else:
         notePub.putBoolean('hasTarget', False)
         print('no target detected')
@@ -52,6 +52,8 @@ def main():
     interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
     inference_size = input_size(interpreter)
+
+    print(inference_size)
 
     cap = cv2.VideoCapture(1)
     while cap.isOpened():
