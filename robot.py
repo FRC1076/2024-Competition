@@ -298,7 +298,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopPeriodic(self):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        if self.operator.xboxController.getYButton() and self.mechanism.indexingBeam.beamBroken() == False:
+        if self.operator.xboxController.getAButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
             self.mechanism.sprocketToPosition(-37)
@@ -310,14 +310,14 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.indexNote()
         elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
             self.mechanism.reverseIndex()
-        elif self.operator.xboxController.getBButtonReleased():
-            self.mechanism.indexFixedRollBack()
+        #elif self.operator.xboxController.getBButtonReleased():
+            #self.mechanism.indexFixedRollBack()
         else:
             if not self.operator.xboxController.getYButton():
                 self.mechanism.stopIndexing()
             
         #shooter motor and sprocket
-        if self.operator.xboxController.getRightBumper():
+        while self.operator.xboxController.getLeftTriggerAxis() > 0.5:
             if self.mechanism.indexingBeam.beamBroken() == True:
                 self.mechanism.shootNote()
             else:
@@ -332,9 +332,9 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(-3) #-25.9 close up #-9 from stage head on
             self.mechanism.indexNote()
-        elif self.operator.xboxController.getAButton():
+        elif self.operator.xboxController.getBButton():
             self.mechanism.sprocketToPosition(-20.9)
-        elif self.operator.xboxController.getLeftBumper():
+        elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80)
             self.mechanism.indexNote()
         else:
@@ -342,7 +342,7 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.stopSprocket()
 
         #sprocket down for climb
-        if self.operator.xboxController.getRightTriggerAxis() > 0.5 and self.operator.xboxController.getLeftTriggerAxis() > 0.5:
+        if self.operator.xboxController.getRightBumper and self.operator.xboxController.getLeftBumper:
                 self.mechanism.sprocketToPosition(-30)
 
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
