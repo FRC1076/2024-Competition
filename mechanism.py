@@ -16,7 +16,6 @@ class Mechanism:
 
         motor_type_brushless = rev.CANSparkLowLevel.MotorType.kBrushless
         motor_type_brushed = rev.CANSparkLowLevel.MotorType.kBrushed
-        self.intakeBeamBreak = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.intakeMotor = rev.CANSparkMax(config["INTAKE_MOTOR_ID"], motor_type_brushless)
         self.indexMotor = rev.CANSparkMax(config["INDEX_MOTOR_ID"], motor_type_brushless)
         self.indexEncoder = self.indexMotor.getEncoder()
@@ -44,8 +43,6 @@ class Mechanism:
     #action is intake or eject, L1 is intake, B is eject
     def intakeNote(self):
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
-        if self.intakeBeamBreak.beamBroken():
-            print("note inside intake")
         return
     
     def stopIntake(self):

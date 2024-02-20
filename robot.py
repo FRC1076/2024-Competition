@@ -298,7 +298,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopPeriodic(self):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        if self.operator.xboxController.getYButton():
+        if self.operator.xboxController.getYButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
             self.mechanism.sprocketToPosition(-37)
