@@ -38,6 +38,7 @@ class Mechanism:
         self.sprocketAbsoluteEncoder = wpilib.DutyCycleEncoder(config["SPROCKET_ENCODER_ID"])
         self.sprocketEncoderShift = config["SPROCKET_ENCODER_SHIFT"]
         self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
+        self.indexingBeam = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -130,8 +131,14 @@ class Mechanism:
     def indexFixedRollBack(self):
         if not self.inARollBack:
             self.inARollBack = True
-            self.rollBackStartValue = self.indexEncoder.getPosition()
-    
+
+    def indexBeamBroken(self):
+        return self.indexingBeam.beamBroken()
+
+    def indexBeamHealthy(self):
+        return self.indexingBeam.isSelfCheckHealthy()
+
+
     def periodic(self):
         if self.inARollBack:
             self.indexMotor.set(-self.config["INDEX_SPEED"])
