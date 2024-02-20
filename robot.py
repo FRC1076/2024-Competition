@@ -298,6 +298,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopPeriodic(self):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
+        print(self.mechanism.getShooterRPM())
         if self.operator.xboxController.getYButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
@@ -333,7 +334,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(-3) #-25.9 close up #-9 from stage head on
             self.mechanism.indexNote()
         elif self.operator.xboxController.getAButton():
-            self.mechanism.sprocketToPosition(-20.9)
+            self.mechanism.sprocketToPosition(-24)
         elif self.operator.xboxController.getLeftBumper():
             self.mechanism.sprocketToPosition(80)
             self.mechanism.indexNote()
