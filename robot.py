@@ -300,6 +300,7 @@ class MyRobot(wpilib.TimedRobot):
         #intake motor
         print(self.mechanism.getShooterRPM())
         if self.operator.xboxController.getYButton() and self.mechanism.indexingBeam.beamBroken() == False:
+            self.mechanism.stopShooting()
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
             self.mechanism.sprocketToPosition(-37)
@@ -332,12 +333,10 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketUp()
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(-3) #-25.9 close up #-9 from stage head on
-            self.mechanism.indexNote()
         elif self.operator.xboxController.getAButton():
             self.mechanism.sprocketToPosition(-24)
         elif self.operator.xboxController.getLeftBumper():
             self.mechanism.sprocketToPosition(80)
-            self.mechanism.indexNote()
         else:
             if(not self.operator.xboxController.getYButton()):
                 self.mechanism.stopSprocket()
