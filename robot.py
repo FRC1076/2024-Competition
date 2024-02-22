@@ -274,7 +274,7 @@ class MyRobot(wpilib.TimedRobot):
         #gyro = AHRS.create_spi()
         gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
         
-        swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight)
+        swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 
         return swerve
 
@@ -299,7 +299,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
-        print('target at ({}, {})'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY()))
+        print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         print(self.mechanism.getShooterRPM())
@@ -386,6 +386,8 @@ class MyRobot(wpilib.TimedRobot):
         if(driver.getAButton()):
             self.drivetrain.alignWithApril(0, 75, 0)
             return False
+        if(driver.getXButton()):
+            self.drivetrain.alignWithNote(0, 20, 0)
         
         # Regular driving, not a maneuver
         if False:

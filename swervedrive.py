@@ -57,7 +57,8 @@ class SwerveDrive:
             _bearing_cfg,
             _visionDrive_cfg,
             _auton_steer_straight,
-            _teleop_steer_straight):
+            _teleop_steer_straight,
+            _notedetector):
         
         self.logger = Logger.getLogger()
         self.frontLeftModule = _frontLeftModule
@@ -75,6 +76,7 @@ class SwerveDrive:
 
         self.swervometer = _swervometer
         self.vision = _vision
+        self.notedetector = _notedetector
         self.gyro = _gyro
         self.gyro_angle_zero = 0.0
         #assuming balanced at initialization
@@ -1055,6 +1057,50 @@ class SwerveDrive:
             targetErrorY = self.vision.getTargetPoseCameraSpace()[2] - offsetY
             #targetErrorAngle = math.degrees(math.atan(targetErrorX / targetErrorY))
             targetErrorAngle = self.filteredValues - offsetAngle
+            #targetErrorAngle = 0
+            #print(self.vision.getTargetPoseCameraSpace()[4])
+            #print()
+            #print(targetErrorAngle)
+
+            # if(abs(targetErrorX) < 3):
+            #     targetErrorX /= 2
+            # if(abs(targetErrorY) < 3):
+            #     targetErrorY /= 2
+            # rotationSpeed = self.visionDrive_r_pid_controller.calculate(-self.filteredValues)
+            # if(not self.visionDrive_r_pid_controller.atSetpoint()):
+            #     self.set_rcw(rotationSpeed)
+            # self.goToPose(x + targetErrorY, y - targetErrorX, self.getBearing())
+            # #self.move(0, 0, clamp(targetErrorAngle) / 5, self.getBearing())
+            # #print(self.visionDrive_r_pid_controller.getPositionError())
+            # rotationSpeed = self.visionDrive_r_pid_controller.calculate(-self.filteredValues)
+            # #print(self.visionDrive_r_pid_controller.atSetpoint())
+            # if(not self.visionDrive_r_pid_controller.atSetpoint()):
+            #     self.set_rcw(rotationSpeed)
+            #     #self.execute('center')
+            #self.move(clamp(targetErrorX), clamp(targetErrorY), -targetErrorAngle, self.getBearing())
+            xMove = self.visionDrive_x_pid_controller.calculate(targetErrorX)
+            yMove = self.visionDrive_y_pid_controller.calculate(targetErrorY)
+            angleMove = self.visionDrive_r_pid_controller.calculate(targetErrorAngle)
+            #yMove = 0
+            #self.move(clamp(yMove), clamp(xMove), clamp(angleMove), self.getBearing())
+            # self.move(-clamp(yMove), 0, -clamp(angleMove), self.getBearing())
+            # self.move(0, 0, -clamp(angleMove), self.getBearing())
+            self.set_fwd(clamp(xMove))
+            self.set_strafe(clamp(yMove))
+            self.set_rcw(-clamp(angleMove))
+            self.execute('center')
+        else:
+            self.set_rcw(0)
+            self.execute('center')
+    
+    def alignWithNote(self, offsetX, offsetY, offsetAngle):
+        x, y, r = self.swervometer.getCOF()
+
+        if(self.notedetector.hasTargets()):
+            targetErrorX = self.notedetector.getTargetErrorX - offsetX
+            targetErrorY = self.notedetector.getTargetErrorY - offsetY
+            #targetErrorAngle = math.degrees(math.atan(targetErrorX / targetErrorY))
+            targetErrorAngle = self.notedetector.getTargetErrorAngle - offsetAngle
             #targetErrorAngle = 0
             #print(self.vision.getTargetPoseCameraSpace()[4])
             #print()
