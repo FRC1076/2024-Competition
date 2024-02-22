@@ -299,7 +299,6 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
-        print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         print(self.mechanism.getShooterRPM())

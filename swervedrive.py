@@ -1097,6 +1097,8 @@ class SwerveDrive:
         x, y, r = self.swervometer.getCOF()
 
         if(self.notedetector.hasTargets()):
+            print('note at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+
             targetErrorX = self.notedetector.getTargetErrorX - offsetX
             targetErrorY = self.notedetector.getTargetErrorY - offsetY
             #targetErrorAngle = math.degrees(math.atan(targetErrorX / targetErrorY))
@@ -1134,6 +1136,7 @@ class SwerveDrive:
             self.set_rcw(-clamp(angleMove))
             self.execute('center')
         else:
+            print("no note found")
             self.set_rcw(0)
             self.execute('center')
     
