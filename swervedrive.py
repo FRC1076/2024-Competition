@@ -1093,24 +1093,20 @@ class SwerveDrive:
     
     def pointToPose(self, x, y):
         currentX, currentY, currentR = self.swervometer.getCOF()
-        #print(y - currentY, x - currentX)
+        #use a try-except in case of atan dividing by 0. May not be an issue but just in case
         try:
-            #oliver = self.getGyroAngle() - math.atan((y - currentY)/(x - currentX)) * 180/math.pi
-            desiredAngle = 180 - math.atan2((currentY - y), (currentX - x)) * 180/math.pi
-            #print(self.getGyroAngle() - math.atan((y - currentY)/(x - currentX)) * 180/math.pi)
-            #print(math.atan(-(y - currentY)/(x - currentX)) * 180/math.pi)
-            print(y, currentY, x, currentX)
-            print(desiredAngle, self.getGyroAngle())
-            angleMove = self.bearing_pid_controller.calculate(self.getGyroAngle(), desiredAngle)
-            #print(math.atan2(-(y - currentY), (x - currentX)) * 180/math.pi)
-            #print("Gyro", self.getGyroAngle())
-            #print(angleMove)
-            #print(-clamp(angleMove))
+            desiredAngle = (180 - math.atan2((currentY - y), (currentX - x)) * 180/math.pi) % 360
+            #if we desire angle 359, it will overshoot and go to 0 which will then pid all the way back to 359 but overshoot again and keep spinning in circles
+            #to fix this, find the complementary angle and move in the direction of the fastest path
+            directAngle = desiredAngle - self.getGyroAngle()
+            complementaryAngle = (360 - abs(directAngle)) * math.copysign(1, directAngle)
+            if(abs(complementaryAngle) < abs(directAngle)):
+                angleMove = -self.beairng_pid_controller.calculate(complementaryAngle)
+            else:
+                angleMove = self.bearing_pid_controller.calculate(directAngle)
             self.set_rcw(clamp(angleMove))
         except:
             pass
-        #print(self.getGyroAngle())
-
         return
     
     def visionPeriodic(self):
