@@ -22,13 +22,13 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'A', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
-    'FIELD_RED_A_START_POSITION_X': 294, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_X': 275, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
     'FIELD_RED_A_START_POSITION_Y': 57, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
     'FIELD_RED_A_START_ANGLE': 0, # Heading angle of starting position A when on red team
     'FIELD_RED_B_START_POSITION_X': 248.625, # X-Coordinate of starting position B when on red team
@@ -136,15 +136,15 @@ autonConfig = {
     'SCORE_EXISTING': True,
     'BALANCE_BOT': True,
     'DO_COMMUNITY': False, # Only applies for position B
-    'AUTON_OPEN_LOOP_RAMP_RATE': 1, # Improves the quality of swervometery by avoiding slippage.
+    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 1], ['RAISE_ARM', -7], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -10],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -10], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']],
+    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM', -28], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 1], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -25.9],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']],
     'TASK_BLUE_A': [],
     'noteConfig': {
     #RED TEAM,
-        'NOTE 1': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 235.5, 57, 0]],
-        'NOTE 2': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 267.25, 114, 0], ['MOVE', 235.5, 114, 0], ['MOVE', 235.5, 114,  41] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
-        'NOTE 3': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 267.25, 0, 0], ['MOVE', 235.5, 0, 0], ['MOVE', 235.5, 0, -41]],
+        'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
+        'NOTE 2': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 114, 0], ['MOVE', 216.5, 114, 0], ['MOVE', 275, 57, 0] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
+        'NOTE 3': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 0, 0], ['MOVE', 216.5, 0, 0], ['MOVE', 275, 57, 0]],
         'NOTE 4': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -75, 0], ['MOVE', 19.9, -75, 0] ],
         'NOTE 5': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0],['MOVE', 19.9, -9, 0]],
         'NOTE 6 NEGATIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0], ['MOVE', 19.9, 57, 0]],

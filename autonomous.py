@@ -88,17 +88,17 @@ class Autonomous:
         elif self.autonTask[0] == 'SHOOT_NOTE':
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
-            if self.hasRolledBack == False and (self.autonTimer.get() - self.lastTime < 1):
+            if self.hasRolledBack == False and (self.autonTimer.get() - self.lastTime < 0.5):
                 self.mechanism.indexFixedRollBack()
                 self.hasRolledBack = True
-            if self.hasRolledBack == True and (self.autonTimer.get() - self.lastTime < 1):
+            if self.hasRolledBack == True and (self.autonTimer.get() - self.lastTime < 0.5):
                 return
             if(self.autonTimer.get() - self.lastTime > 1):
                 self.hasRolledBack = False
                 self.mechanism.shootNote()
-            if(self.autonTimer.get() - self.lastTime > 3):
+            if(self.autonTimer.get() - self.lastTime > 2):
                 self.mechanism.indexNote()
-            if(self.autonTimer.get() - self.lastTime > 5):
+            if(self.autonTimer.get() - self.lastTime > 2.3):
                 self.mechanism.sprocketToPosition(-37)
                 self.mechanism.stopIndexing()
                 self.mechanism.stopShooting()

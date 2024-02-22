@@ -134,6 +134,7 @@ class Mechanism:
     def indexFixedRollBack(self):
         if not self.inARollBack:
             self.inARollBack = True
+            self.rollBackStartValue = self.indexEncoder.getPosition()
 
     def indexBeamBroken(self):
         return self.indexingBeam.beamBroken()
