@@ -117,11 +117,8 @@ drivetrainConfig = {
 }
 
 visionConfig = {
-    'TARGET_HEIGHT': 8.5,
-    'TARGET_RADIUS': 2,
-    'SHOOTER_HEIGHT': 3.5,
-    'SHOOTER_OFFSET': 1,
-    'CAMERA_HEIGHT': 4,
+    'CAMERA_HEIGHT_FROM_GROUND': 18,
+    'CAMERA_DISTANCE_FROM_COF': 12,
     'CAMERA_PITCH': 0,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
