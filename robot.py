@@ -296,9 +296,9 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
+        print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        print(self.mechanism.getShooterRPM())
+        #print(self.mechanism.getShooterRPM())
         if self.operator.xboxController.getAButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.stopShooting()
             self.mechanism.intakeNote()
