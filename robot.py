@@ -343,7 +343,16 @@ class MyRobot(wpilib.TimedRobot):
 
         #sprocket down for climb
         if self.operator.xboxController.getRightTriggerAxis() > 0.5 and self.operator.xboxController.getLeftTriggerAxis() > 0.5:
-                self.mechanism.sprocketToPosition(-30)
+            self.mechanism.sprocketToPosition(-30)
+        elif self.operator.xboxController.getLeftTriggerAxis() > 0.5:
+            if self.team_is_blu:
+                distance = self.swervometer.distanceToPose(-326, 57)
+            else:
+                distance = self.swervometer.distanceToPose(326, 57)
+            a = 13.4952
+            b = -64.5634
+            y = a * math.log(distance) + b
+            self.mechanism.sprocketToPosition(y)
 
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
@@ -405,7 +414,10 @@ class MyRobot(wpilib.TimedRobot):
 
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
-                self.drivetrain.pointToPose(-326, 57)
+                if self.team_is_blu:
+                    self.drivetrain.pointToPose(-326, 57)
+                else:
+                    self.drivetrain.pointToPose(326, 57)
                 self.drivetrain.execute('center')
                 return
             

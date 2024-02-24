@@ -224,3 +224,6 @@ class Swervometer:
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37
         print("CURRENT POSE", self.currentX, self.currentY)
+    
+    def distanceToPose(self, x, y):
+        return math.sqrt(pow(x - self.currentX, 2) + pow(y - self.currentY, 2))
