@@ -1101,10 +1101,10 @@ class SwerveDrive:
             directAngle = desiredAngle - self.getGyroAngle()
             complementaryAngle = (360 - abs(directAngle)) * math.copysign(1, directAngle)
             if(abs(complementaryAngle) < abs(directAngle)):
-                angleMove = -self.beairng_pid_controller.calculate(complementaryAngle)
+                angleMove = -self.bearing_pid_controller.calculate(complementaryAngle)
             else:
                 angleMove = self.bearing_pid_controller.calculate(directAngle)
-            self.set_rcw(clamp(angleMove))
+            self.set_rcw(-clamp(angleMove))
         except:
             pass
         return
