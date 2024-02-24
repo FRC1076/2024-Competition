@@ -200,8 +200,8 @@ mechanismConfig = {
     "INDEX_SPEED": 0.5,
     "INDEX_ROLL_BACK_ROTATIONS": 6,
     
-    "SHOOTER_LEFT_MOTOR_ID": 8,
-    "SHOOTER_RIGHT_MOTOR_ID": 28,
+    "SHOOTER_LEFT_MOTOR_ID": 28,
+    "SHOOTER_RIGHT_MOTOR_ID": 8,
     "SHOOTER_LEFT_SPEED": -0.6, #0.6 - good value for accuracy (on compliant wheels)
     "SHOOTER_RIGHT_SPEED": 1, #1 - good value for accuracy (on compliant wheels)
     "SHOOTER_LEFT_REVERSE_SPEED": 0.2,
