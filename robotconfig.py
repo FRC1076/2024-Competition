@@ -213,6 +213,8 @@ mechanismConfig = {
     #Up and down speeds for the Sprocket Motor, NEED TO BE SET
     "SPROCKET_LEFT_MOTOR_ID": 6,
     "SPROCKET_RIGHT_MOTOR_ID": 7,
+    "CLIMB_LOCK_MOTOR_ID": 60,
+    "CLIMB_LOCK_SPEED": 0.1,
     "SPROCKET_MOTOR_LEFT_UP": 0.1,
     "SPROCKET_MOTOR_RIGHT_UP": -0.1,
     "SPROCKET_MOTOR_LEFT_DOWN": -0.1,
@@ -234,6 +236,7 @@ mechanismConfig = {
     "SPROCKET_FEEDFORWARD_KA": 0,
     "SPROCKET_FEEDFORWARD_VELOCITY": 0, #in radians
     "SPROCKET_FEEDFORWARD_ACCELERATION": 0, #in radians/second^2
+    
 
 
 }

@@ -42,6 +42,7 @@ class Mechanism:
         self.sprocketEncoderShift = config["SPROCKET_ENCODER_SHIFT"]
         self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
         self.indexingBeam = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
+        self.climbLockMotor = rev.CANSparkMax(config["CLIMB_LOCK_MOTOR_ID"], motor_type_brushless)
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -159,3 +160,7 @@ class Mechanism:
     def setRightShooterRPM(self, rpm):
         self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
         print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+
+    def lockClimb(self):
+        self.climbLockMotor.set('CLIMB_LOCK_SPEED')
+        return

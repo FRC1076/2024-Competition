@@ -344,6 +344,7 @@ class MyRobot(wpilib.TimedRobot):
         #sprocket down for climb
         if self.operator.xboxController.getRightTriggerAxis() > 0.5 and self.operator.xboxController.getLeftTriggerAxis() > 0.5:
                 self.mechanism.sprocketToPosition(-30)
+                self.mechanism.lockClimb()
 
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
