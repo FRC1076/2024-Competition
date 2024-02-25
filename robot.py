@@ -213,6 +213,7 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
         return vision
     
     def initDrivetrain(self, config):
@@ -342,8 +343,15 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.stopSprocket()
 
         #sprocket down for climb
-        if self.operator.xboxController.getRightBumper() and self.operator.xboxController.getLeftBumper():
-                self.mechanism.sprocketToPosition(-30)
+        if self.operator.xboxController.getLeftBumper():
+            if self.team_is_blu:
+                distance = self.swervometer.distanceToPose(-326, 57)
+            else:
+                distance = self.swervometer.distanceToPose(326, 57)
+            a = 13.4952
+            b = -64.5634
+            y = a * math.log(distance) + b
+            self.mechanism.sprocketToPosition(y)
 
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
@@ -405,7 +413,10 @@ class MyRobot(wpilib.TimedRobot):
 
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
-                self.drivetrain.pointToPose(-294, 57)
+                if self.team_is_blu:
+                    self.drivetrain.pointToPose(-326, 57)
+                else:
+                    self.drivetrain.pointToPose(326, 57)
                 self.drivetrain.execute('center')
                 return
             

@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'A', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
@@ -89,7 +89,7 @@ drivetrainConfig = {
     'TARGET_KP': 0.020,
     'TARGET_KI': 0.00, #0.005,
     'TARGET_KD': 0.0001,
-    'BEARING_KP': 0.025,
+    'BEARING_KP': 0.035,
     'BEARING_KI': 0.0,
     'BEARING_KD': 0.000,
     'ROBOT_INCHES_PER_ROTATION': 1.0, #1.793, # Inches per rotation of wheels
@@ -117,11 +117,8 @@ drivetrainConfig = {
 }
 
 visionConfig = {
-    'TARGET_HEIGHT': 8.5,
-    'TARGET_RADIUS': 2,
-    'SHOOTER_HEIGHT': 3.5,
-    'SHOOTER_OFFSET': 1,
-    'CAMERA_HEIGHT': 4,
+    'CAMERA_HEIGHT_FROM_GROUND': 18,
+    'CAMERA_DISTANCE_FROM_COF': 12,
     'CAMERA_PITCH': 0,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
