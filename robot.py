@@ -280,7 +280,7 @@ class MyRobot(wpilib.TimedRobot):
     def initAuton(self, config):
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism)
+        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer)
         return auton
     
     def teleopInit(self):
@@ -297,9 +297,11 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
+        print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        if self.operator.xboxController.getYButton():
+        #print(self.mechanism.getShooterRPM())
+        if self.operator.xboxController.getAButton() and self.mechanism.indexingBeam.beamBroken() == False:
+            self.mechanism.stopShooting()
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
             self.mechanism.sprocketToPosition(-37)
@@ -311,18 +313,19 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.indexNote()
         elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
             self.mechanism.reverseIndex()
-        elif self.operator.xboxController.getBButtonReleased():
-            self.mechanism.indexFixedRollBack()
+        #elif self.operator.xboxController.getBButtonReleased():
+            #self.mechanism.indexFixedRollBack()
         else:
-            if not self.operator.xboxController.getYButton():
+            if not self.operator.xboxController.getAButton():
                 self.mechanism.stopIndexing()
             
         #shooter motor and sprocket
-        if self.operator.xboxController.getRightBumper():
-            self.mechanism.shootNote()
-        else:
-            self.mechanism.stopShooting()
-        
+        if self.operator.xboxController.getLeftTriggerAxis() > 0.5:
+            if self.mechanism.indexingBeam.beamBroken() == True:
+                self.mechanism.shootNote()
+            else:
+                self.mechanism.stopShooting()
+
         #rotate sprocketDown
         if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
             self.mechanism.sprocketDown()
@@ -331,20 +334,16 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketUp()
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(-3) #-25.9 close up #-9 from stage head on
-            self.mechanism.indexNote()
-        elif self.operator.xboxController.getAButton():
-            self.mechanism.sprocketToPosition(-20.9)
-        elif self.operator.xboxController.getLeftBumper():
+        elif self.operator.xboxController.getBButton():
+            self.mechanism.sprocketToPosition(-24)
+        elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80)
-            self.mechanism.indexNote()
         else:
-            if(not self.operator.xboxController.getYButton()):
+            if(not self.operator.xboxController.getAButton()):
                 self.mechanism.stopSprocket()
 
         #sprocket down for climb
-        if self.operator.xboxController.getRightTriggerAxis() > 0.5 and self.operator.xboxController.getLeftTriggerAxis() > 0.5:
-            self.mechanism.sprocketToPosition(-30)
-        elif self.operator.xboxController.getLeftTriggerAxis() > 0.5:
+        if self.operator.xboxController.getLeftBumper():
             if self.team_is_blu:
                 distance = self.swervometer.distanceToPose(-326, 57)
             else:
@@ -394,7 +393,7 @@ class MyRobot(wpilib.TimedRobot):
         
         # Regular driving, not a maneuver
         if False:
-             print("a")
+            print("a")
         else:
             strafe = self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone)
             fwd = self.deadzoneCorrection(driver.getLeftY() * translational_clutch, self.driver.deadzone)
@@ -484,6 +483,7 @@ class MyRobot(wpilib.TimedRobot):
     def autonomousPeriodic(self):
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
+        self.mechanism.autonPeriodic()
         return
     
     def deadzoneCorrection(self, val, deadzone):
