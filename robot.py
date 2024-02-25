@@ -279,7 +279,7 @@ class MyRobot(wpilib.TimedRobot):
     def initAuton(self, config):
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism)
+        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer)
         return auton
     
     def teleopInit(self):
@@ -472,6 +472,7 @@ class MyRobot(wpilib.TimedRobot):
     def autonomousPeriodic(self):
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
+        self.mechanism.autonPeriodic()
         return
     
     def deadzoneCorrection(self, val, deadzone):

@@ -42,6 +42,8 @@ class Mechanism:
         self.sprocketEncoderShift = config["SPROCKET_ENCODER_SHIFT"]
         self.sprocketEncoderZero = config["SPROCKET_ENCODER_ZERO"]
         self.indexingBeam = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
+        self.autonSprocketPosition = -38
+        self.shooting = False
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -159,3 +161,16 @@ class Mechanism:
     def setRightShooterRPM(self, rpm):
         self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
         print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+
+    def setAutonSprocketPosition(self, position):
+        self.autonSprocketPosition = position
+
+    def setShootState(self, isShooting):
+        self.shooting = isShooting
+
+    def autonPeriodic(self):
+        self.sprocketToPosition(self.autonSprocketPosition)
+        if self.indexBeamBroken() and not self.shooting:
+            self.stopIndexing()
+        else:
+            self.indexNote()

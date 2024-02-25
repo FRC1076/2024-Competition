@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'A', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
@@ -37,7 +37,7 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_RED_C_START_POSITION_X': 248.625, # X-Coordinate of starting position C when on red team
     'FIELD_RED_C_START_POSITION_Y': -115.25, #-137.90, # Y-Coordinate of starting postion C when on red team
     'FIELD_RED_C_START_ANGLE': 0.0, # Heading angle of starting position C when on red team
-    'FIELD_BLU_A_START_POSITION_X': -270.53, # X-Coordinate of starting position A when on blue team
+    'FIELD_BLU_A_START_POSITION_X': -275, # X-Coordinate of starting position A when on blue team
     'FIELD_BLU_A_START_POSITION_Y': 57, # 40.15, # Y-Coordinate of starting postion A when on blue team
     'FIELD_BLU_A_START_ANGLE': 180.0, # Heading angle of starting position A when on blue team
     'FIELD_BLU_B_START_POSITION_X': -248.625, # X-Coordinate of starting position B when on blue team
@@ -138,8 +138,8 @@ autonConfig = {
     'DO_COMMUNITY': False, # Only applies for position B
     'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM', -28], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 1], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -25.9],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']],
-    'TASK_BLUE_A': [],
+    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-3'], ['RAISE_ARM_START', -10], ['PATH', '3-p1'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'p1-1'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', -25.9], ['PATH', '2-C'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_BLUE_A': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-3'], ['RAISE_ARM_START', -10], ['PATH', '3-p1'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'p1-1'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', -25.9], ['PATH', '2-C'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'noteConfig': {
     #RED TEAM,
         'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
@@ -198,7 +198,7 @@ dashboardConfig = {
 mechanismConfig = {
     "INTAKE_BEAMBREAK_PIN": 5,
     "INTAKE_MOTOR_ID": 5,
-    "INTAKE_SPEED": 0.75,
+    "INTAKE_SPEED": 1,
     "INDEX_MOTOR_ID": 61,
     "INDEX_SPEED": 0.5,
     "INDEX_ROLL_BACK_ROTATIONS": 6,
