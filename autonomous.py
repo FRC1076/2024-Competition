@@ -74,9 +74,9 @@ class Autonomous:
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
                 self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
-                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
                 if(self.team_is_red):
                     self.path = self.path.flipPath()
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
             self.drivetrain.set_fwd(-self.chassisSpeeds.vy/3)
