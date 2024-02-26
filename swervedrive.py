@@ -381,8 +381,7 @@ class SwerveDrive:
         if self.squared_inputs:
             fwd = self.square_input(fwd)
 
-        fwd *= self.xy_multiplier
-
+        fwd *= 1
         self._requested_vectors['fwd'] = fwd
 
     def set_strafe(self, strafe):
@@ -392,8 +391,7 @@ class SwerveDrive:
         """
         if self.squared_inputs:
             strafe = self.square_input(strafe)
-
-        strafe *= self.xy_multiplier
+        strafe *= 1
 
         self._requested_vectors['strafe'] = strafe
 
