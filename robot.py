@@ -297,6 +297,54 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        self.teleopMechanism()
+        #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
+        self.drivetrain.visionPeriodic()
+        self.teleopDrivetrain()
+        return
+    
+    def teleopMechanism(self):
+        #passive functions
+        if not self.mechanism.indexBeamBroken:
+            self.mechanism.indexNote()
+        else:
+            self.mechanism.stopIndexing()
+        self.mechanism.shootNote()
+
+        #trigger controls
+        if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+            self.mechanism.intakeNote()
+        if(self.operator.xboxController.getRightTriggerAxis() > 0.5):
+            self.mechanism.indexNote()
+
+        #manual index note
+        if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
+            self.mechanism.indexNote()
+        elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
+            self.mechanism.reverseIndex()
+            self.mechanism.reverseIntake()
+        
+        #Sprockt Controls
+        #rotate sprocket down
+        if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
+            self.mechanism.sprocketDown()
+        #rotate sprocket up
+        elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
+            self.mechanism.sprocketUp()
+        #subwoofer
+        if self.operator.xboxController.getAButton():
+            self.mechanism.sprocketToPosition(-24)
+        #podium
+        elif self.operator.xboxController.getXButton():
+            self.mechanism.sprocketToPosition(-3)
+        #amp
+        elif self.operator.xboxController.getYButton():
+            self.mechanism.sprocketToPosition(80)
+        #auto aim
+        elif self.operator.xboxController.getBButton():
+            pass
+        
+        """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         #print(self.mechanism.getShooterRPM())
@@ -351,12 +399,7 @@ class MyRobot(wpilib.TimedRobot):
             a = 13.4952
             b = -64.5634
             y = a * math.log(distance) + b
-            self.mechanism.sprocketToPosition(y)
-
-        #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
-        self.drivetrain.visionPeriodic()
-        self.teleopDrivetrain()
-        return
+            self.mechanism.sprocketToPosition(y)"""
 
     def teleopDrivetrain(self):
         if (not self.drivetrain):

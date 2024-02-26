@@ -51,6 +51,10 @@ class Mechanism:
         self.intakeMotor.set(self.config["INTAKE_SPEED"])
         return
     
+    def reverseIntake(self):
+        self.intakeMotor.set(-self.config["INTAKE_SPEED"])
+        return
+    
     def stopIntake(self):
         self.intakeMotor.set(0)
     
