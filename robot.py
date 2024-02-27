@@ -305,6 +305,16 @@ class MyRobot(wpilib.TimedRobot):
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules)
         self.mechanism.periodic()
+        if not self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple")
+        else:
+            if(self.ledTimer.get() > 0.1):
+                if(not self.ledOn):
+                    LEDs.rainbowLED("purple")
+                else:
+                    LEDs.rainbowLED("off")
+                self.ledOn = not self.ledOn
+                self.ledTimer.reset()
         return True
     
     def teleopPeriodic(self):
@@ -337,13 +347,6 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.mechanism.stopIndexing()
             self.mechanism.shootNote()
-            if(self.ledTimer.get() > 0.1):
-                if(not self.ledOn):
-                    LEDs.rainbowLED("purple")
-                else:
-                    LEDs.rainbowLED("off")
-                self.ledOn = not self.ledOn
-                self.ledTimer.reset()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
