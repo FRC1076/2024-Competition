@@ -28,7 +28,7 @@ class Autonomous:
         self.lastTime = -1
         self.hasRolledBack = False
 
-        self.holonomicController = PPHolonomicDriveController(PIDConstants(0.6, 0, 0), PIDConstants(0, 0, 0), 3, 0.5388, 0.2)
+        self.holonomicController = PPHolonomicDriveController(PIDConstants(2, 0, 0), PIDConstants(0, 0, 0), 3, 0.5388, 0.2)
         self.swervometer = swervometer
         self.team_is_red = team_is_red
 
@@ -76,13 +76,13 @@ class Autonomous:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
                 else:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
-            self.drivetrain.execute('center')
-            self.drivetrain.set_fwd(0)
-            self.drivetrain.set_strafe(0)
-            self.drivetrain.set_rcw(0)
             if(abs(self.chassisSpeeds.vx/3) < 0.1 and abs(self.chassisSpeeds.vy/3) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
                 self.lastTime = -1
                 self.taskListCounter += 1
+            self.drivetrain.execute('center')
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)
