@@ -312,9 +312,10 @@ class MyRobot(wpilib.TimedRobot):
         #passive functions
         if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
+            self.mechanism.stopShooting()
         else:
             self.mechanism.stopIndexing()
-        self.mechanism.shootNote()
+            self.mechanism.shootNote()
 
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
@@ -359,7 +360,7 @@ class MyRobot(wpilib.TimedRobot):
             else:
                 distance = self.swervometer.distanceToPose(326, 57) - 15
 
-            v = 560
+            v = 620
             u = math.atan(
                 (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
             )
@@ -488,9 +489,9 @@ class MyRobot(wpilib.TimedRobot):
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
-                    self.drivetrain.pointToPose(-326, 57)
+                    self.drivetrain.pointToPriorityTag()
                 else:
-                    self.drivetrain.pointToPose(326, 57)
+                    self.drivetrain.pointToPriorityTag()
                 self.drivetrain.execute('center')
                 return
             

@@ -43,6 +43,10 @@ class Vision:
             return bool(self.table.getNumberArray('botpose', [])[7])
         except:
             return False
+    
+    def hasPriorityTargets(self):
+        print("PRIORITY TARGET VALUE", bool(self.table.getNumber('ta', 0)))
+        return bool(self.table.getNumber('ta', 0))  
 
     def canUpdatePose(self):
         #print("Vision: self.pipeline: ", self.pipeline, " self.hasTargets: ", self.hasTargets())
@@ -91,6 +95,15 @@ class Vision:
     
     def getTargetPoseCameraSpace(self):
         pose = self.table.getNumberArray('targetpose_cameraspace', None) # returns [x, y, z, roll, pitch, yaw]
+        s = 39.37 # scalar to convert meters to inches
+        #print("POSE IS: ", pose)
+        if len(pose) != 0:
+            return (pose[0] * s, pose[1] * s, pose[2] * s, pose[3], pose[4], pose[5])
+        else:
+            return (-1, -1, -1, -1, -1, -1)
+        
+    def getTargetPoseRobotSpace(self):
+        pose = self.table.getNumberArray('targetpose_robotspace', None) # returns [x, y, z, roll, pitch, yaw]
         s = 39.37 # scalar to convert meters to inches
         #print("POSE IS: ", pose)
         if len(pose) != 0:
