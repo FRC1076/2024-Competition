@@ -102,6 +102,15 @@ class Vision:
         else:
             return (-1, -1, -1, -1, -1, -1)
         
+    def getTargetPoseRobotSpace(self):
+        pose = self.table.getNumberArray('targetpose_robotspace', None) # returns [x, y, z, roll, pitch, yaw]
+        s = 39.37 # scalar to convert meters to inches
+        #print("POSE IS: ", pose)
+        if len(pose) != 0:
+            return (pose[0] * s, pose[1] * s, pose[2] * s, pose[3], pose[4], pose[5])
+        else:
+            return (-1, -1, -1, -1, -1, -1)
+        
     # get the target size within the frame in pixels
     # can mulitply this by something to get the distance to the target
     # can be compared with the desired distance to drive a PID
