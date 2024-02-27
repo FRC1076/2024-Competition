@@ -238,7 +238,7 @@ mechanismConfig = {
 noteDetectorConfig = {
     "CAMERA_HEIGHT": 22.8,
     "NOTE_HEIGHT": 2.0,
-    "CAMERA_ANGLE_ABOVE_HORIZONTAL": -36,
+    "CAMERA_ANGLE_ABOVE_HORIZONTAL": -53.7,
     "CAMERA_OFFSET_X": 0,
     "CAMERA_OFFSET_Y": 21.5,
     "CAMERA_FOV_Z": 41.232,

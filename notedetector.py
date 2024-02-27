@@ -26,7 +26,7 @@ class NoteDetector:
     def getTargetErrorAngle(self):
         # angle to the note, in degrees
         # positive angle is to the right
-        return math.degrees(math.atan(self.getTargetErrorX/self.getTargetErrorY))
+        return math.degrees(math.atan(self.getTargetErrorX()/self.getTargetErrorY()))
 
     def getTargetErrorX(self):
         # x distance to the note, in inches
@@ -42,7 +42,7 @@ class NoteDetector:
 
         self.targetPixelZ = (self.config['CAMERA_PIXELS_Z'] - (self.getYMin() + self.getYMax())/2) - self.config['CAMERA_PIXELS_Z']/2
         self.targetAngleZ = (self.targetPixelZ/(self.config['CAMERA_PIXELS_Z']/2))*(self.config['CAMERA_FOV_Z']/2) + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
-        self.targetErrorY = ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.targetAngleZ)))*(-1) + self.config['CAMERA_OFFSET_Y'] + self.config['CAMERA_OFFSET_Y']
+        self.targetErrorY = ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.targetAngleZ)))*(-1) + self.config['CAMERA_OFFSET_Y']
         return self.targetErrorY
     
     

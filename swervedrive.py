@@ -1094,11 +1094,11 @@ class SwerveDrive:
     def alignWithNote(self, offsetX, offsetY, offsetAngle):
         x, y, r = self.swervometer.getCOF()
 
-        if(self.notedetector.hasTargets()):
-            targetErrorX = self.notedetector.getTargetErrorX - offsetX
-            targetErrorY = self.notedetector.getTargetErrorY - offsetY
+        if(self.notedetector.hasTarget()):
+            targetErrorX = -(self.notedetector.getTargetErrorX() - offsetX)
+            targetErrorY = -(self.notedetector.getTargetErrorY() - offsetY)
             #targetErrorAngle = math.degrees(math.atan(targetErrorX / targetErrorY))
-            targetErrorAngle = self.notedetector.getTargetErrorAngle - offsetAngle
+            targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
             #targetErrorAngle = 0
             #print(self.vision.getTargetPoseCameraSpace()[4])
             #print()
