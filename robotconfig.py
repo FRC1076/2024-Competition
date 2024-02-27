@@ -135,9 +135,11 @@ autonConfig = {
     'DO_COMMUNITY': False, # Only applies for position B
     'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_B': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-1'], ['RAISE_ARM_START', -25.9], ['PATH', '1-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'TASK_BLUE_B': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-1'], ['RAISE_ARM_START', -25.9], ['PATH', '1-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'noteConfig': {
+    'TASK': 'FOUR_NOTE',
+    'TASK_FOUR_NOTE_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-1'], ['RAISE_ARM_START', -25.9], ['PATH', '1-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_THREE_NOTE_STAGE_SIDE_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_TWO_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_ONE_NOTE': 
     #RED TEAM,
         'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
         'NOTE 2': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 114, 0], ['MOVE', 216.5, 114, 0], ['MOVE', 275, 57, 0] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
@@ -160,6 +162,7 @@ autonConfig = {
         'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]] 
     }
 }
+
 
 MODULE_NAMES = namedtuple('MODULE_NAMES', [
     'ROBOT',

@@ -10,17 +10,7 @@ import math
 class Autonomous:
 
     def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer):
-        taskListName = ""
-        if team_is_red:
-            taskListName += "TASK_RED"
-        else:
-            taskListName += "TASK_BLUE"
-        if field_start_position == 'A':
-            taskListName += "_A"
-        elif field_start_position == 'B':
-            taskListName += "_B"
-        else:
-            taskListName += "_C"
+        taskListName = "TASK_" + config["TASK"]
         self.taskList = []
         for cmd in config[taskListName]:
             if cmd[0] == 'NOTE':
