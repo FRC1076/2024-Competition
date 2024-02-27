@@ -305,7 +305,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopMechanism(self):
         #passive functions
-        if not self.mechanism.indexBeamBroken:
+        if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
         else:
             self.mechanism.stopIndexing()
@@ -314,6 +314,8 @@ class MyRobot(wpilib.TimedRobot):
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.intakeNote()
+        else:
+            self.mechanism.stopIntake()
         if(self.operator.xboxController.getRightTriggerAxis() > 0.5):
             self.mechanism.indexNote()
 
@@ -331,9 +333,14 @@ class MyRobot(wpilib.TimedRobot):
         #rotate sprocket up
         elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
+        else:
+            self.mechanism.stopSprocket()
+        #intake
+        if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+            self.mechanism.sprocketToPosition(-37)
         #subwoofer
-        if self.operator.xboxController.getAButton():
-            self.mechanism.sprocketToPosition(-24)
+        elif self.operator.xboxController.getAButton():
+            self.mechanism.sprocketToPosition(-20)
         #podium
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(-3)
