@@ -39,7 +39,10 @@ class Vision:
     def hasTargets(self):
         #print("Vision: ", self.table.getNumber('tv', 0))
         #print("Bot Pose: ", self.table.getNumberArray('botpose', None))
-        return bool(self.table.getNumber('tv', 0))
+        try:
+            return bool(self.table.getNumberArray('botpose', [])[7])
+        except:
+            return False
 
     def canUpdatePose(self):
         #print("Vision: self.pipeline: ", self.pipeline, " self.hasTargets: ", self.hasTargets())

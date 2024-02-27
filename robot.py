@@ -214,6 +214,10 @@ class MyRobot(wpilib.TimedRobot):
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
         NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
+        if self.team_is_blu:
+            NetworkTables.getTable('limelight').putNumber('priorityid', 7)
+        else:
+            NetworkTables.getTable('limelight').putNumber('priorityid', 4)
         return vision
     
     def initDrivetrain(self, config):
@@ -304,6 +308,7 @@ class MyRobot(wpilib.TimedRobot):
         return
     
     def teleopMechanism(self):
+        print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
@@ -350,19 +355,23 @@ class MyRobot(wpilib.TimedRobot):
         #auto aim
         elif self.operator.xboxController.getBButton():
             if self.team_is_blu:
-                distance = self.swervometer.distanceToPose(-326, 57)
+                distance = self.swervometer.distanceToPose(-326, 57) - 15
             else:
-                distance = self.swervometer.distanceToPose(326, 57)
+                distance = self.swervometer.distanceToPose(326, 57) - 15
 
-            v = 510.149
+            v = 560
             u = math.atan(
-                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354)   )**2)) / (distance + 13.1)
+                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
             )
             l = math.atan(
-                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354)   )**2)) / (distance - 4.9)
+                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance - 4.9)
             )
             angle = math.degrees(((u+l)/-2)+0.523599)
             self.mechanism.sprocketToPosition(angle)
+            print('current pose', self.swervometer.getCOF())
+            print('angle', angle)
+            print('sprocket angle', self.mechanism.getSprocketAngle())
+            print('distance', distance)
         
         """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
