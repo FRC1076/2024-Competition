@@ -43,6 +43,10 @@ class Vision:
             return bool(self.table.getNumberArray('botpose', [])[7])
         except:
             return False
+    
+    def hasPriorityTargets(self):
+        print("PRIORITY TARGET VALUE", bool(self.table.getNumber('ta', 0)))
+        return bool(self.table.getNumber('ta', 0))  
 
     def canUpdatePose(self):
         #print("Vision: self.pipeline: ", self.pipeline, " self.hasTargets: ", self.hasTargets())

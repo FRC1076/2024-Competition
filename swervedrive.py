@@ -1107,6 +1107,10 @@ class SwerveDrive:
             pass
         return
     
+    def pointToPriorityTag(self):
+        if(self.vision.hasPriorityTargets()):
+            self.set_rcw(clamp(self.vision.gettargetErrorX() * 0.05))
+    
     def visionPeriodic(self):
         if(self.vision.hasTargets()):
             targetErrorAngle = self.vision.getTargetPoseCameraSpace()[4]

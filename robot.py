@@ -488,9 +488,9 @@ class MyRobot(wpilib.TimedRobot):
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
-                    self.drivetrain.pointToPose(-326, 57)
+                    self.drivetrain.pointToPriorityTag()
                 else:
-                    self.drivetrain.pointToPose(326, 57)
+                    self.drivetrain.pointToPriorityTag()
                 self.drivetrain.execute('center')
                 return
             
