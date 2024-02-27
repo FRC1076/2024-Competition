@@ -135,8 +135,8 @@ autonConfig = {
     'DO_COMMUNITY': False, # Only applies for position B
     'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-3'], ['RAISE_ARM_START', -10], ['PATH', '3-p1'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'p1-1'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', -25.9], ['PATH', '2-C'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'TASK_BLUE_A': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-3'], ['RAISE_ARM_START', -10], ['PATH', '3-p1'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'p1-1'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', -25.9], ['PATH', '2-C'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_RED_B': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-1'], ['RAISE_ARM_START', -25.9], ['PATH', '1-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_BLUE_B': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-1'], ['RAISE_ARM_START', -25.9], ['PATH', '1-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'noteConfig': {
     #RED TEAM,
         'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
