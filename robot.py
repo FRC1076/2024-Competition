@@ -349,7 +349,20 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(80)
         #auto aim
         elif self.operator.xboxController.getBButton():
-            pass
+            if self.team_is_blu:
+                distance = self.swervometer.distanceToPose(-326, 57)
+            else:
+                distance = self.swervometer.distanceToPose(326, 57)
+
+            v = 510.149
+            u = math.atan(
+                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354)   )**2)) / (distance + 13.1)
+            )
+            l = math.atan(
+                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354)   )**2)) / (distance - 4.9)
+            )
+            angle = math.degrees(((u+l)/-2)+0.523599)
+            self.mechanism.sprocketToPosition(angle)
         
         """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
@@ -407,6 +420,8 @@ class MyRobot(wpilib.TimedRobot):
             b = -64.5634
             y = a * math.log(distance) + b
             self.mechanism.sprocketToPosition(y)"""
+        
+        
 
     def teleopDrivetrain(self):
         if (not self.drivetrain):
