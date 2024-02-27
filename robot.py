@@ -34,6 +34,7 @@ from dashboard import Dashboard
 
 from autonomous import Autonomous
 from mechanism import Mechanism
+from leds import LEDs
 
 ARCADE = 1
 TANK = 2
@@ -51,11 +52,7 @@ class MyRobot(wpilib.TimedRobot):
         self.operator = None
         self.auton = None
         self.vision = None
-        self.led = wpilib.AddressableLED(3)
-        self.LED_COUNT = 84
-
-        self.led.setLength(self.LED_COUNT)
-
+        self.leds = None
 
 
         # Even if no drivetrain, defaults to drive phase
@@ -292,26 +289,11 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotPeriodic(self):
         return True
-
-    def rainbowLED(self):
-        rainbow = 0
-        i = 0
-        data = [wpilib.AddressableLED.LEDData(255, 0, 0) for _ in range(self.LED_COUNT)]
-        for d in data:
-            hue = (rainbow + ((i * 180 / self.LED_COUNT) % 180))
-            data[i].setHSV(int(hue), 255, 128)
-            i += 1
-            if rainbow > 180:
-                rainbow = 0
-            rainbow += 3
-            self.led.setData(data)
-        self.led.setData(data)
-        self.led.start()
     
     def teleopPeriodic(self):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        self.rainbowLED()
+        LEDs.rainbowLED("purple")
 
         if self.operator.xboxController.getYButton():
             self.mechanism.intakeNote()
