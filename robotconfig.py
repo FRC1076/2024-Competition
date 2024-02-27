@@ -46,20 +46,20 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_BLU_C_START_POSITION_X': -248.625, # X-Coordinate of starting position C when on blue team
     'FIELD_BLU_C_START_POSITION_Y': -115.25, # -137.90, # Y-Coordinate of starting postion C when on blue team
     'FIELD_BLU_C_START_ANGLE': 180.0, # Heading angle of starting position C when on blue team
-    'ROBOT_FRAME_DIMENSION_X': 30.0, # X-coordinate length of robot frame  (2023: 34.0)
-    'ROBOT_FRAME_DIMENSION_Y': 30.0, # Y-coordinate length of robot frame  (2023: 26.0)
+    'ROBOT_FRAME_DIMENSION_X': 34.0, # X-coordinate length of robot frame  (2023: 34.0)
+    'ROBOT_FRAME_DIMENSION_Y': 26.0, # Y-coordinate length of robot frame  (2023: 26.0)
     'ROBOT_BUMPER_DIMENSION_X': 3.0, # Width of bumper (X-axis)
     'ROBOT_BUMPER_DIMENSION_Y': 3.0, # Width of bumper (Y-axis)
-    'ROBOT_COF_OFFSET_X': 15.0, # X-offset of center of frame (assume half frame dimension) (2023: 17.0)
-    'ROBOT_COF_OFFSET_Y': 15.0, # Y-offset of center of frame (assume half frame dimension) (2023: 13.0)
+    'ROBOT_COF_OFFSET_X': 17.0, # X-offset of center of frame (assume half frame dimension) (2023: 17.0)
+    'ROBOT_COF_OFFSET_Y': 13.0, # Y-offset of center of frame (assume half frame dimension) (2023: 13.0)
     'ROBOT_COM_OFFSET_X': -0.75, # X-offset of center of mass (relative to center of frame)
     'ROBOT_COM_OFFSET_Y': -0.75, # Y-offset of center of mass (relative to center of frame)
-    'ROBOT_GYRO_OFFSET_X': 18.5, # X-offset of center of gyro (relative to lower left frame) 18.5 (2023: 15.0)
-    'ROBOT_GYRO_OFFSET_Y': 4.25, # Y-offset of center of gyro (relative to lower left frame) 4.25 (2023: 12.0)
+    'ROBOT_GYRO_OFFSET_X': 15.0, # X-offset of center of gyro (relative to lower left frame) 18.5 (2023: 15.0)
+    'ROBOT_GYRO_OFFSET_Y': 12.0, # Y-offset of center of gyro (relative to lower left frame) 4.25 (2023: 12.0)
     'ROBOT_CAMERA_OFFSET_X': 17.0, # X-offset of center of camera lens (relative to center of frame)
     'ROBOT_CAMERA_OFFSET_Y': 0.0, # Y-offset of center of camera lens (relative to center of frame)
     'ROBOT_CAMERA_HEIGHT': 12.1875, # Height of camera eye relative to gyroscope: 11 3/16+ 2 -1
-    'ROBOT_SWERVE_MODULE_OFFSET_X': 11.75, # X-offset of swerve module center from COF  (2023: 13.75)
+    'ROBOT_SWERVE_MODULE_OFFSET_X': 13.75, # X-offset of swerve module center from COF  (2023: 13.75)
     'ROBOT_SWERVE_MODULE_OFFSET_Y': 9.75, # Y-offset of swerve module center from COF   (2023: 9.75)
 }
 
@@ -90,8 +90,8 @@ drivetrainConfig = {
     'TARGET_KI': 0.00, #0.005,
     'TARGET_KD': 0.0001,
     'BEARING_KP': 0.025,
-    'BEARING_KI': 0.0,
-    'BEARING_KD': 0.000,
+    'BEARING_KI': 0.00001,
+    'BEARING_KD': 0.0001,
     'ROBOT_INCHES_PER_ROTATION': 1.0, #1.793, # Inches per rotation of wheels
     'TELEOP_OPEN_LOOP_RAMP_RATE': 0.125, # Improves maneuverability of bot.
     'TELEOP_CLOSED_LOOP_RAMP_RATE': 0.125,

@@ -1,1 +1,2 @@
-python3 '\home\mendel\coralscript2.py'
+python3 print("notedetect")
+python3 /home/mendel/'\home\mendel\coralscript.py'
