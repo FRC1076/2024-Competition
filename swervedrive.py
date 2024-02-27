@@ -1113,6 +1113,22 @@ class SwerveDrive:
                 self.set_rcw(clamp(self.vision.gettargetErrorX() * 0.05) * 0.2)
             else:
                 self.set_rcw(0)
+
+    def rotateToAngle(self, angle):
+        try:
+            desiredAngle = angle
+            #if we desire angle 359, it will overshoot and go to 0 which will then pid all the way back to 359 but overshoot again and keep spinning in circles
+            #to fix this, find the complementary angle and move in the direction of the fastest path
+            directAngle = desiredAngle - self.getGyroAngle()
+            complementaryAngle = (360 - abs(directAngle)) * math.copysign(1, directAngle)
+            if(abs(complementaryAngle) < abs(directAngle)):
+                angleMove = -self.bearing_pid_controller.calculate(complementaryAngle)
+            else:
+                angleMove = self.bearing_pid_controller.calculate(directAngle)
+            self.set_rcw(-clamp(angleMove))
+        except:
+            pass
+        return
     
     def visionPeriodic(self):
         if(self.vision.hasTargets()):

@@ -392,7 +392,7 @@ class MyRobot(wpilib.TimedRobot):
             else:
                 distance = self.swervometer.distanceToPose(326, 57) - 15
 
-            v = 620
+            v = 580
             u = math.atan(
                 (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
             )
@@ -477,8 +477,8 @@ class MyRobot(wpilib.TimedRobot):
         translational_clutch = 1.0
         rotational_clutch = 1.0
         if (driver.getRightBumper() or self.mechanism.getSprocketAngle() > 30):
-            translational_clutch = 0.65
-            rotational_clutch = 0.65
+            translational_clutch = 0.5
+            rotational_clutch = 0.5
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.
             translational_clutch = 0.3
             rotational_clutch = 0.35 #0.2 was a little too slow for rotation, but perfect for translation #out of data comment
@@ -494,9 +494,6 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(True)
         else:
             self.drivetrain.setWheelLock(False)
-        if(driver.getAButton()):
-            self.drivetrain.alignWithApril(0, 75, 0)
-            return False
         
         # Regular driving, not a maneuver
         if False:
@@ -526,6 +523,25 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.pointToPriorityTag()
                 self.drivetrain.execute('center')
                 return
+
+            if(driver.getAButton()):
+                self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
+                if self.team_is_blu:
+                    self.drivetrain.rotateToAngle(270)
+                else:
+                    self.drivetrain.rotateToAngle(270)
+                self.drivetrain.execute('center')
+                return
+            
+            if(driver.getXButton()):
+                self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
+                if self.team_is_blu:
+                    self.drivetrain.rotateToAngle(180)
+                else:
+                    self.drivetrain.rotateToAngle(0)
+                self.drivetrain.execute('center')
+                return
+            
             
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.
             
