@@ -301,9 +301,6 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
-        gyroAngle = self.drivetrain.getGyroAngle()
-        modules = self.drivetrain.getModules()
-        self.swervometer.updatePoseEstimator(gyroAngle, modules)
         self.mechanism.periodic()
         if not self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple")
@@ -410,6 +407,9 @@ class MyRobot(wpilib.TimedRobot):
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         #print(self.mechanism.getShooterRPM())
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
         if self.operator.xboxController.getAButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.stopShooting()
             self.mechanism.intakeNote()
@@ -604,6 +604,9 @@ class MyRobot(wpilib.TimedRobot):
         return
     
     def autonomousPeriodic(self):
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()

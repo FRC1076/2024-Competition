@@ -214,14 +214,14 @@ class Swervometer:
         self.poseEstimator =  SwerveDrive4PoseEstimator(kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180))
         self.vision = vision
 
-    def updatePoseEstimator(self, gyroAngle, modules):
+    def updatePoseEstimator(self, gyroAngle, modules, inAuton):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
         frontRightModule = modules['front_right'].getSwerveModulePosition()
         rearLeftModule = modules['rear_left'].getSwerveModulePosition()
         rearRightModule = modules['rear_right'].getSwerveModulePosition()
         self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentBearing = gyroAngle
-        if(self.vision.hasTargets()):
+        if(self.vision.hasTargets() and not inAuton):
             self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37
