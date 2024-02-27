@@ -295,6 +295,9 @@ class MyRobot(wpilib.TimedRobot):
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
+        self.dropArmTimer = wpilib.Timer()
+        self.dropArmTimer.start()
+        self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         return
 
     def robotPeriodic(self):
@@ -315,10 +318,22 @@ class MyRobot(wpilib.TimedRobot):
     def teleopMechanism(self):
         print('RPM', self.mechanism.getShooterRPM())
         #passive functions
+        #no note inside
         if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
             self.mechanism.stopShooting()
             LEDs.rainbowLED("purple")
+            if self.previousBeamIsBrokenState:
+                self.dropArmTimer.reset()
+            if (self.dropArmTimer.get() > 0.5 
+                and not self.operator.xboxController.getAButton() 
+                and not self.operator.xboxController.getBButton() 
+                and not self.operator.xboxController.getYButton() 
+                and not self.operator.xboxController.getXButton() 
+                and not abs(self.operator.xboxController.getLeftY()) > 0.1
+                and not self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+                self.mechanism.sprocketToPosition(-37)
+        #yes note inside
         else:
             self.mechanism.stopIndexing()
             self.mechanism.shootNote()
@@ -329,7 +344,7 @@ class MyRobot(wpilib.TimedRobot):
                     LEDs.rainbowLED("off")
                 self.ledOn = not self.ledOn
                 self.ledTimer.reset()
-
+        self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.intakeNote()
@@ -353,7 +368,8 @@ class MyRobot(wpilib.TimedRobot):
         elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
         else:
-            self.mechanism.stopSprocket()
+            if self.mechanism.indexBeamBroken():
+                self.mechanism.stopSprocket()
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
@@ -457,7 +473,7 @@ class MyRobot(wpilib.TimedRobot):
         # Implement clutch on driving and rotating.
         translational_clutch = 1.0
         rotational_clutch = 1.0
-        if (driver.getRightBumper()):
+        if (driver.getRightBumper() or self.mechanism.getSprocketAngle() > 30):
             translational_clutch = 0.65
             rotational_clutch = 0.65
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.

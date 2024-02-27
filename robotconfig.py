@@ -197,7 +197,7 @@ mechanismConfig = {
     "INTAKE_MOTOR_ID": 5,
     "INTAKE_SPEED": 1,
     "INDEX_MOTOR_ID": 61,
-    "INDEX_SPEED": 0.5,
+    "INDEX_SPEED": 0.35,
     "INDEX_ROLL_BACK_ROTATIONS": 6,
     
     "SHOOTER_LEFT_MOTOR_ID": 28,
