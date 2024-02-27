@@ -35,6 +35,8 @@ from dashboard import Dashboard
 from autonomous import Autonomous
 from mechanism import Mechanism
 
+from leds import LEDs
+
 ARCADE = 1
 TANK = 2
 SWERVE = 3
@@ -86,7 +88,9 @@ class MyRobot(wpilib.TimedRobot):
         
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
-
+        self.ledTimer = wpilib.Timer()
+        self.ledTimer.start()
+        self.ledOn = True
         return
     
     def disabledExit(self):
@@ -301,6 +305,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        #LEDs.rainbowLED("purple")
         self.teleopMechanism()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
@@ -313,9 +318,17 @@ class MyRobot(wpilib.TimedRobot):
         if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
             self.mechanism.stopShooting()
+            LEDs.rainbowLED("purple")
         else:
             self.mechanism.stopIndexing()
             self.mechanism.shootNote()
+            if(self.ledTimer.get() > 0.1):
+                if(not self.ledOn):
+                    LEDs.rainbowLED("purple")
+                else:
+                    LEDs.rainbowLED("off")
+                self.ledOn = not self.ledOn
+                self.ledTimer.reset()
 
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
@@ -445,11 +458,11 @@ class MyRobot(wpilib.TimedRobot):
         translational_clutch = 1.0
         rotational_clutch = 1.0
         if (driver.getRightBumper()):
-            translational_clutch = 0.4
-            rotational_clutch = 0.4
+            translational_clutch = 0.65
+            rotational_clutch = 0.65
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.
-            translational_clutch = 0.2
-            rotational_clutch = 0.3 #0.2 was a little too slow for rotation, but perfect for translation
+            translational_clutch = 0.3
+            rotational_clutch = 0.35 #0.2 was a little too slow for rotation, but perfect for translation #out of data comment
 
         # Reset the gyro in the direction bot is facing.
         # Note this is a bad idea in competition, since it's reset automatically in robotInit.
