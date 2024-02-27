@@ -215,6 +215,7 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
         return vision
     
     def initDrivetrain(self, config):
@@ -281,7 +282,7 @@ class MyRobot(wpilib.TimedRobot):
     def initAuton(self, config):
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism)
+        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer)
         return auton
     
     def teleopInit(self):
@@ -300,10 +301,78 @@ class MyRobot(wpilib.TimedRobot):
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
         print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+        self.teleopMechanism()
+        #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
+        self.drivetrain.visionPeriodic()
+        self.teleopDrivetrain()
+        return
+    
+    def teleopMechanism(self):
+        #passive functions
+        if not self.mechanism.indexBeamBroken():
+            self.mechanism.indexNote()
+        else:
+            self.mechanism.stopIndexing()
+        self.mechanism.shootNote()
+
+        #trigger controls
+        if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+            self.mechanism.intakeNote()
+        else:
+            self.mechanism.stopIntake()
+        if(self.operator.xboxController.getRightTriggerAxis() > 0.5):
+            self.mechanism.indexNote()
+
+        #manual index note
+        if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
+            self.mechanism.indexNote()
+        elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
+            self.mechanism.reverseIndex()
+            self.mechanism.reverseIntake()
+        
+        #Sprockt Controls
+        #rotate sprocket down
+        if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
+            self.mechanism.sprocketDown()
+        #rotate sprocket up
+        elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
+            self.mechanism.sprocketUp()
+        else:
+            self.mechanism.stopSprocket()
+        #intake
+        if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+            self.mechanism.sprocketToPosition(-37)
+        #subwoofer
+        elif self.operator.xboxController.getAButton():
+            self.mechanism.sprocketToPosition(-20)
+        #podium
+        elif self.operator.xboxController.getXButton():
+            self.mechanism.sprocketToPosition(-3)
+        #amp
+        elif self.operator.xboxController.getYButton():
+            self.mechanism.sprocketToPosition(80)
+        #auto aim
+        elif self.operator.xboxController.getBButton():
+            if self.team_is_blu:
+                distance = self.swervometer.distanceToPose(-326, 57)
+            else:
+                distance = self.swervometer.distanceToPose(326, 57)
+
+            v = 510.149
+            u = math.atan(
+                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354)   )**2)) / (distance + 13.1)
+            )
+            l = math.atan(
+                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354)   )**2)) / (distance - 4.9)
+            )
+            angle = math.degrees(((u+l)/-2)+0.523599)
+            self.mechanism.sprocketToPosition(angle)
+        
+        """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
-        print(self.mechanism.getShooterRPM())
-        if self.operator.xboxController.getYButton() and self.mechanism.indexingBeam.beamBroken() == False:
+        #print(self.mechanism.getShooterRPM())
+        if self.operator.xboxController.getAButton() and self.mechanism.indexingBeam.beamBroken() == False:
             self.mechanism.stopShooting()
             self.mechanism.intakeNote()
             self.mechanism.indexNote()
@@ -316,14 +385,14 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.indexNote()
         elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
             self.mechanism.reverseIndex()
-        elif self.operator.xboxController.getBButtonReleased():
-            self.mechanism.indexFixedRollBack()
+        #elif self.operator.xboxController.getBButtonReleased():
+            #self.mechanism.indexFixedRollBack()
         else:
-            if not self.operator.xboxController.getYButton():
+            if not self.operator.xboxController.getAButton():
                 self.mechanism.stopIndexing()
             
         #shooter motor and sprocket
-        if self.operator.xboxController.getRightBumper():
+        if self.operator.xboxController.getLeftTriggerAxis() > 0.5:
             if self.mechanism.indexingBeam.beamBroken() == True:
                 self.mechanism.shootNote()
             else:
@@ -337,22 +406,26 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketUp()
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(-3) #-25.9 close up #-9 from stage head on
-        elif self.operator.xboxController.getAButton():
+        elif self.operator.xboxController.getBButton():
             self.mechanism.sprocketToPosition(-24)
-        elif self.operator.xboxController.getLeftBumper():
+        elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80)
         else:
-            if(not self.operator.xboxController.getYButton()):
+            if(not self.operator.xboxController.getAButton()):
                 self.mechanism.stopSprocket()
 
         #sprocket down for climb
-        if self.operator.xboxController.getRightTriggerAxis() > 0.5 and self.operator.xboxController.getLeftTriggerAxis() > 0.5:
-                self.mechanism.sprocketToPosition(-30)
-
-        #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
-        self.drivetrain.visionPeriodic()
-        self.teleopDrivetrain()
-        return
+        if self.operator.xboxController.getLeftBumper():
+            if self.team_is_blu:
+                distance = self.swervometer.distanceToPose(-326, 57)
+            else:
+                distance = self.swervometer.distanceToPose(326, 57)
+            a = 13.4952
+            b = -64.5634
+            y = a * math.log(distance) + b
+            self.mechanism.sprocketToPosition(y)"""
+        
+        
 
     def teleopDrivetrain(self):
         if (not self.drivetrain):
@@ -411,7 +484,10 @@ class MyRobot(wpilib.TimedRobot):
 
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
-                self.drivetrain.pointToPose(-294, 57)
+                if self.team_is_blu:
+                    self.drivetrain.pointToPose(-326, 57)
+                else:
+                    self.drivetrain.pointToPose(326, 57)
                 self.drivetrain.execute('center')
                 return
             
@@ -478,6 +554,7 @@ class MyRobot(wpilib.TimedRobot):
     def autonomousPeriodic(self):
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
+        self.mechanism.autonPeriodic()
         return
     
     def deadzoneCorrection(self, val, deadzone):

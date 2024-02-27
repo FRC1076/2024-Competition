@@ -22,13 +22,13 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'A', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
-    'FIELD_RED_A_START_POSITION_X': 294, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_X': 275, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
     'FIELD_RED_A_START_POSITION_Y': 57, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
     'FIELD_RED_A_START_ANGLE': 0, # Heading angle of starting position A when on red team
     'FIELD_RED_B_START_POSITION_X': 248.625, # X-Coordinate of starting position B when on red team
@@ -37,7 +37,7 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_RED_C_START_POSITION_X': 248.625, # X-Coordinate of starting position C when on red team
     'FIELD_RED_C_START_POSITION_Y': -115.25, #-137.90, # Y-Coordinate of starting postion C when on red team
     'FIELD_RED_C_START_ANGLE': 0.0, # Heading angle of starting position C when on red team
-    'FIELD_BLU_A_START_POSITION_X': -270.53, # X-Coordinate of starting position A when on blue team
+    'FIELD_BLU_A_START_POSITION_X': -275, # X-Coordinate of starting position A when on blue team
     'FIELD_BLU_A_START_POSITION_Y': 57, # 40.15, # Y-Coordinate of starting postion A when on blue team
     'FIELD_BLU_A_START_ANGLE': 180.0, # Heading angle of starting position A when on blue team
     'FIELD_BLU_B_START_POSITION_X': -248.625, # X-Coordinate of starting position B when on blue team
@@ -89,9 +89,9 @@ drivetrainConfig = {
     'TARGET_KP': 0.020,
     'TARGET_KI': 0.00, #0.005,
     'TARGET_KD': 0.0001,
-    'BEARING_KP': 0.025,
-    'BEARING_KI': 0.00001,
-    'BEARING_KD': 0.0001,
+    'BEARING_KP': 0.035,
+    'BEARING_KI': 0.0,
+    'BEARING_KD': 0.000,
     'ROBOT_INCHES_PER_ROTATION': 1.0, #1.793, # Inches per rotation of wheels
     'TELEOP_OPEN_LOOP_RAMP_RATE': 0.125, # Improves maneuverability of bot.
     'TELEOP_CLOSED_LOOP_RAMP_RATE': 0.125,
@@ -117,11 +117,8 @@ drivetrainConfig = {
 }
 
 visionConfig = {
-    'TARGET_HEIGHT': 8.5,
-    'TARGET_RADIUS': 2,
-    'SHOOTER_HEIGHT': 3.5,
-    'SHOOTER_OFFSET': 1,
-    'CAMERA_HEIGHT': 4,
+    'CAMERA_HEIGHT_FROM_GROUND': 18,
+    'CAMERA_DISTANCE_FROM_COF': 12,
     'CAMERA_PITCH': 0,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
@@ -136,15 +133,15 @@ autonConfig = {
     'SCORE_EXISTING': True,
     'BALANCE_BOT': True,
     'DO_COMMUNITY': False, # Only applies for position B
-    'AUTON_OPEN_LOOP_RAMP_RATE': 1, # Improves the quality of swervometery by avoiding slippage.
+    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 1], ['RAISE_ARM', -7], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 2], ['RAISE_ARM', -10],  ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['NOTE', 3], ['RAISE_ARM', -10], ['SHOOT_NOTE'], ['LOWER_ARM', -37], ['STOP_INTAKE']],
-    'TASK_BLUE_A': [],
+    'TASK_RED_A': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-3'], ['RAISE_ARM_START', -10], ['PATH', '3-p1'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'p1-1'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', -25.9], ['PATH', '2-C'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'TASK_BLUE_A': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-3'], ['RAISE_ARM_START', -10], ['PATH', '3-p1'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'p1-1'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', -25.9], ['PATH', '2-C'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'noteConfig': {
     #RED TEAM,
-        'NOTE 1': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 235.5, 57, 0]],
-        'NOTE 2': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 267.25, 114, 0], ['MOVE', 235.5, 114, 0], ['MOVE', 235.5, 114,  41] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
-        'NOTE 3': [['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 267.25, 0, 0], ['MOVE', 235.5, 0, 0], ['MOVE', 235.5, 0, -41]],
+        'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
+        'NOTE 2': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 114, 0], ['MOVE', 216.5, 114, 0], ['MOVE', 275, 57, 0] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
+        'NOTE 3': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 0, 0], ['MOVE', 216.5, 0, 0], ['MOVE', 275, 57, 0]],
         'NOTE 4': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -75, 0], ['MOVE', 19.9, -75, 0] ],
         'NOTE 5': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0],['MOVE', 19.9, -9, 0]],
         'NOTE 6 NEGATIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, -34.31, 0], ['MOVE', 19.9, 57, 0]],
@@ -198,13 +195,13 @@ dashboardConfig = {
 mechanismConfig = {
     "INTAKE_BEAMBREAK_PIN": 5,
     "INTAKE_MOTOR_ID": 5,
-    "INTAKE_SPEED": 0.75,
+    "INTAKE_SPEED": 1,
     "INDEX_MOTOR_ID": 61,
     "INDEX_SPEED": 0.5,
     "INDEX_ROLL_BACK_ROTATIONS": 6,
     
-    "SHOOTER_LEFT_MOTOR_ID": 8,
-    "SHOOTER_RIGHT_MOTOR_ID": 28,
+    "SHOOTER_LEFT_MOTOR_ID": 28,
+    "SHOOTER_RIGHT_MOTOR_ID": 8,
     "SHOOTER_LEFT_SPEED": -0.85, #0.6 - good value for accuracy (on compliant wheels)
     "SHOOTER_RIGHT_SPEED": 1, #1 - good value for accuracy (on compliant wheels)
     "SHOOTER_LEFT_REVERSE_SPEED": 0.2,
@@ -224,12 +221,12 @@ mechanismConfig = {
     #Value of sprocket encoder at 0 (in deg) (at horizontal)
     "SPROCKET_ENCODER_ZERO": 49.1, #47.9
     #Tune values for the Sprocket Motor's PID
-    "SPROCKET_PID_KP": 0.05, #0.006
+    "SPROCKET_PID_KP": 0.03, #0.006 #0.05
     "SPROCKET_PID_KI": 0,
-    "SPROCKET_PID_KD": 0,
+    "SPROCKET_PID_KD": 0, #0
     #Tune values for the Sprocket Motor's Feedforward
     "SPROCKET_FEEDFORWARD_KS": 0,
-    "SPROCKET_FEEDFORWARD_KG": 0.0260, #0.0275
+    "SPROCKET_FEEDFORWARD_KG": 0.0275, #0.0275
     "SPROCKET_FEEDFORWARD_KV": 0,
     "SPROCKET_FEEDFORWARD_KA": 0,
     "SPROCKET_FEEDFORWARD_VELOCITY": 0, #in radians
