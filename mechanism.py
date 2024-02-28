@@ -44,6 +44,7 @@ class Mechanism:
         self.indexingBeam = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.autonSprocketPosition = -38
         self.shooting = False
+        self.climbMotor = rev.CANSparkMax(config["CLIMB_MOTOR_ID"], motor_type_brushless)
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -95,6 +96,10 @@ class Mechanism:
         self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_DOWN"])
         #self.sprocketLimitStop()
         return
+
+    def sprocketFullSpeedDown(self):
+        self.sprocketLeftMotor.set(-1)
+        self.sprocketRightMotor.set(1)
     
     def sprocketToPosition(self, targetPosition): #test and debug me!
         config = self.config
@@ -178,3 +183,12 @@ class Mechanism:
             self.stopIndexing()
         else:
             self.indexNote()
+    
+    def lockClimb(self):
+        self.climbMotor.set(-0.2)
+    
+    def stopClimb(self):
+        self.climbMotor.set(0)
+
+    def reverseClimb(self):
+        self.climbMotor.set(0.2)

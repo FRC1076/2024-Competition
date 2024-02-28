@@ -69,8 +69,8 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/3)
-            self.drivetrain.set_strafe(self.chassisSpeeds.vx/3)
+            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4)
+            self.drivetrain.set_strafe(self.chassisSpeeds.vx/4)
             if self.drivetrain.shouldSteerStraight():
                 if(self.team_is_red):
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))

@@ -298,6 +298,7 @@ class MyRobot(wpilib.TimedRobot):
         self.dropArmTimer = wpilib.Timer()
         self.dropArmTimer.start()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
+        self.allowDropArm = True
         return
 
     def robotPeriodic(self):
@@ -315,6 +316,9 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
         #LEDs.rainbowLED("purple")
         self.teleopMechanism()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
@@ -332,13 +336,15 @@ class MyRobot(wpilib.TimedRobot):
             LEDs.rainbowLED("purple")
             if self.previousBeamIsBrokenState:
                 self.dropArmTimer.reset()
+                self.allowDropArm = True
             if (self.dropArmTimer.get() > 0.5 
                 and not self.operator.xboxController.getAButton() 
                 and not self.operator.xboxController.getBButton() 
                 and not self.operator.xboxController.getYButton() 
                 and not self.operator.xboxController.getXButton() 
                 and not abs(self.operator.xboxController.getLeftY()) > 0.1
-                and not self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+                and not self.operator.xboxController.getLeftTriggerAxis() > 0.5
+                and self.allowDropArm):
                 self.mechanism.sprocketToPosition(-37)
         #yes note inside
         else:
@@ -364,11 +370,12 @@ class MyRobot(wpilib.TimedRobot):
         #rotate sprocket down
         if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
             self.mechanism.sprocketDown()
+            self.allowDropArm = False
         #rotate sprocket up
         elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
+            self.allowDropArm = False
         else:
-            if self.mechanism.indexBeamBroken():
                 self.mechanism.stopSprocket()
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
@@ -378,7 +385,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(-20)
         #podium
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(-3)
+            self.mechanism.sprocketToPosition(2)
         #amp
         elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80)
@@ -402,7 +409,16 @@ class MyRobot(wpilib.TimedRobot):
             print('angle', angle)
             print('sprocket angle', self.mechanism.getSprocketAngle())
             print('distance', distance)
-        
+        elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
+            self.mechanism.sprocketFullSpeedDown()
+        if self.operator.xboxController.getPOV() == 180:
+            self.mechanism.lockClimb()
+        elif self.operator.xboxController.getPOV() == 0:
+            self.mechanism.reverseClimb()   
+        else:
+            self.mechanism.stopClimb()
+            
+            
         """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
