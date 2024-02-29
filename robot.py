@@ -204,7 +204,7 @@ class MyRobot(wpilib.TimedRobot):
                                 swerve_module_offset_y=config['ROBOT_SWERVE_MODULE_OFFSET_Y'])
 
         swervometer = Swervometer(field_cfg, robot_cfg)
-
+        self.starting_angle = starting_angle
         return swervometer
     
     def initVision(self, config):
@@ -288,7 +288,7 @@ class MyRobot(wpilib.TimedRobot):
     def initAuton(self, config):
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer)
+        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer, self.starting_angle)
         return auton
     
     def teleopInit(self):

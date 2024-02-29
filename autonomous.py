@@ -9,7 +9,7 @@ from pathplannerlib.controller import PPHolonomicDriveController
 import math
 class Autonomous:
 
-    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer):
+    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer, starting_angle):
         taskListName = config["TASK"]
         self.taskList = []
         for cmd in config[taskListName]:
@@ -31,6 +31,7 @@ class Autonomous:
         self.holonomicController = PPHolonomicDriveController(PIDConstants(2, 0, 0), PIDConstants(0, 0, 0), 3, 0.5388, 0.2)
         self.swervometer = swervometer
         self.team_is_red = team_is_red
+        self.starting_angle = starting_angle
 
     def executeAuton(self):
         print(self.taskListCounter)
@@ -72,10 +73,7 @@ class Autonomous:
             self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4)
             self.drivetrain.set_strafe(self.chassisSpeeds.vx/4)
             if self.drivetrain.shouldSteerStraight():
-                if(self.team_is_red):
-                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
-                else:
-                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
+                self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, self.starting_angle))
             if(abs(self.chassisSpeeds.vx/3) < 0.1 and abs(self.chassisSpeeds.vy/3) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
