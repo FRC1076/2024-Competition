@@ -144,7 +144,13 @@ class Autonomous:
                 self.taskListCounter += 1
         
         elif self.autonTask[0] == 'RAISE_ARM_START':
-            if self.mechanism.indexBeamBroken():
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+            if(self.autonTimer.get() - self.lastTime > 2.5):
+                self.mechanism.stopIndexing()
+                self.mechanism.setAutonSprocketPosition(self.autonTask[1])
+                self.taskListCounter += 1   
+            elif self.mechanism.indexBeamBroken():
                 self.mechanism.stopIndexing()
                 self.mechanism.setAutonSprocketPosition(self.autonTask[1])
                 self.taskListCounter += 1
