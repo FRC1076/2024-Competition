@@ -47,6 +47,7 @@ class Swervometer:
         self.frame_dimension_y = self.robotProperty.frame_dimension_y
         self.com_offset_x = self.robotProperty.com_offset_x
         self.com_offset_y = self.robotProperty.com_offset_y
+        self.starting_angle = self.field.start_angle
         print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
     
         self.calcLeverArmLengths()
