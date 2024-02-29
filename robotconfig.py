@@ -24,6 +24,7 @@ controllerConfig = {
 swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
+    'FIELD_START_POSITION': 'D',
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -46,6 +47,12 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_BLU_C_START_POSITION_X': -300, # X-Coordinate of starting position C when on blue team
     'FIELD_BLU_C_START_POSITION_Y': 10, # -137.90, # Y-Coordinate of starting postion C when on blue team
     'FIELD_BLU_C_START_ANGLE': 240.0, # Heading angle of starting position C when on blue team
+    'FIELD_RED_D_START_POSITION_X': 300,
+    'FIELD_RED_D_START_POSITION_Y': 114,
+    'FIELD_RED_D_START_POSITION_ANGLE': 0,
+    'FIELD_BLU_D_START_POSITION_X': -300,
+    'FIELD_BLU_D_START_POSITION_Y': 114,
+    'FIELD_BLU_D_START_POSITION_ANGLE': 0,
     'ROBOT_FRAME_DIMENSION_X': 30.0, # X-coordinate length of robot frame  (2023: 34.0)
     'ROBOT_FRAME_DIMENSION_Y': 30.0, # Y-coordinate length of robot frame  (2023: 26.0)
     'ROBOT_BUMPER_DIMENSION_X': 3.0, # Width of bumper (X-axis)
@@ -139,9 +146,13 @@ autonConfig = {
     'B_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -23], ['PATH', '3-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_THREE_NOTE_STAGE_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', 0], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_TWO_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-3'], ['RAISE_ARM_START', -10], ['PATH', '3-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'B_ONE_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'B_ONE_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-8']],
+    'A_ONE_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['WAIT', 10], ['PATH', 'A-LEAVE']],
+    'C_ONE_NOTE':[['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-8-ROTATE']],
+    
     #'A_THREE_NOTE_AMP_SIDE_CENTER_LINE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-5']],
     'A_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-1'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'C_TWO_NOTE_STAGE_SIDE_CENTER_LINE':[['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-8-ROTATE'], ['PATH', '8-C-ROTATE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'TEST': [['PATH', 'C-3']],
     
     # #RED TEAM,
