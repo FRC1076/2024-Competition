@@ -338,7 +338,7 @@ class MyRobot(wpilib.TimedRobot):
         return
     
     def teleopMechanism(self):
-        print('RPM', self.mechanism.getShooterRPM())
+        #print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -360,7 +360,10 @@ class MyRobot(wpilib.TimedRobot):
         #yes note inside
         else:
             self.mechanism.stopIndexing()
-            self.mechanism.shootNote()
+            if(self.mechanism.getSprocketAngle() > 70):
+                self.mechanism.shootAmp()
+            else:
+                self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
@@ -422,9 +425,9 @@ class MyRobot(wpilib.TimedRobot):
             print('distance', distance)
         elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
             self.mechanism.sprocketFullSpeedDown()
-        if self.operator.xboxController.getPOV() == 180:
+        if self.operator.xboxController.getPOV() == 0:
             self.mechanism.lockClimb()
-        elif self.operator.xboxController.getPOV() == 0:
+        elif self.operator.xboxController.getPOV() == 180:
             self.mechanism.reverseClimb()   
         else:
             self.mechanism.stopClimb()
