@@ -324,6 +324,7 @@ class MyRobot(wpilib.TimedRobot):
                     LEDs.rainbowLED("off")
                 self.ledOn = not self.ledOn
                 self.ledTimer.reset()
+        print(self.drivetrain.getGyroAngle())
         return True
     
     def teleopPeriodic(self):
@@ -390,7 +391,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketUp()
             self.allowDropArm = False
         else:
-                self.mechanism.stopSprocket()
+            self.mechanism.stopSprocket()
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
