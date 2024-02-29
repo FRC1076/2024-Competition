@@ -34,10 +34,10 @@ class Swervometer:
         self.teamGyroAdjustment=self.robotProperty.team_gyro_adjustment
         self.teamMoveAdjustment=self.robotProperty.team_move_adjustment
         self.useCOMadjustment = self.robotProperty.use_com_adjustment
-        print("field.orgin_x", self.field.origin_x, " field.origin_y", self.field.origin_y)
-        print("field.start_position_x: ", self.field.start_position_x, " field.start_position_y: ", self.field.start_position_y)
-        print("bumper_dimension_x: ", self.robotProperty.bumper_dimension_x, " bumper_dimension_y: ", self.robotProperty.bumper_dimension_y)
-        print("cof_offset_x: ", self.robotProperty.cof_offset_x, " cof_offset_y: ", self.robotProperty.cof_offset_y)
+        #print("field.orgin_x", self.field.origin_x, " field.origin_y", self.field.origin_y)
+        #print("field.start_position_x: ", self.field.start_position_x, " field.start_position_y: ", self.field.start_position_y)
+        #print("bumper_dimension_x: ", self.robotProperty.bumper_dimension_x, " bumper_dimension_y: ", self.robotProperty.bumper_dimension_y)
+        #print("cof_offset_x: ", self.robotProperty.cof_offset_x, " cof_offset_y: ", self.robotProperty.cof_offset_y)
         self.currentX = self.field.start_position_x
         self.currentY = self.field.start_position_y
         self.currentBearing = self.field.start_angle
@@ -48,7 +48,7 @@ class Swervometer:
         self.com_offset_x = self.robotProperty.com_offset_x
         self.com_offset_y = self.robotProperty.com_offset_y
         self.starting_angle = self.field.start_angle
-        print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
+        #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
     
         self.calcLeverArmLengths()
 

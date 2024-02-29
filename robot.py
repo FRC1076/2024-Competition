@@ -420,10 +420,10 @@ class MyRobot(wpilib.TimedRobot):
             )
             angle = math.degrees(((u+l)/-2)+0.523599)
             self.mechanism.sprocketToPosition(angle)
-            print('current pose', self.swervometer.getCOF())
-            print('angle', angle)
-            print('sprocket angle', self.mechanism.getSprocketAngle())
-            print('distance', distance)
+            #print('current pose', self.swervometer.getCOF())
+            #print('angle', angle)
+            #print('sprocket angle', self.mechanism.getSprocketAngle())
+            #print('distance', distance)
         elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
             self.mechanism.sprocketFullSpeedDown()
         if self.operator.xboxController.getPOV() == 0:
@@ -593,7 +593,7 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.execute('center')
             # If no joysticks are dictating movement, but we want to lock the wheels.
             elif self.drivetrain.getWheelLock():
-                print("wheel locking")
+                #print("wheel locking")
                 self.drivetrain.move(0, 0, 0, self.drivetrain.getBearing())
                 self.drivetrain.execute('center')
             # Otherwise, make sure we are explicitly doing nothing, so bot does not drift.

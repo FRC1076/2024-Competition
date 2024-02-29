@@ -117,7 +117,7 @@ class Mechanism:
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
         self.sprocketRightMotor.set(-self.sprocketMotorSpeed)
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
-        print(self.getSprocketAngle())
+        #print(self.getSprocketAngle())
         self.sprocketLimitStop()
         return abs(targetPosition - self.getSprocketAngle()) < 0.5
     
@@ -176,7 +176,7 @@ class Mechanism:
 
     def setRightShooterRPM(self, rpm):
         self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
-        print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+        #print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
 
     def setAutonSprocketPosition(self, position):
         self.autonSprocketPosition = position

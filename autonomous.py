@@ -33,7 +33,7 @@ class Autonomous:
         self.team_is_red = team_is_red
 
     def executeAuton(self):
-        print(self.taskListCounter)
+        #print(self.taskListCounter)
         if not self.autonHasStarted:
             self.autonTimer.start()
             self.autonHasStarted = True
@@ -43,7 +43,7 @@ class Autonomous:
             self.drivetrain.set_strafe(0)
             self.drivetrain.set_rcw(0)
             self.drivetrain.execute('center')
-            print("tasks arae done")
+            #print("tasks arae done")
             return False
         
         self.autonTask = self.taskList[self.taskListCounter]
@@ -170,7 +170,7 @@ class Autonomous:
             else:
                 if(self.drivetrain.rotateToAngle(180 - self.autonTask[1])):
                     self.taskListCounter += 1
-            
+
         return False
     
     def move(self):
