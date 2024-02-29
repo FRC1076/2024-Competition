@@ -34,6 +34,7 @@ from dashboard import Dashboard
 
 from autonomous import Autonomous
 from mechanism import Mechanism
+from elastic import Elastic
 
 from wpilib.shuffleboard import Shuffleboard
 from wpilib.shuffleboard import BuiltInWidgets
@@ -60,6 +61,11 @@ class MyRobot(wpilib.TimedRobot):
         self.config = robotConfig
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
+
+        elastic = Elastic()
+        elastic.displayMainWindow()
+
+        """
         #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
         #self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
 
@@ -76,7 +82,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.dashboard.putBoolean(DASH_PREFIX, 'Note Inside', False)
         self.dashboard.putBoolean(DASH_PREFIX, 'Note Detected', True)
-
+        """
         """
         Recieve:
         - Limelight video
