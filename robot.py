@@ -154,7 +154,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = config['FIELD_BLU_B_START_POSITION_X']
                 starting_position_y = config['FIELD_BLU_B_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_B_START_ANGLE']
-        else: # config['FIELD_START_POSITION'] == 'C'
+        elif (config['FIELD_START_POSITION'] == 'C'): # config['FIELD_START_POSITION'] == 'C'
             self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'C')
             self.fieldStartPosition = 'C'
             if self.team_is_red:
@@ -165,6 +165,17 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = config['FIELD_BLU_C_START_POSITION_X']
                 starting_position_y = config['FIELD_BLU_C_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_C_START_ANGLE']
+        else: # config['FIELD_START_POSITION'] == 'C'
+            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'D')
+            self.fieldStartPosition = 'D'
+            if self.team_is_red:
+                starting_position_x = config['FIELD_RED_D_START_POSITION_X']
+                starting_position_y = config['FIELD_RED_D_START_POSITION_Y']
+                starting_angle = config['FIELD_RED_D_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = config['FIELD_BLU_D_START_POSITION_X']
+                starting_position_y = config['FIELD_BLU_D_START_POSITION_Y']
+                starting_angle = config['FIELD_BLU_D_START_ANGLE']
         
         bumpers_attached = config['HAS_BUMPERS_ATTACHED']
         if bumpers_attached:
