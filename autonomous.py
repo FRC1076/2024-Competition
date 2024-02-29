@@ -72,7 +72,10 @@ class Autonomous:
             self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4)
             self.drivetrain.set_strafe(self.chassisSpeeds.vx/4)
             if self.drivetrain.shouldSteerStraight():
-                self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, self.swervometer.starting_angle))
+                if(self.team_is_red):
+                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
+                else:
+                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
             if(abs(self.chassisSpeeds.vx/3) < 0.1 and abs(self.chassisSpeeds.vy/3) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
@@ -159,7 +162,15 @@ class Autonomous:
         elif self.autonTask[0] == 'LOWER_ARM_START':
             self.mechanism.setAutonSprocketPosition(self.autonTask[1])
             self.taskListCounter += 1
-
+        
+        elif self.autonTask[0] == 'ROTATE':
+            if self.team_is_red:
+                if(self.drivetrain.rotateToAngle(self.autonTask[1])):
+                    self.taskListCounter += 1
+            else:
+                if(self.drivetrain.rotateToAngle(180 - self.autonTask[1])):
+                    self.taskListCounter += 1
+            
         return False
     
     def move(self):

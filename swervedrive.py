@@ -1126,9 +1126,9 @@ class SwerveDrive:
             else:
                 angleMove = self.bearing_pid_controller.calculate(directAngle)
             self.set_rcw(-clamp(angleMove))
+            return self.bearing_pid_controller.atSetpoint()
         except:
-            pass
-        return
+            return False
     
     def visionPeriodic(self):
         if(self.vision.hasTargets()):

@@ -29,24 +29,24 @@ swervometerConfig = { # All positions measured in inches
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
-    'FIELD_RED_A_START_POSITION_X': 300, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
-    'FIELD_RED_A_START_POSITION_Y': 104, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
-    'FIELD_RED_A_START_ANGLE': 60, # Heading angle of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_X': 308, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_Y': 114, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
+    'FIELD_RED_A_START_ANGLE': 0, # Heading angle of starting position A when on red team
     'FIELD_RED_B_START_POSITION_X': 275, # X-Coordinate of starting position B when on red team
     'FIELD_RED_B_START_POSITION_Y': 57, #-28.25, # Y-Coordinate of starting postion B when on red team
     'FIELD_RED_B_START_ANGLE': 0, # Heading angle of starting position B when on red team
-    'FIELD_RED_C_START_POSITION_X': 300, # X-Coordinate of starting position C when on red team
-    'FIELD_RED_C_START_POSITION_Y': 10, #-137.90, # Y-Coordinate of starting postion C when on red team
-    'FIELD_RED_C_START_ANGLE': 300, # Heading angle of starting position C when on red team
-    'FIELD_BLU_A_START_POSITION_X': -300, # X-Coordinate of starting position A when on blue team
-    'FIELD_BLU_A_START_POSITION_Y': 104, # 40.15, # Y-Coordinate of starting postion A when on blue team
-    'FIELD_BLU_A_START_ANGLE': 120, # Heading angle of starting position A when on blue team
+    'FIELD_RED_C_START_POSITION_X': 308, # X-Coordinate of starting position C when on red team
+    'FIELD_RED_C_START_POSITION_Y': 0, #-137.90, # Y-Coordinate of starting postion C when on red team
+    'FIELD_RED_C_START_ANGLE': 0, # Heading angle of starting position C when on red team
+    'FIELD_BLU_A_START_POSITION_X': -308, # X-Coordinate of starting position A when on blue team
+    'FIELD_BLU_A_START_POSITION_Y': 114, # 40.15, # Y-Coordinate of starting postion A when on blue team
+    'FIELD_BLU_A_START_ANGLE': 180, # Heading angle of starting position A when on blue team
     'FIELD_BLU_B_START_POSITION_X': -275, # X-Coordinate of starting position B when on blue team
     'FIELD_BLU_B_START_POSITION_Y': 57, #-28.25, # Y-Coordinate of starting postion B when on blue team
     'FIELD_BLU_B_START_ANGLE': 180.0, # Heading angle of starting position B when on blue team
-    'FIELD_BLU_C_START_POSITION_X': -300, # X-Coordinate of starting position C when on blue team
-    'FIELD_BLU_C_START_POSITION_Y': 10, # -137.90, # Y-Coordinate of starting postion C when on blue team
-    'FIELD_BLU_C_START_ANGLE': 240.0, # Heading angle of starting position C when on blue team
+    'FIELD_BLU_C_START_POSITION_X': -308, # X-Coordinate of starting position C when on blue team
+    'FIELD_BLU_C_START_POSITION_Y': 0, # -137.90, # Y-Coordinate of starting postion C when on blue team
+    'FIELD_BLU_C_START_ANGLE': 180.0, # Heading angle of starting position C when on blue team
     'FIELD_RED_D_START_POSITION_X': 300,
     'FIELD_RED_D_START_POSITION_Y': 114,
     'FIELD_RED_D_START_POSITION_ANGLE': 0,
@@ -152,7 +152,7 @@ autonConfig = {
     
     #'A_THREE_NOTE_AMP_SIDE_CENTER_LINE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-5']],
     #A_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-1'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'C_TWO_NOTE_STAGE_SIDE_CENTER_LINE':[['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-8-ROTATE'], ['RAISE_ARM_START', -25.9], ['PATH', '8-C-ROTATE'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'C_TWO_NOTE_CENTER_LINE':[['START_INTAKE'], ['PATH', 'C-COUT'], ['ROTATE', 60], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['ROTATE', 0], ['PATH', 'COUT-8'], ['RAISE_ARM_START', -25.9], ['PATH', '8-COUT'], ['ROTATE', 60], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     
     # #RED TEAM,
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
