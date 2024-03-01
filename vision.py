@@ -45,7 +45,7 @@ class Vision:
             return False
     
     def hasPriorityTargets(self):
-        print("PRIORITY TARGET VALUE", bool(self.table.getNumber('ta', 0)))
+        #print("PRIORITY TARGET VALUE", bool(self.table.getNumber('ta', 0)))
         return bool(self.table.getNumber('ta', 0))  
 
     def canUpdatePose(self):
