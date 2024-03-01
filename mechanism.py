@@ -119,6 +119,7 @@ class Mechanism:
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
         #print(self.getSprocketAngle())
         self.sprocketLimitStop()
+        print('targetPosition', targetPosition)
         return abs(targetPosition - self.getSprocketAngle()) < 0.5
     
     def stopSprocket(self):

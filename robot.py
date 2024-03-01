@@ -324,7 +324,6 @@ class MyRobot(wpilib.TimedRobot):
                     LEDs.rainbowLED("off")
                 self.ledOn = not self.ledOn
                 self.ledTimer.reset()
-        print(self.drivetrain.getGyroAngle())
         return True
     
     def teleopPeriodic(self):
@@ -339,6 +338,7 @@ class MyRobot(wpilib.TimedRobot):
         return
     
     def teleopMechanism(self):
+        self.inADropDownThisCycle = False
         #print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         #no note inside
@@ -358,6 +358,7 @@ class MyRobot(wpilib.TimedRobot):
                 and not self.operator.xboxController.getLeftTriggerAxis() > 0.5
                 and self.allowDropArm):
                 self.mechanism.sprocketToPosition(-37)
+                self.inADropDownThisCycle = True
         #yes note inside
         else:
             self.mechanism.stopIndexing()
@@ -391,7 +392,8 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketUp()
             self.allowDropArm = False
         else:
-            self.mechanism.stopSprocket()
+            if not self.inADropDownThisCycle:
+                self.mechanism.stopSprocket()
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
@@ -400,10 +402,10 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(-20)
         #podium
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(2)
+            self.mechanism.sprocketToPosition(0)
         #amp
         elif self.operator.xboxController.getYButton():
-            self.mechanism.sprocketToPosition(80)
+            self.mechanism.sprocketToPosition(80) 
         #auto aim
         elif self.operator.xboxController.getBButton():
             if self.team_is_blu:
@@ -424,6 +426,7 @@ class MyRobot(wpilib.TimedRobot):
             #print('angle', angle)
             #print('sprocket angle', self.mechanism.getSprocketAngle())
             #print('distance', distance)
+        
         elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
             self.mechanism.sprocketFullSpeedDown()
         if self.operator.xboxController.getPOV() == 0:
