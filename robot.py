@@ -154,7 +154,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = config['FIELD_BLU_B_START_POSITION_X']
                 starting_position_y = config['FIELD_BLU_B_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_B_START_ANGLE']
-        else: # config['FIELD_START_POSITION'] == 'C'
+        elif (config['FIELD_START_POSITION'] == 'C'): # config['FIELD_START_POSITION'] == 'C'
             self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'C')
             self.fieldStartPosition = 'C'
             if self.team_is_red:
@@ -165,6 +165,17 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = config['FIELD_BLU_C_START_POSITION_X']
                 starting_position_y = config['FIELD_BLU_C_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_C_START_ANGLE']
+        else: # config['FIELD_START_POSITION'] == 'C'
+            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'D')
+            self.fieldStartPosition = 'D'
+            if self.team_is_red:
+                starting_position_x = config['FIELD_RED_D_START_POSITION_X']
+                starting_position_y = config['FIELD_RED_D_START_POSITION_Y']
+                starting_angle = config['FIELD_RED_D_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = config['FIELD_BLU_D_START_POSITION_X']
+                starting_position_y = config['FIELD_BLU_D_START_POSITION_Y']
+                starting_angle = config['FIELD_BLU_D_START_ANGLE']
         
         bumpers_attached = config['HAS_BUMPERS_ATTACHED']
         if bumpers_attached:
@@ -204,7 +215,7 @@ class MyRobot(wpilib.TimedRobot):
                                 swerve_module_offset_y=config['ROBOT_SWERVE_MODULE_OFFSET_Y'])
 
         swervometer = Swervometer(field_cfg, robot_cfg)
-
+        self.starting_angle = starting_angle
         return swervometer
     
     def initVision(self, config):
@@ -288,7 +299,7 @@ class MyRobot(wpilib.TimedRobot):
     def initAuton(self, config):
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer)
+        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer, self.starting_angle)
         return auton
     
     def teleopInit(self):
@@ -327,7 +338,8 @@ class MyRobot(wpilib.TimedRobot):
         return
     
     def teleopMechanism(self):
-        print('RPM', self.mechanism.getShooterRPM())
+        self.inADropDownThisCycle = False
+        #print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -346,10 +358,14 @@ class MyRobot(wpilib.TimedRobot):
                 and not self.operator.xboxController.getLeftTriggerAxis() > 0.5
                 and self.allowDropArm):
                 self.mechanism.sprocketToPosition(-37)
+                self.inADropDownThisCycle = True
         #yes note inside
         else:
             self.mechanism.stopIndexing()
-            self.mechanism.shootNote()
+            if(self.mechanism.getSprocketAngle() > 70):
+                self.mechanism.shootAmp()
+            else:
+                self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
@@ -376,6 +392,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketUp()
             self.allowDropArm = False
         else:
+            if not self.inADropDownThisCycle:
                 self.mechanism.stopSprocket()
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
@@ -385,10 +402,10 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(-20)
         #podium
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(2)
+            self.mechanism.sprocketToPosition(0)
         #amp
         elif self.operator.xboxController.getYButton():
-            self.mechanism.sprocketToPosition(80)
+            self.mechanism.sprocketToPosition(80) 
         #auto aim
         elif self.operator.xboxController.getBButton():
             if self.team_is_blu:
@@ -405,15 +422,16 @@ class MyRobot(wpilib.TimedRobot):
             )
             angle = math.degrees(((u+l)/-2)+0.523599)
             self.mechanism.sprocketToPosition(angle)
-            print('current pose', self.swervometer.getCOF())
-            print('angle', angle)
-            print('sprocket angle', self.mechanism.getSprocketAngle())
-            print('distance', distance)
+            #print('current pose', self.swervometer.getCOF())
+            #print('angle', angle)
+            #print('sprocket angle', self.mechanism.getSprocketAngle())
+            #print('distance', distance)
+        
         elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
             self.mechanism.sprocketFullSpeedDown()
-        if self.operator.xboxController.getPOV() == 180:
+        if self.operator.xboxController.getPOV() == 0:
             self.mechanism.lockClimb()
-        elif self.operator.xboxController.getPOV() == 0:
+        elif self.operator.xboxController.getPOV() == 180:
             self.mechanism.reverseClimb()   
         else:
             self.mechanism.stopClimb()
@@ -578,7 +596,7 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.execute('center')
             # If no joysticks are dictating movement, but we want to lock the wheels.
             elif self.drivetrain.getWheelLock():
-                print("wheel locking")
+                #print("wheel locking")
                 self.drivetrain.move(0, 0, 0, self.drivetrain.getBearing())
                 self.drivetrain.execute('center')
             # Otherwise, make sure we are explicitly doing nothing, so bot does not drift.

@@ -9,7 +9,7 @@ from pathplannerlib.controller import PPHolonomicDriveController
 import math
 class Autonomous:
 
-    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer):
+    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer, starting_angle):
         taskListName = config["TASK"]
         self.taskList = []
         for cmd in config[taskListName]:
@@ -28,12 +28,12 @@ class Autonomous:
         self.lastTime = -1
         self.hasRolledBack = False
 
-        self.holonomicController = PPHolonomicDriveController(PIDConstants(2, 0, 0), PIDConstants(0, 0, 0), 3, 0.5388, 0.2)
+        self.holonomicController = PPHolonomicDriveController(PIDConstants(1.5, 0, 0), PIDConstants(0, 0, 0), 3, 0.5388, 0.2)
         self.swervometer = swervometer
         self.team_is_red = team_is_red
 
     def executeAuton(self):
-        print(self.taskListCounter)
+        #print(self.taskListCounter)
         if not self.autonHasStarted:
             self.autonTimer.start()
             self.autonHasStarted = True
@@ -43,7 +43,7 @@ class Autonomous:
             self.drivetrain.set_strafe(0)
             self.drivetrain.set_rcw(0)
             self.drivetrain.execute('center')
-            print("tasks arae done")
+            #print("tasks arae done")
             return False
         
         self.autonTask = self.taskList[self.taskListCounter]
@@ -69,8 +69,8 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4)
-            self.drivetrain.set_strafe(self.chassisSpeeds.vx/4)
+            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4.4)
+            self.drivetrain.set_strafe(self.chassisSpeeds.vx/4.4)
             if self.drivetrain.shouldSteerStraight():
                 if(self.team_is_red):
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
@@ -146,9 +146,17 @@ class Autonomous:
                 self.taskListCounter += 1
         
         elif self.autonTask[0] == 'RAISE_ARM_START':
-            if self.mechanism.indexBeamBroken():
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+            if(self.autonTimer.get() - self.lastTime > 2.5):
                 self.mechanism.stopIndexing()
                 self.mechanism.setAutonSprocketPosition(self.autonTask[1])
+                self.lastTime = -1
+                self.taskListCounter += 1   
+            elif self.mechanism.indexBeamBroken():
+                self.mechanism.stopIndexing()
+                self.mechanism.setAutonSprocketPosition(self.autonTask[1])
+                self.lastTime = -1
                 self.taskListCounter += 1
             else:
                 self.mechanism.indexNote()
@@ -156,7 +164,17 @@ class Autonomous:
         elif self.autonTask[0] == 'LOWER_ARM_START':
             self.mechanism.setAutonSprocketPosition(self.autonTask[1])
             self.taskListCounter += 1
-
+        
+        elif self.autonTask[0] == 'ROTATE':
+            if self.team_is_red:
+                if(self.drivetrain.rotateToAngle(self.autonTask[1])):
+                    self.drivetrain.set_rcw(0)
+                    self.taskListCounter += 1
+            else:
+                if(self.drivetrain.rotateToAngle(180 - self.autonTask[1])):
+                    self.drivetrain.set_rcw(0)
+                    self.taskListCounter += 1
+            self.drivetrain.execute('center')
         return False
     
     def move(self):
