@@ -521,6 +521,7 @@ class MyRobot(wpilib.TimedRobot):
         # Note this is a bad idea in competition, since it's reset automatically in robotInit.
         if (driver.getLeftTriggerAxis() > 0.7 and driver.getRightTriggerAxis() > 0.7 and driver.getXButton()):
             self.drivetrain.resetGyro()
+            return
             #self.drivetrain.printGyro()
 
         # Determine if Wheel Lock is needed.
