@@ -339,7 +339,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
-        #print('RPM', self.mechanism.getShooterRPM())
+        print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -399,7 +399,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(-37)
         #subwoofer
         elif self.operator.xboxController.getAButton():
-            self.mechanism.sprocketToPosition(-20)
+            self.mechanism.sprocketToPosition(-16)
         #podium
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(0)
