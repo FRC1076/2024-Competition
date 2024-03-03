@@ -399,7 +399,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.sprocketToPosition(-37)
         #subwoofer
         elif self.operator.xboxController.getAButton():
-            self.mechanism.sprocketToPosition(-24)
+            self.mechanism.sprocketToPosition(-23)
         #podium
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(0)
