@@ -21,6 +21,8 @@ class Autonomous:
                 self.taskList.append(cmd)
         self.taskListCounter = 0
 
+        self.maxSpeed = config["MAX_SPEED_M/S"]
+
         self.autonTimer = wpilib.Timer()
         self.autonHasStarted = False
         self.drivetrain = drivetrain
@@ -28,7 +30,12 @@ class Autonomous:
         self.lastTime = -1
         self.hasRolledBack = False
 
-        self.holonomicController = PPHolonomicDriveController(PIDConstants(1.5, 0, 0), PIDConstants(0, 0, 0), 3, 0.5388, 0.2)
+        self.holonomicController = PPHolonomicDriveController(
+                                    PIDConstants(config['TRANSLATION_KP'], config['TRANSLATION_KI'], config['TRANSLATION_KD']), 
+                                    PIDConstants(config['ROTATION_KP'], config['ROTATION_KI'], config['ROTATION_KD']), 
+                                    config['MAX_SPEED_M/S'], 
+                                    config['DRIVE_BASE_RADIUS'], 
+                                    config['PERIOD'])
         self.swervometer = swervometer
         self.team_is_red = team_is_red
 

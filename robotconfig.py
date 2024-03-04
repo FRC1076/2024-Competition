@@ -152,7 +152,7 @@ autonConfig = {
     #'A_THREE_NOTE_AMP_SIDE_CENTER_LINE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-5']],
     #A_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-1'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'C_TWO_NOTE_CENTER_LINE':[['START_INTAKE'], ['RAISE_ARM_START', -7], ['PATH', 'C-COUT'], ['ROTATE', -75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['ROTATE', 0], ['PATH', 'COUT-8'], ['RAISE_ARM_START', -7], ['PATH', '8-COUT'], ['ROTATE', -75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'A_THREE_NOTE_NO_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -15], ['PATH', 'A-ABACK'], ['ROTATE', 50], ['SHOOT_NOTE'], ['ROTATE', 0], ['WAIT', 1.5], ['LOWER_ARM_START', -37], ['PATH', 'ABACK-1'], ['RAISE_ARM_START', 0], ['PATH', '1-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -25.9], ['PATH', '3-B'], ['SHOOT_NOTE']]
+    'A_THREE_NOTE_NO_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -15], ['PATH', 'A-ABACK'], ['ROTATE', 50], ['SHOOT_NOTE'], ['ROTATE', 0], ['WAIT', 1.5], ['LOWER_ARM_START', -37], ['PATH', 'ABACK-1'], ['RAISE_ARM_START', 0], ['PATH', '1-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -25.9], ['PATH', '3-B'], ['SHOOT_NOTE']],
     
     # #RED TEAM,
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
@@ -175,6 +175,15 @@ autonConfig = {
     #     'NOTE 15': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 148.31, 180], ['MOVE', 19.9, 123, 180]],
     #     'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]], 
     # },
+    'MAX_SPEED_M/S': 4.6,
+    'TRANSLATION_KP': 1.5,
+    'TRANSLATION_KI': 0,
+    'TRANSLATION_KD': 0,
+    'ROTATION_KP': 0,
+    'ROTATION_KI': 0,
+    'ROTATION_KD': 0,
+    'DRIVE_BASE_RADIUS': 0.5388,
+    'PERIOD': 0.02,
 }
 
 
