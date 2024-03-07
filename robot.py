@@ -365,7 +365,7 @@ class MyRobot(wpilib.TimedRobot):
             if(self.mechanism.getSprocketAngle() > 70):
                 self.mechanism.shootAmp()
             else:
-                self.mechanism.shootNote()
+                self.mechanism.shootNote() #change to shootReverse() to intake from source
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         #trigger controls
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):

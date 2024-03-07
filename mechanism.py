@@ -80,8 +80,8 @@ class Mechanism:
         return
     
     def shootReverse(self):
-        self.leftShootingMotor.set(self.config["SHOOTER_LEFT_REVERSE_SPEED"])
-        self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_REVERSE_SPEED"])
+        self.setLeftShooterRPM(1000)
+        self.setRightShooterRPM(-1250)
         return
     
     #forces stop because motor doesn't always go to 0 by itself
