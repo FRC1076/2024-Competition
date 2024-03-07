@@ -200,19 +200,24 @@ class Swervometer:
         
         return self.currentX, self.currentY, self.currentBearing
     """
+
+    def getKinematics(self):
+        return self.kinematics
+
     def initPoseEstimator(self, modules, vision):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
         frontRightModule = modules['front_right'].getSwerveModulePosition()
         rearLeftModule = modules['rear_left'].getSwerveModulePosition()
         rearRightModule = modules['rear_right'].getSwerveModulePosition()
         #correct order kinematics
-        kinematics = SwerveDrive4Kinematics(Translation2d(self.swerveModuleOffsetX * 0.0254, self.swerveModuleOffsetY * 0.0254),
+        #frontLeft, frontRight, rearLeft, rearRight
+        self.kinematics = SwerveDrive4Kinematics(Translation2d(self.swerveModuleOffsetX * 0.0254, self.swerveModuleOffsetY * 0.0254),
                                              Translation2d(self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254),
                                              Translation2d(-self.swerveModuleOffsetX * 0.0254, self.swerveModuleOffsetY * 0.0254),
                                              Translation2d(-self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254))
         gyroAngle = Rotation2d(self.teamGyroAdjustment * math.pi / 180)
         swerveModules = (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule)
-        self.poseEstimator =  SwerveDrive4PoseEstimator(kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180))
+        self.poseEstimator =  SwerveDrive4PoseEstimator(self.kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180))
         self.vision = vision
 
     def updatePoseEstimator(self, gyroAngle, modules, inAuton):

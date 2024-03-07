@@ -36,6 +36,7 @@ class Autonomous:
                                     config['MAX_SPEED_M/S'], 
                                     config['DRIVE_BASE_RADIUS'], 
                                     config['PERIOD'])
+        self.maxSpeed = config['MAX_SPEED_M/S']
         self.swervometer = swervometer
         self.team_is_red = team_is_red
 
@@ -76,6 +77,17 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
+            self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(self.chassisSpeeds)
+            self.modules = self.drivetrain.getModules()
+            self.modules['front_left'].move(self.moduleStates[0].speed / self.maxSpeed, self.moduleStates[0].degrees())
+            self.modules['front_right'].move(self.moduleStates[1].speed / self.maxSpeed, self.moduleStates[1].degrees())
+            self.modules['rear_left'].move(self.moduleStates[2].speed / self.maxSpeed, self.moduleStates[2].degrees())
+            self.modules['rear_right'].move(self.moduleStates[3].speed / self.maxSpeed, self.moduleStates[3].degrees())
+            self.modules['front_left'].execute()
+            self.modules['front_right'].execute()
+            self.modules['rear_left'].execute()
+            self.modules['rear_right'].execute()
+            """
             self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4.6)
             self.drivetrain.set_strafe(self.chassisSpeeds.vx/4.6)
             if self.drivetrain.shouldSteerStraight():
@@ -90,6 +102,7 @@ class Autonomous:
                 self.lastTime = -1
                 self.taskListCounter += 1
             self.drivetrain.execute('center')
+            """
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)
