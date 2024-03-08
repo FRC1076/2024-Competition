@@ -3,7 +3,11 @@ import math
 
 import wpilib
 import wpilib.drive
+import wpimath.kinematics
+from wpimath.kinematics import ChassisSpeeds
+import wpimath.geometry
 import wpimath.controller
+import wpimath.trajectory
 import rev
 
 from networktables import NetworkTables
@@ -44,6 +48,10 @@ class SwerveModule:
 
         self.rotateMotor = _rotateMotor
         self.rotateEncoder = _rotateEncoder
+
+        self.drivePID = PIDController(0,0,0)
+        self.driveFeedforward = wpimath.controller.SimpleMotorFeedforwardMeters(0,4.3)
+
 
         self.driveMotor = _driveMotor
         self.driveEncoder = _driveEncoder
@@ -218,6 +226,37 @@ class SwerveModule:
         self._requested_speed = speed 
         self._set_deg(deg)
         #print("speed:", speed, " degree:", deg)
+
+    def closedMove(self, speed, angle):
+        if self.allow_reverse: #addresses module-flipping
+            """
+            If the difference between the requested degree and the current degree is
+            more than 90 degrees, don't turn the wheel 180 degrees. Instead reverse the speed.
+            """
+            diff = abs(deg - self.get_current_angle())
+
+            if (diff > 180):
+                diff = 360 - diff
+
+            if diff > 90: #make this with the new tick-degree methods
+                self.moduleFlipped = not self.moduleFlipped
+                self.positionSign *= -1
+
+            if self.moduleFlipped:
+                speed *= -1
+                #deg += 180
+                #deg %= 360
+            
+            #print("Module Flipped Test: flipped: ", self.moduleFlipped, " speed: ", speed, " positionSign: ", self.positionSign)
+
+        self._requested_speed = speed / 4.3 + self.drivePID.calculate(self.get_current_velocity(), speed)
+        self._set_deg(deg)
+        
+
+        
+        
+
+        
 
     def debug(self): #can use logging/SD if useful
         """
