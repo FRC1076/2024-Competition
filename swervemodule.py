@@ -284,9 +284,9 @@ class SwerveModule:
 
     def setRampRate(self, openLoopRampRate, closedLoopRampRate):
         self.driveMotor.setOpenLoopRampRate(openLoopRampRate)
-        print("Open Loop Ramp Rate: ", self.driveMotor.getOpenLoopRampRate())
+        #print("Open Loop Ramp Rate: ", self.driveMotor.getOpenLoopRampRate())
         self.driveMotor.setClosedLoopRampRate(closedLoopRampRate)
-        print("Closed Loop Ramp Rate: ", self.driveMotor.getClosedLoopRampRate())
+        #print("Closed Loop Ramp Rate: ", self.driveMotor.getClosedLoopRampRate())
 
     def getSwerveModulePosition(self):
         return self.swerveModulePosition

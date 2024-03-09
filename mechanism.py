@@ -44,6 +44,7 @@ class Mechanism:
         self.indexingBeam = BeamBreak(config["INTAKE_BEAMBREAK_PIN"])
         self.autonSprocketPosition = -38
         self.shooting = False
+        self.climbMotor = rev.CANSparkMax(config["CLIMB_MOTOR_ID"], motor_type_brushless)
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -71,6 +72,13 @@ class Mechanism:
         #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
+    def shootAmp(self):
+        #self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
+        self.setLeftShooterRPM(-2000)
+        self.setRightShooterRPM(2000)
+        #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
+        return
+    
     def shootReverse(self):
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_REVERSE_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_REVERSE_SPEED"])
@@ -95,6 +103,10 @@ class Mechanism:
         self.sprocketRightMotor.set(config["SPROCKET_MOTOR_RIGHT_DOWN"])
         #self.sprocketLimitStop()
         return
+
+    def sprocketFullSpeedDown(self):
+        self.sprocketLeftMotor.set(-1)
+        self.sprocketRightMotor.set(1)
     
     def sprocketToPosition(self, targetPosition): #test and debug me!
         config = self.config
@@ -105,8 +117,9 @@ class Mechanism:
         self.sprocketMotorSpeed = self.sprocketPIDCalculation + self.sprocketFeedforwardCalculation
         self.sprocketRightMotor.set(-self.sprocketMotorSpeed)
         self.sprocketLeftMotor.set(self.sprocketMotorSpeed)
-        print(self.getSprocketAngle())
+        #print(self.getSprocketAngle())
         self.sprocketLimitStop()
+        #print('targetPosition', targetPosition)
         return abs(targetPosition - self.getSprocketAngle()) < 0.5
     
     def stopSprocket(self):
@@ -164,7 +177,7 @@ class Mechanism:
 
     def setRightShooterRPM(self, rpm):
         self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
-        print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+        #print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
 
     def setAutonSprocketPosition(self, position):
         self.autonSprocketPosition = position
@@ -178,3 +191,12 @@ class Mechanism:
             self.stopIndexing()
         else:
             self.indexNote()
+    
+    def lockClimb(self):
+        self.climbMotor.set(-0.2)
+    
+    def stopClimb(self):
+        self.climbMotor.set(0)
+
+    def reverseClimb(self):
+        self.climbMotor.set(0.2)

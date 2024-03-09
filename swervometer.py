@@ -34,10 +34,10 @@ class Swervometer:
         self.teamGyroAdjustment=self.robotProperty.team_gyro_adjustment
         self.teamMoveAdjustment=self.robotProperty.team_move_adjustment
         self.useCOMadjustment = self.robotProperty.use_com_adjustment
-        print("field.orgin_x", self.field.origin_x, " field.origin_y", self.field.origin_y)
-        print("field.start_position_x: ", self.field.start_position_x, " field.start_position_y: ", self.field.start_position_y)
-        print("bumper_dimension_x: ", self.robotProperty.bumper_dimension_x, " bumper_dimension_y: ", self.robotProperty.bumper_dimension_y)
-        print("cof_offset_x: ", self.robotProperty.cof_offset_x, " cof_offset_y: ", self.robotProperty.cof_offset_y)
+        #print("field.orgin_x", self.field.origin_x, " field.origin_y", self.field.origin_y)
+        #print("field.start_position_x: ", self.field.start_position_x, " field.start_position_y: ", self.field.start_position_y)
+        #print("bumper_dimension_x: ", self.robotProperty.bumper_dimension_x, " bumper_dimension_y: ", self.robotProperty.bumper_dimension_y)
+        #print("cof_offset_x: ", self.robotProperty.cof_offset_x, " cof_offset_y: ", self.robotProperty.cof_offset_y)
         self.currentX = self.field.start_position_x
         self.currentY = self.field.start_position_y
         self.currentBearing = self.field.start_angle
@@ -47,7 +47,8 @@ class Swervometer:
         self.frame_dimension_y = self.robotProperty.frame_dimension_y
         self.com_offset_x = self.robotProperty.com_offset_x
         self.com_offset_y = self.robotProperty.com_offset_y
-        print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
+        self.starting_angle = self.field.start_angle
+        #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
     
         self.calcLeverArmLengths()
 
@@ -214,15 +215,18 @@ class Swervometer:
         self.poseEstimator =  SwerveDrive4PoseEstimator(kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180))
         self.vision = vision
 
-    def updatePoseEstimator(self, gyroAngle, modules):
+    def updatePoseEstimator(self, gyroAngle, modules, inAuton):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
         frontRightModule = modules['front_right'].getSwerveModulePosition()
         rearLeftModule = modules['rear_left'].getSwerveModulePosition()
         rearRightModule = modules['rear_right'].getSwerveModulePosition()
         self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentBearing = gyroAngle
-        if(self.vision.hasTargets()):
-            self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
+        if(self.vision.hasTargets() and not inAuton):
+            try:
+                self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
+            except:
+                pass
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37
