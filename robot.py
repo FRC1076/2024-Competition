@@ -486,6 +486,12 @@ class MyRobot(wpilib.TimedRobot):
             return 'center'
     
     def autonomousInit(self): 
+
+        self.autonomousCommand = self.container.getAutonomousCommand()
+
+        if self.autonomousCommand:
+            self.autonomousCommand.schedule()
+
         if not self.auton:
             return
         if not self.drivetrain:

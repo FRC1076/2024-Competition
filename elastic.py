@@ -4,6 +4,11 @@ from dashboard import Dashboard
 
 from networktables import NetworkTables
 from robotconfig import elasticConfig
+from wpilib import SmartDashboard
+
+import wpilib
+from wpilib.drive import DifferentialDrive
+from wpilib.shuffleboard import Shuffleboard
 
 TEST_MODE = False
 
@@ -80,6 +85,47 @@ class Elastic:
         .withPosition(12,8)
         .withWidget(BuiltInWidgets.kToggleButton)
         .getEntry())
+
+    def autonDisplay(self):
+        """
+        # A simple auto routine that drives forward a specified distance, and then stops.
+        self.simpleAuto = DriveDistance(
+            constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, self.drive
+        )
+
+        # A complex auto routine that drives forward, drops a hatch, and then drives backward.
+        self.complexAuto = ComplexAuto(self.drive, self.hatch)
+        """
+
+        AUTON_PLAN_LIST = {
+            "AUTON_0": 0,
+            "AUTON_1": 0,
+            "AUTON_2": 0,
+            "AUTON_3": 0,
+            "AUTON_4": 0,
+            "AUTON_5": 0,
+        }
+
+        self.noMoveAuto = AUTON_PLAN_LIST["AUTON_0"]
+        self.oneNoteAuto = AUTON_PLAN_LIST["AUTON_1"]
+        self.threeNoteAuto = AUTON_PLAN_LIST["AUTON_2"]
+        self.fourLeftNoteAuto = AUTON_PLAN_LIST["AUTON_3"]
+        self.scatterMidAuto = AUTON_PLAN_LIST["AUTON_4"]
+
+        # Chooser
+        self.chooser = wpilib.SendableChooser()
+
+        # Add commands to the autonomous command chooser
+        self.chooser.setDefaultOption("No move", self.noMoveAuto)
+        self.chooser.addOption("1 note", self.oneNoteAuto)
+        self.chooser.addOption("3 note", self.threeNoteAuto)
+        self.chooser.addOption("4 note left", self.fourLeftNoteAuto)
+        self.chooser.addOption("scatter mid note", self.scatterMidAuto)
+
+        # Put the chooser on the dashboard
+        SmartDashboard.putData(self.chooser)
+
+        return
 
 """
     def updateCoral():
