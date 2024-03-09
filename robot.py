@@ -317,16 +317,17 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotPeriodic(self):
         self.mechanism.periodic()
-        if not self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple")
+        if self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple-false")
+        elif self.notedetector.hasTarget():
+            if self.notedetector.getTargetErrorX() < 1.5 and self.notedetector.getTargetErrorX() > -1.5:
+                LEDs.rainbowLED("orange-flash")
+            elif self.notedetector.getTargetErrorX() > -1.5:
+                LEDs.rainbowLED("orange-right")
+            elif self.notedetector.getTargetErrorX() < 1.5:
+                LEDs.rainbowLED("orange-left")
         else:
-            if(self.ledTimer.get() > 0.1):
-                if(not self.ledOn):
-                    LEDs.rainbowLED("purple")
-                else:
-                    LEDs.rainbowLED("off")
-                self.ledOn = not self.ledOn
-                self.ledTimer.reset()
+            LEDs.rainbowLED("purple")
         return True
     
     def teleopPeriodic(self):
