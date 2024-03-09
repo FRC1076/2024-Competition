@@ -4,6 +4,8 @@ from dashboard import Dashboard
 
 from networktables import NetworkTables
 from robotconfig import elasticConfig
+from robotconfig import autonConfig
+
 from wpilib import SmartDashboard
 
 import wpilib
@@ -14,8 +16,10 @@ TEST_MODE = False
 
 class Elastic:
 
-    def __init__(self):
+    def __init__(self,autonPlans):
         self.config = elasticConfig
+        self.autonPlans = autonPlans
+        self.selectedTaskKey = autonConfig['B_THREE_NOTE_AMP_SIDE']
         self.isNoteDetected = self.config["NOTE_IS_DETECTED"]
         self.isNoteLeft = self.config["NOTE_ON_LEFT"]
         self.isNoteRight = self.config["NOTE_ON_RIGHT"]
@@ -96,32 +100,24 @@ class Elastic:
         # A complex auto routine that drives forward, drops a hatch, and then drives backward.
         self.complexAuto = ComplexAuto(self.drive, self.hatch)
         """
+        #self.autonPlans is a list of strings
+        #self.autonPlans
 
-        AUTON_PLAN_LIST = {
-            "AUTON_0": 0,
-            "AUTON_1": 0,
-            "AUTON_2": 0,
-            "AUTON_3": 0,
-            "AUTON_4": 0,
-            "AUTON_5": 0,
-        }
-
-        self.noMoveAuto = AUTON_PLAN_LIST["AUTON_0"]
-        self.oneNoteAuto = AUTON_PLAN_LIST["AUTON_1"]
-        self.threeNoteAuto = AUTON_PLAN_LIST["AUTON_2"]
-        self.fourLeftNoteAuto = AUTON_PLAN_LIST["AUTON_3"]
-        self.scatterMidAuto = AUTON_PLAN_LIST["AUTON_4"]
+        AUTON_PLAN_LIST = {} 
 
         # Chooser
         self.chooser = wpilib.SendableChooser()
 
-        # Add commands to the autonomous command chooser
-        self.chooser.setDefaultOption("No move", self.noMoveAuto)
-        self.chooser.addOption("1 note", self.oneNoteAuto)
-        self.chooser.addOption("3 note", self.threeNoteAuto)
-        self.chooser.addOption("4 note left", self.fourLeftNoteAuto)
-        self.chooser.addOption("scatter mid note", self.scatterMidAuto)
+        self.chooser.setDefaultOption("B_THREE_NOTE_AMP_SIDE", self.noMoveAuto)
+        for i in range(0,len(self.autonPlans)):
+            AUTON_PLAN_LIST[self.autonPlans] = self.autonConfig[self.autonPlans]
 
+        #print the above generated list of filtered auton plans into the combobox
+            
+        for i in range(0,len(self.autonPlans)):
+            self.chooser.addOption(AUTON_PLAN_LIST[i], self.autonConfig[i])
+            AUTON_PLAN_LIST[self.autonPlans] = self.autonConfig[self.autonPlans]
+        
         # Put the chooser on the dashboard
         SmartDashboard.putData(self.chooser)
 

@@ -63,8 +63,8 @@ class MyRobot(wpilib.TimedRobot):
         self.config = robotConfig
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
-
-        self.elastic = Elastic()
+        autonPlans = filter(lambda k: "NOTE" in k, self.config["AUTON"].keys())
+        self.elastic = Elastic(autonPlans)
         self.elastic.displayMainWindow()
         self.elastic.summonTheButtons()
 
@@ -341,7 +341,7 @@ class MyRobot(wpilib.TimedRobot):
     def initAuton(self, config):
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer, self.starting_angle)
+        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer, self.starting_angle, self.elastic.selectedTaskKey)
         return auton
     
     def teleopInit(self):
