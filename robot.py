@@ -62,8 +62,9 @@ class MyRobot(wpilib.TimedRobot):
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
 
-        elastic = Elastic()
-        elastic.displayMainWindow()
+        self.elastic = Elastic()
+        self.elastic.displayMainWindow()
+        self.elastic.summonTheButtons()
 
         """
         #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
@@ -329,7 +330,11 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        
+
+        #self.elastic.elasticTesting()
+        #self.elastic.displayMainWindow()
+
+        """
         print("------------------------------------------")
         if self.dashboard.getBoolean(DASH_PREFIX,'Team is Red'):
             print("team red")
@@ -349,7 +354,7 @@ class MyRobot(wpilib.TimedRobot):
         print(self.dashboard.getBoolean(DASH_PREFIX, 'Note Detected'))
 
         print("------------------------------------------")
-        
+        """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
         if self.operator.xboxController.getYButton():
