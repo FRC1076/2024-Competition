@@ -60,6 +60,7 @@ class Vision:
             return self.table.getNumber('tx', 0)
         else:
             print('No vision target.')
+            return 0
 
     def gettargetErrorY(self):
         if self.hasTargets():
@@ -84,6 +85,14 @@ class Vision:
             return (pose[0] * s, pose[1] * s, pose[2] * s)
         else:
             return (-1, -1, -1)
+    
+    def getAvgDistance(self):
+        s = 39.37 # scalar to convert meters to inches
+        pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
+        if len(pose) != 0:
+            return (pose[9] * s)
+        else:
+            return (-1)
 
     def getOrientation(self):
         pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
