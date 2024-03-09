@@ -373,7 +373,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.mechanism.stopIntake()
         if(self.operator.xboxController.getRightTriggerAxis() > 0.5):
-            self.mechanism.indexNote()
+            self.mechanism.fullIndex()
 
         #manual index note
         if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
@@ -416,13 +416,13 @@ class MyRobot(wpilib.TimedRobot):
                 distance = self.vision.getAvgDistance()
                 if distance == -1:
                     distance = self.swervometer.distanceToPose(326, 57) - 15
-
-            v = 580
+            r=1
+            v = 700
             u = math.atan(
-                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
+                (51 + (193.04429 * r * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
             )
             l = math.atan(
-                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance - 4.9)
+                (55.825 + (193.04429 * r *((distance + 13.1) /(v * 0.9432538354))**2)) / (distance - 4.9)
             )
             angle = math.degrees(((u+l)/-2)+0.523599)
             self.mechanism.sprocketToPosition(angle)

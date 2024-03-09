@@ -145,6 +145,11 @@ class Mechanism:
         self.indexMotor.set(self.config["INDEX_SPEED"])
         return
     
+    def fullIndex(self):
+        self.inARollBack = False
+        self.indexMotor.set(1)
+        return
+    
     def reverseIndex(self):
         self.inARollBack = False
         self.indexMotor.set(-1 * self.config["INDEX_SPEED"])
