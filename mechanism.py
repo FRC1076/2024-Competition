@@ -67,8 +67,8 @@ class Mechanism:
     #r1 shoots the note
     def shootNote(self):
         #self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
-        self.setLeftShooterRPM(-4000)
-        self.setRightShooterRPM(5000)
+        self.setLeftShooterRPM(-4500)
+        self.setRightShooterRPM(5500)
         #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     

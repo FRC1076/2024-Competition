@@ -368,7 +368,7 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         #trigger controls
-        if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
+        if(self.operator.xboxController.getLeftTriggerAxis() > 0.5) and not self.mechanism.indexBeamBroken():
             self.mechanism.intakeNote()
         else:
             self.mechanism.stopIntake()
@@ -409,9 +409,13 @@ class MyRobot(wpilib.TimedRobot):
         #auto aim
         elif self.operator.xboxController.getBButton():
             if self.team_is_blu:
-                distance = self.swervometer.distanceToPose(-326, 57) - 15
+                distance = self.vision.getAvgDistance()
+                if distance == -1:
+                    distance = self.swervometer.distanceToPose(-326, 57) - 15
             else:
-                distance = self.swervometer.distanceToPose(326, 57) - 15
+                distance = self.vision.getAvgDistance()
+                if distance == -1:
+                    distance = self.swervometer.distanceToPose(326, 57) - 15
 
             v = 580
             u = math.atan(
