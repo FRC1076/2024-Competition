@@ -323,16 +323,16 @@ class MyRobot(wpilib.TimedRobot):
         if self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < 1.5 and self.notedetector.getTargetErrorX() > -1.5:
                 LEDs.rainbowLED("orange-flash")
-                print('orange-flash')
+                #print('orange-flash')
             elif self.notedetector.getTargetErrorX() > -1.5:
                 LEDs.rainbowLED("orange-right")
-                print('orange-right')
+                #print('orange-right')
             elif self.notedetector.getTargetErrorX() < 1.5:
                 LEDs.rainbowLED("orange-left")
-                print('orange-left')
+                #print('orange-left')
         else:
             LEDs.rainbowLED("purple")
-            print('purple')
+            #print('purple')
         return True
     
     def teleopPeriodic(self):

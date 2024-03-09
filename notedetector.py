@@ -40,9 +40,10 @@ class NoteDetector:
     def getTargetErrorY(self):
         # y distance to the note
 
-        self.targetPixelZ = (self.config['CAMERA_PIXELS_Z'] - (self.getYMin() + self.getYMax())/2) - self.config['CAMERA_PIXELS_Z']/2
+        #self.targetPixelZ = (self.config['CAMERA_PIXELS_Z'] - (self.getYMin() + self.getYMax())/2) - self.config['CAMERA_PIXELS_Z']/2
+        self.targetPixelZ = (self.config['CAMERA_PIXELS_Z'] - (self.getYMax())) - self.config['CAMERA_PIXELS_Z']/2
         self.targetAngleZ = (self.targetPixelZ/(self.config['CAMERA_PIXELS_Z']/2))*(self.config['CAMERA_FOV_Z']/2) + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
-        self.targetErrorY = ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.targetAngleZ)))*(-1) + self.config['CAMERA_OFFSET_Y']
+        self.targetErrorY = ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.targetAngleZ)))*(-1) + self.config['CAMERA_OFFSET_Y'] + self.config['NOTE_DIAMETER']/2
         return self.targetErrorY
     
     
