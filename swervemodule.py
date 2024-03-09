@@ -49,7 +49,7 @@ class SwerveModule:
         self.rotateMotor = _rotateMotor
         self.rotateEncoder = _rotateEncoder
 
-        self.drivePID = PIDController(0,0,0)
+        self.drivePID = PIDController(1,0,0)
         self.driveFeedforward = wpimath.controller.SimpleMotorFeedforwardMeters(0,4.3)
 
 
@@ -193,6 +193,10 @@ class SwerveModule:
         """
         self._requested_angle = value % 360
 
+    def move(self, speed, deg):
+        self.closedMove(speed, deg)
+
+    '''
     def move(self, speed, deg): #this is all good mostly
         """
         Set the requested speed and rotation of passed.
@@ -225,9 +229,11 @@ class SwerveModule:
 
         self._requested_speed = speed 
         self._set_deg(deg)
-        #print("speed:", speed, " degree:", deg)
+        #print("speed:", speed, " degree:", deg)'''
 
-    def closedMove(self, speed, angle):
+    def closedMove(self, speed, deg):
+        speed = clamp(speed)
+        speed *= 4.3
         if self.allow_reverse: #addresses module-flipping
             """
             If the difference between the requested degree and the current degree is
@@ -249,7 +255,9 @@ class SwerveModule:
             
             #print("Module Flipped Test: flipped: ", self.moduleFlipped, " speed: ", speed, " positionSign: ", self.positionSign)
 
-        self._requested_speed = speed / 4.3 + self.drivePID.calculate(self.get_current_velocity(), speed)
+        self._requested_speed = speed + self.drivePID.calculate((self.get_current_velocity() / 60) * 1.86 * 0.0254, speed)
+        print("ACTUAL:", (self.get_current_velocity() / 60) * 1.86 * 0.0254, "DESIRED", self._requested_speed)
+        self._requested_speed /= 4.3
         self._set_deg(deg)
         
 
