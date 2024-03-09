@@ -381,8 +381,7 @@ class SwerveDrive:
         if self.squared_inputs:
             fwd = self.square_input(fwd)
 
-        fwd *= self.xy_multiplier
-
+        fwd *= 1
         self._requested_vectors['fwd'] = fwd
 
     def set_strafe(self, strafe):
@@ -392,8 +391,7 @@ class SwerveDrive:
         """
         if self.squared_inputs:
             strafe = self.square_input(strafe)
-
-        strafe *= self.xy_multiplier
+        strafe *= 1
 
         self._requested_vectors['strafe'] = strafe
 
@@ -1017,7 +1015,7 @@ class SwerveDrive:
         for key in self.modules:
             self.log("Module: Key: ", key)
             self.modules[key].execute()
-        COFX, COFY, COFAngle = self.swervometer.calculateCOFPose(self.modules, self.getGyroAngle())
+        COFX, COFY, COFAngle = self.swervometer.getCOF()
         #print(COFX, COFY, self.vision.getPose()[0], self.vision.getPose()[1])
         #print(COFX, COFY)
         #print("\n")
@@ -1093,6 +1091,65 @@ class SwerveDrive:
             self.set_rcw(0)
             self.execute('center')
     
+    def pointToPose(self, x, y):
+        currentX, currentY, currentR = self.swervometer.getCOF()
+        #use a try-except in case of atan dividing by 0. May not be an issue but just in case
+        try:
+            desiredAngle = (180 - math.atan2((currentY - y), (currentX - x)) * 180/math.pi) % 360
+            #if we desire angle 359, it will overshoot and go to 0 which will then pid all the way back to 359 but overshoot again and keep spinning in circles
+            #to fix this, find the complementary angle and move in the direction of the fastest path
+            directAngle = desiredAngle - self.getGyroAngle()
+            complementaryAngle = (360 - abs(directAngle)) * math.copysign(1, directAngle)
+            if(abs(complementaryAngle) < abs(directAngle)):
+                angleMove = -self.bearing_pid_controller.calculate(complementaryAngle)
+            else:
+                angleMove = self.bearing_pid_controller.calculate(directAngle)
+            self.set_rcw(-clamp(angleMove))
+        except:
+            pass
+        return
+    
+    def pointToPriorityTag(self):
+        if(self.vision.hasPriorityTargets()):
+            if(abs(self.vision.gettargetErrorX()) > 2):
+                self.set_rcw(clamp(self.vision.gettargetErrorX() * 0.05) * 0.2)
+            else:
+                self.set_rcw(0)
+
+    def rotateToAngle(self, angle):
+        current_angle = self.getGyroAngle()
+        angle_diff = abs(current_angle - angle)
+        if (angle_diff) > 180:
+            angle_diff = 360 - angle_diff
+            if angle < current_angle:
+                target_angle = current_angle + angle_diff
+            else:
+                target_angle = current_angle - angle_diff
+        else:
+            if angle < current_angle:
+                target_angle = current_angle - angle_diff
+            else:
+                target_angle = current_angle + angle_diff
+
+        rcw_error = self.bearing_pid_controller.calculate(self.getGyroAngle(), target_angle)
+        self.set_rcw(clamp(rcw_error) * 0.5)
+        return abs(rcw_error) < 0.2
+        """
+        try:
+            desiredAngle = angle
+            #if we desire angle 359, it will overshoot and go to 0 which will then pid all the way back to 359 but overshoot again and keep spinning in circles
+            #to fix this, find the complementary angle and move in the direction of the fastest path
+            directAngle = desiredAngle - self.getGyroAngle()
+            complementaryAngle = (360 - abs(directAngle)) * math.copysign(1, directAngle)
+            if(abs(complementaryAngle) < abs(directAngle)):
+                angleMove = -self.bearing_pid_controller.calculate(complementaryAngle)
+            else:
+                angleMove = self.bearing_pid_controller.calculate(directAngle)
+            self.set_rcw(-clamp(angleMove))
+            return self.bearing_pid_controller.atSetpoint()
+        except:
+            return False"""\
+    
     def visionPeriodic(self):
         if(self.vision.hasTargets()):
             targetErrorAngle = self.vision.getTargetPoseCameraSpace()[4]
@@ -1107,7 +1164,10 @@ class SwerveDrive:
         if(self.vision.hasTargets()):
             newX = self.poseXFilter.calculate(self.vision.getPose()[0])
             newY = self.poseYFilter.calculate(self.vision.getPose()[1])
-            self.swervometer.setCOF(newX, newY, self.getBearing())
+            self.swervometer.setCOF(newX, newY, self.getBearing())  
+
+    def getModules(self):
+        return self.modules
 
     def idle(self):
         for key in self.modules:

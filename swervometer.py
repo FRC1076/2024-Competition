@@ -1,5 +1,11 @@
 import math
 import wpilib
+from wpimath.estimator import SwerveDrive4PoseEstimator
+from wpimath.kinematics import SwerveDrive4Kinematics
+from wpimath.geometry import Translation2d
+from wpimath.geometry import Rotation2d
+from wpimath.kinematics import SwerveModulePosition
+from wpimath.geometry import Pose2d
 from collections import namedtuple
 
 # Create the structure of the field config:
@@ -28,10 +34,10 @@ class Swervometer:
         self.teamGyroAdjustment=self.robotProperty.team_gyro_adjustment
         self.teamMoveAdjustment=self.robotProperty.team_move_adjustment
         self.useCOMadjustment = self.robotProperty.use_com_adjustment
-        print("field.orgin_x", self.field.origin_x, " field.origin_y", self.field.origin_y)
-        print("field.start_position_x: ", self.field.start_position_x, " field.start_position_y: ", self.field.start_position_y)
-        print("bumper_dimension_x: ", self.robotProperty.bumper_dimension_x, " bumper_dimension_y: ", self.robotProperty.bumper_dimension_y)
-        print("cof_offset_x: ", self.robotProperty.cof_offset_x, " cof_offset_y: ", self.robotProperty.cof_offset_y)
+        #print("field.orgin_x", self.field.origin_x, " field.origin_y", self.field.origin_y)
+        #print("field.start_position_x: ", self.field.start_position_x, " field.start_position_y: ", self.field.start_position_y)
+        #print("bumper_dimension_x: ", self.robotProperty.bumper_dimension_x, " bumper_dimension_y: ", self.robotProperty.bumper_dimension_y)
+        #print("cof_offset_x: ", self.robotProperty.cof_offset_x, " cof_offset_y: ", self.robotProperty.cof_offset_y)
         self.currentX = self.field.start_position_x
         self.currentY = self.field.start_position_y
         self.currentBearing = self.field.start_angle
@@ -41,9 +47,17 @@ class Swervometer:
         self.frame_dimension_y = self.robotProperty.frame_dimension_y
         self.com_offset_x = self.robotProperty.com_offset_x
         self.com_offset_y = self.robotProperty.com_offset_y
-        print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
+        self.starting_angle = self.field.start_angle
+        #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
     
         self.calcLeverArmLengths()
+
+    def startTimer(self):
+        self.timer = wpilib.Timer()
+        self.timer.start()
+
+    def getTimer(self):
+        return self.timer.get()
 
     def getFrameDimensions(self):
         #return self.frame_dimension_x, self.frame_dimension_y
@@ -57,6 +71,9 @@ class Swervometer:
 
     def getCOF(self):
         return self.currentX, self.currentY, self.currentBearing
+    
+    def getPathPlannerPose(self):
+        return Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees(self.currentBearing))
 
     def setCOF(self, x, y, bearing):
         self.currentX = x
@@ -104,7 +121,7 @@ class Swervometer:
             return self.rearLeftCOMmult
         else: # (key == 'front_left'):
             return self.frontLeftCOMmult
-
+    """
     def calculateModuleCoordinates(self, psi, currentGyroAngle, hypotenuse, positionChange, wheelAngle):
         #print("calcModCoord: psi: ", psi, " currentGyroAngle: ", currentGyroAngle, " hypo: ", hypotenuse, " posChg: ", positionChange, " wheelAngle: ", wheelAngle)
         
@@ -182,4 +199,38 @@ class Swervometer:
         self.currentBearing = currentGyroAngle
         
         return self.currentX, self.currentY, self.currentBearing
-   
+    """
+    def initPoseEstimator(self, modules, vision):
+        frontLeftModule = modules['front_left'].getSwerveModulePosition()
+        frontRightModule = modules['front_right'].getSwerveModulePosition()
+        rearLeftModule = modules['rear_left'].getSwerveModulePosition()
+        rearRightModule = modules['rear_right'].getSwerveModulePosition()
+        #correct order kinematics
+        kinematics = SwerveDrive4Kinematics(Translation2d(self.swerveModuleOffsetX * 0.0254, self.swerveModuleOffsetY * 0.0254),
+                                             Translation2d(self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254),
+                                             Translation2d(-self.swerveModuleOffsetX * 0.0254, self.swerveModuleOffsetY * 0.0254),
+                                             Translation2d(-self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254))
+        gyroAngle = Rotation2d(self.teamGyroAdjustment * math.pi / 180)
+        swerveModules = (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule)
+        self.poseEstimator =  SwerveDrive4PoseEstimator(kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180), (0.1, 0.1, 0.1), (1.8, 1.8, 1.8))
+        self.vision = vision
+
+    def updatePoseEstimator(self, gyroAngle, modules, inAuton):
+        frontLeftModule = modules['front_left'].getSwerveModulePosition()
+        frontRightModule = modules['front_right'].getSwerveModulePosition()
+        rearLeftModule = modules['rear_left'].getSwerveModulePosition()
+        rearRightModule = modules['rear_right'].getSwerveModulePosition()
+        self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
+        self.currentBearing = gyroAngle
+        if(self.vision.hasTargets() and not inAuton):
+            try:
+                self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
+            except:
+                pass
+        self.currentPose = self.poseEstimator.getEstimatedPosition()
+        self.currentX = self.currentPose.X() * 39.37
+        self.currentY = self.currentPose.Y() * 39.37
+
+        
+    def distanceToPose(self, x, y):
+        return math.sqrt(pow(x - self.currentX, 2) + pow(y - self.currentY, 2))

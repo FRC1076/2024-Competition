@@ -4,7 +4,6 @@ import math
 import wpilib
 import wpilib.drive
 import wpimath.controller
-import ctre
 import rev
 
 from networktables import NetworkTables
@@ -13,6 +12,9 @@ from collections import namedtuple
 
 from dashboard import Dashboard
 from robotconfig import MODULE_NAMES
+
+from wpimath.kinematics import SwerveModulePosition
+from wpimath.geometry import Rotation2d
 
 # Create the structure of the config: SmartDashboard prefix, Encoder's zero point, Drive motor inverted, Allow reverse
 ModuleConfig = namedtuple('ModuleConfig', ['sd_prefix', 'zero', 'inverted', 'allow_reverse', 'position_conversion', 'heading_kP', 'heading_kI', 'heading_kD'])
@@ -85,6 +87,8 @@ class SwerveModule:
         self.sd.putNumber(DASH_PREFIX, 'Heading kP', self.heading_pid_controller.getP())
         self.sd.putNumber(DASH_PREFIX, 'Heading kI', self.heading_pid_controller.getI())
         self.sd.putNumber(DASH_PREFIX, 'Heading kD', self.heading_pid_controller.getD())
+
+        self.swerveModulePosition = SwerveModulePosition(0, Rotation2d(0))
 
     def reset(self):
         
@@ -258,14 +262,17 @@ class SwerveModule:
 
         #print("Angle: ", self.get_current_angle(), " Absolute Position: ", self.sd_prefix, " ", self.encoder.getAbsolutePosition(), self.encoder_zero, self.encoder.getAbsolutePosition() - self.encoder_zero)
 
-        self.newPosition = self.driveEncoder.getPosition() * 1.79
+        self.newPosition = self.driveEncoder.getPosition() * 1.86
+        #print("FACTOR: ", self.driveEncoder.getPositionConversionFactor())
+        self.newPosition = self.driveEncoder.getPosition() * 1.86 #convert position to inches travelled by the wheel, I believe
         #print("FACTOR: ", self.driveEncoder.getPositionConversionFactor())
         self.positionChange = (self.newPosition - self.lastPosition) * self.positionSign
         #print("Position Change: ", self.positionChange, " New: ", self.newPosition, " Last: ", self.lastPosition, " Sign: ", self.positionSign)
         self.newAngle = self.get_current_angle()
-        self.lastPosition = self.newPosition # save it for next time
-
-        #self.update_smartdash()
+        #use wpilib's swerve module position. must add the position change because wpilib can't take into account the positionSign, so we must take it into account before we feed it in
+        self.swerveModulePosition = SwerveModulePosition((self.swerveModulePosition.distance * 39.37 + self.positionChange) * 0.0254 , Rotation2d((self.newAngle - 90) % 360 * math.pi / 180))
+        self.lastPosition = self.newPosition
+        self.update_smartdash()
     
     def testMove(self, driveInput, rotateInput):
         self.driveMotor.set(clamp(driveInput))
@@ -277,9 +284,12 @@ class SwerveModule:
 
     def setRampRate(self, openLoopRampRate, closedLoopRampRate):
         self.driveMotor.setOpenLoopRampRate(openLoopRampRate)
-        print("Open Loop Ramp Rate: ", self.driveMotor.getOpenLoopRampRate())
+        #print("Open Loop Ramp Rate: ", self.driveMotor.getOpenLoopRampRate())
         self.driveMotor.setClosedLoopRampRate(closedLoopRampRate)
-        print("Closed Loop Ramp Rate: ", self.driveMotor.getClosedLoopRampRate())
+        #print("Closed Loop Ramp Rate: ", self.driveMotor.getClosedLoopRampRate())
+
+    def getSwerveModulePosition(self):
+        return self.swerveModulePosition
 
     def update_smartdash(self):
         """

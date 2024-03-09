@@ -12,13 +12,14 @@ class Logger:
         self.dataLog.start(dir)
 
     def log(self, moduleName, *dataToLog):
-        if loggingConfig[moduleName]:
+        """if loggingConfig[moduleName]:
             dataAsStrings = map(lambda x: str(x), dataToLog)
             message = ', '.join(dataAsStrings)
 
             timestamp = datetime.now().strftime("%m/%d/%Y-%m-%d-%H:%M:%S")
             logEntry = 'LOG: (' + timestamp + ') ' + message
-            self.dataLog.log(logEntry)
+            self.dataLog.log(logEntry)"""
+        return
 
     # singleton pattern!
     def getLogger(dir=''):
