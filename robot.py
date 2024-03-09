@@ -317,22 +317,30 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotPeriodic(self):
         self.mechanism.periodic()
-        if self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple-false")
-        elif self.notedetector.hasTarget():
+        # if self.mechanism.indexBeamBroken():
+        #     LEDs.rainbowLED("purple-false")
+        #     print('purple-false')
+        if self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < 1.5 and self.notedetector.getTargetErrorX() > -1.5:
                 LEDs.rainbowLED("orange-flash")
+                print('orange-flash')
             elif self.notedetector.getTargetErrorX() > -1.5:
                 LEDs.rainbowLED("orange-right")
+                print('orange-right')
             elif self.notedetector.getTargetErrorX() < 1.5:
                 LEDs.rainbowLED("orange-left")
+                print('orange-left')
         else:
             LEDs.rainbowLED("purple")
+            print('purple')
         return True
     
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
-        print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+        if self.notedetector.hasTarget():
+            print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+        else:
+            print('no target')
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
@@ -345,7 +353,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
-        print('RPM', self.mechanism.getShooterRPM())
+        #print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
