@@ -252,10 +252,10 @@ class MyRobot(wpilib.TimedRobot):
             target_offsetX_april=config['APRIL_TARGET_OFFSET_X'], target_target_size_april=config['APRIL_TARGET_TARGET_SIZE'],
             max_target_offset_x=config['MAX_TARGET_OFFSET_X'], min_target_size=config['MIN_TARGET_SIZE'])
     
-        flModule_cfg = ModuleConfig(sd_prefix='FrontLeft_Module', zero=125.4 + 90, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        frModule_cfg = ModuleConfig(sd_prefix='FrontRight_Module', zero=293.6 + 90, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        rlModule_cfg = ModuleConfig(sd_prefix='RearLeft_Module', zero=272.5 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        rrModule_cfg = ModuleConfig(sd_prefix='RearRight_Module', zero=307.5 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        flModule_cfg = ModuleConfig(sd_prefix='FrontLeft_Module', zero=190.5, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        frModule_cfg = ModuleConfig(sd_prefix='FrontRight_Module', zero=153.3, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        rlModule_cfg = ModuleConfig(sd_prefix='RearLeft_Module', zero=143.8, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        rrModule_cfg = ModuleConfig(sd_prefix='RearRight_Module', zero=161.5, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
         
         motor_type = rev.CANSparkLowLevel.MotorType.kBrushless
 
@@ -316,19 +316,30 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotPeriodic(self):
         self.mechanism.periodic()
-        if not self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple")
+        # if self.mechanism.indexBeamBroken():
+        #     LEDs.rainbowLED("purple-false")
+        #     print('purple-false')
+        if self.notedetector.hasTarget():
+            if self.notedetector.getTargetErrorX() < 1.5 and self.notedetector.getTargetErrorX() > -1.5:
+                LEDs.rainbowLED("orange-flash")
+                #print('orange-flash')
+            elif self.notedetector.getTargetErrorX() > -1.5:
+                LEDs.rainbowLED("orange-right")
+                #print('orange-right')
+            elif self.notedetector.getTargetErrorX() < 1.5:
+                LEDs.rainbowLED("orange-left")
+                #print('orange-left')
         else:
-            if(self.ledTimer.get() > 0.1):
-                if(not self.ledOn):
-                    LEDs.rainbowLED("purple")
-                else:
-                    LEDs.rainbowLED("off")
-                self.ledOn = not self.ledOn
-                self.ledTimer.reset()
+            LEDs.rainbowLED("purple")
+            #print('purple')
         return True
     
     def teleopPeriodic(self):
+        #print(self.mechanism.shootingMotorRPMs)
+        if self.notedetector.hasTarget():
+            print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+        else:
+            print('no target')
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
@@ -341,7 +352,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
-        print('RPM', self.mechanism.getShooterRPM())
+        #print('RPM', self.mechanism.getShooterRPM())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -536,6 +547,8 @@ class MyRobot(wpilib.TimedRobot):
             return False
         if(driver.getXButton()):
             self.drivetrain.alignWithNote(0, 20, 0)
+            return False
+
         
         # Regular driving, not a maneuver
         if False:
