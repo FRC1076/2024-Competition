@@ -8,7 +8,7 @@ class NoteDetector:
         NetworkTables.initialize(server='10.10.76.2')
         self.noteSub = NetworkTables.getTable('noteDetector')
         self.config = config
-        self.videoRequested = True
+        self.videoRequested = False
         self.noteSub.putBoolean('videoRequested', self.videoRequested)
 
         # self.noteSub.putString('testKey', 'stuff')
