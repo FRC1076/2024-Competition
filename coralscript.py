@@ -25,6 +25,7 @@ def getClosestNote(objs):
         return False
 
 def publishBBox(obj):
+    notePub.putBoolean('isAlive', True)
     if obj:
         notePub.putString('testKey', 'Hello world')
         notePub.putBoolean('hasTarget', True)
