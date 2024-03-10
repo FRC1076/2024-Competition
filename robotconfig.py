@@ -141,7 +141,7 @@ autonConfig = {
     'DO_COMMUNITY': False, # Only applies for position B
     'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'TASK': 'B_FOUR_NOTE',
+    'TASK': 'TEST',
     'B_FAST_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_THREE_NOTE_STAGE_SIDE': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
@@ -154,6 +154,7 @@ autonConfig = {
     #A_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-1'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'C_TWO_NOTE_CENTER_LINE':[['START_INTAKE'], ['RAISE_ARM_START', -7], ['PATH', 'C-COUT'], ['ROTATE', -75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['ROTATE', 0], ['PATH', 'COUT-8'], ['RAISE_ARM_START', -7], ['PATH', '8-COUT'], ['ROTATE', -75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'A_THREE_NOTE_NO_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -15], ['PATH', 'A-ABACK'], ['ROTATE', 50], ['SHOOT_NOTE'], ['ROTATE', 0], ['WAIT', 1.5], ['LOWER_ARM_START', -37], ['PATH', 'ABACK-1'], ['RAISE_ARM_START', 0], ['PATH', '1-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -25.9], ['PATH', '3-B'], ['SHOOT_NOTE']],
+    'TEST': [['PATH', 'TEST']],
     
     # #RED TEAM,
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
