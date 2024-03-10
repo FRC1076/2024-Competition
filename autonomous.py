@@ -39,6 +39,8 @@ class Autonomous:
         self.swervometer = swervometer
         self.team_is_red = team_is_red
 
+        self.maxSpeed = config['MAX_SPEED_M/S']
+
     def executeAuton(self):
         #print(self.taskListCounter)
         if not self.autonHasStarted:
@@ -76,14 +78,14 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/4.6)
-            self.drivetrain.set_strafe(self.chassisSpeeds.vx/4.6)
+            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/self.maxSpeed)
+            self.drivetrain.set_strafe(self.chassisSpeeds.vx/self.maxSpeed)
             if self.drivetrain.shouldSteerStraight():
                 if(self.team_is_red):
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
                 else:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
-            if(abs(self.chassisSpeeds.vx/3) < 0.1 and abs(self.chassisSpeeds.vy/3) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+            if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
                 self.drivetrain.set_rcw(0)
@@ -123,7 +125,7 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
                 self.mechanism.setShootState(True)
                 self.mechanism.indexNote()
-            if(self.autonTimer.get() - self.lastTime > 0.25):
+            if(self.autonTimer.get() - self.lastTime > 0.35):
                 #self.mechanism.sprocketToPosition(-37)
                 self.mechanism.setShootState(False)
                 self.mechanism.stopIndexing()

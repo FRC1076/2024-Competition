@@ -315,7 +315,10 @@ class MyRobot(wpilib.TimedRobot):
         if not self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple")
         else:
-            LEDs.rainbowLED("purple-flash")
+            if(self.vision.hasPriorityTargets() and abs(self.vision.gettargetErrorX()) < 1.5):
+                LEDs.rainbowLED("green")
+            else:
+                LEDs.rainbowLED("purple-flash")
         return True
     
     def teleopPeriodic(self):
@@ -331,7 +334,8 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
-        print('RPM', self.mechanism.getShooterRPM())
+        #print('RPM', self.mechanism.getShooterRPM())
+        print('ANGLE', self.mechanism.getSprocketAngle())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -365,7 +369,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.mechanism.stopIntake()
         if(self.operator.xboxController.getRightTriggerAxis() > 0.5):
-            self.mechanism.indexNote()
+            self.mechanism.fullIndex()
 
         #manual index note
         if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
@@ -401,19 +405,14 @@ class MyRobot(wpilib.TimedRobot):
         #auto aim
         elif self.operator.xboxController.getBButton():
             if self.team_is_blu:
-                distance = self.swervometer.distanceToPose(-326, 57) - 15
+                distance = self.vision.getAvgDistance()
+                if distance == -1:
+                    distance = self.swervometer.distanceToPose(-326, 57) - 15
             else:
-                distance = self.swervometer.distanceToPose(326, 57) - 15
-
-            v = 580
-            u = math.atan(
-                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
-            )
-            l = math.atan(
-                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance - 4.9)
-            )
-            angle = math.degrees(((u+l)/-2)+0.523599)
-            self.mechanism.sprocketToPosition(angle)
+                distance = self.vision.getAvgDistance()
+                if distance == -1:
+                    distance = self.swervometer.distanceToPose(326, 57) - 15
+            self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
             #print('current pose', self.swervometer.getCOF())
             #print('angle', angle)
             #print('sprocket angle', self.mechanism.getSprocketAngle())
