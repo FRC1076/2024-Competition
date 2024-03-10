@@ -63,10 +63,16 @@ class MyRobot(wpilib.TimedRobot):
         self.config = robotConfig
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
-        autonPlans = filter(lambda k: "NOTE" in k, self.config["AUTON"].keys())
+        autonPlans = list(filter(lambda k: "NOTE" in k, self.config["AUTON"].keys()))
+        
+        print("I AM THE AUTTONNNN PLAAAAANS",list(autonPlans)) #= list of filtered plans from robotconfig.autonConfig
+        #from robotconfig import autonConfig
+        #print(autonConfig) #the whole auton config list with all autonplan sublists
+
         self.elastic = Elastic(autonPlans)
         self.elastic.displayMainWindow()
-        self.elastic.summonTheButtons()
+        #self.elastic.summonTheButtons()
+        self.elastic.autonDisplay()
 
         """
         #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
@@ -345,6 +351,7 @@ class MyRobot(wpilib.TimedRobot):
         return auton
     
     def teleopInit(self):
+        self.elastic.getSelectedAuton()
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
@@ -369,6 +376,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        self.elastic.getSelectedAuton()
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)

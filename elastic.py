@@ -19,6 +19,7 @@ class Elastic:
     def __init__(self,autonPlans):
         self.config = elasticConfig
         self.autonPlans = autonPlans
+        self.autonConfig = autonConfig
         self.selectedTaskKey = autonConfig['B_THREE_NOTE_AMP_SIDE']
         self.isNoteDetected = self.config["NOTE_IS_DETECTED"]
         self.isNoteLeft = self.config["NOTE_ON_LEFT"]
@@ -101,27 +102,61 @@ class Elastic:
         self.complexAuto = ComplexAuto(self.drive, self.hatch)
         """
         #self.autonPlans is a list of strings
-        #self.autonPlans
 
-        AUTON_PLAN_LIST = {} 
+        AUTON_PLAN_LIST = {
+            "B_THREE_NOTE_AMP_SIDE":self.autonConfig["B_THREE_NOTE_AMP_SIDE"],
+        } 
 
         # Chooser
         self.chooser = wpilib.SendableChooser()
 
-        self.chooser.setDefaultOption("B_THREE_NOTE_AMP_SIDE", self.noMoveAuto)
-        for i in range(0,len(self.autonPlans)):
-            AUTON_PLAN_LIST[self.autonPlans] = self.autonConfig[self.autonPlans]
+        self.chooser.setDefaultOption("B_THREE_NOTE_AMP_SIDE", self.autonConfig["B_THREE_NOTE_AMP_SIDE"])
+        for i in range(1,int(len(self.autonPlans))):
+            print("ADDING THE THIS NUMBER TO THE SENDABLE CHOOSER:",i)
+            print(self.autonPlans[i])
+            AUTON_PLAN_LIST[self.autonPlans[i]] = self.autonConfig[self.autonPlans[i]]
+            print("THE AUTON_PLAN_LIST",AUTON_PLAN_LIST[self.autonPlans[i]])
+            #u need to get the value of the auton config terms
 
-        #print the above generated list of filtered auton plans into the combobox
-            
-        for i in range(0,len(self.autonPlans)):
-            self.chooser.addOption(AUTON_PLAN_LIST[i], self.autonConfig[i])
-            AUTON_PLAN_LIST[self.autonPlans] = self.autonConfig[self.autonPlans]
-        
-        # Put the chooser on the dashboard
+        print("ALRIGHT NOW WE ARE MOVING ON TO THE V FOR LOOP TO PUT THIS STUFF ON ELASTIC FR!!!")
+
+        for key, value in AUTON_PLAN_LIST.items():
+            self.chooser.addOption(key, value)
+
         SmartDashboard.putData(self.chooser)
 
-        return
+    def getSelectedAuton(self):
+        print(self.chooser.getSelected())
+
+        #for index, (k,v) in enumerate(AUTON_PLAN_LIST.items()):
+            #print(index,":",k,v) 
+        
+            #print("ADDING THE THIS TO THE ELASTIC BOAAARDDD:",v)
+            #print("PLEASE WORK AUTON_PLAN_LIST",str(AUTON_PLAN_LIST))
+            #print(self.autonConfig[AUTON_PLAN_LIST[v]])
+            #print("PLEASE WORK AUTON_PLAN_LIST",str(AUTON_PLAN_LIST[v]), self.autonConfig[AUTON_PLAN_LIST[v]])
+            #self.chooser.addOption(AUTON_PLAN_LIST[v], self.autonConfig[AUTON_PLAN_LIST[v]])
+
+        # Put the chooser on the dashboard
+        #print(AUTON_PLAN_LIST)
+        #print the above generated list of filtered auton plans into the combobox
+
+    def coralCameraServer():
+        from wpilib.cameraserver import CameraServer
+        """
+        Uses the CameraServer class to automatically capture video from a USB webcam and send it to the
+        FRC dashboard without doing any vision processing. This is the easiest way to get camera images
+        to the dashboard. Just add this to the robotInit() method in your program.
+        """
+
+
+
+
+
+
+
+
+
 
 """
     def updateCoral():

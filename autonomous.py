@@ -11,7 +11,8 @@ import math
 class Autonomous:
 
     def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer, starting_angle, autonKey):
-        taskListName = config[autonKey]
+        #taskListName = config[autonKey]
+        taskListName = config["TASK"]
         self.taskList = []
         for cmd in config[taskListName]:
             if cmd[0] == 'NOTE':
