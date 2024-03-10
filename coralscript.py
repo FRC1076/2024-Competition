@@ -58,25 +58,31 @@ def main():
     inference_size = input_size(interpreter)
 
     print(inference_size)
+    try:   
+        cap = cv2.VideoCapture(source)
+        while cap.isOpened():
+            #print("cap opened")
+            ret, frame = cap.read()
+            if not ret:
+                print('frame not received')
+                break
 
-    cap = cv2.VideoCapture(source)
-    while cap.isOpened():
-        #print("cap opened")
-        ret, frame = cap.read()
-        if not ret:
-            print('frame not received')
-            break
+            cv2_im = frame
+            cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
+            publishVideo(cv2_im_rgb.tobytes())
+            cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
+            run_inference(interpreter, cv2_im_rgb.tobytes())
+            objs = get_objects(interpreter, threshold)
 
-        cv2_im = frame
-        cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-        publishVideo(cv2_img_rgb.tobytes())
-        cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
-        run_inference(interpreter, cv2_im_rgb.tobytes())
-        objs = get_objects(interpreter, threshold)
-
-        publishBBox(getClosestNote(objs))
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            publishBBox(getClosestNote(objs))
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    except cv2.error as error:
+        print("[Error]: {}".format(error))
+        raise
+    except Exception as exc:
+        print("[Exception]: {}".format(exc))
+        raise
 
     cap.release()
     cv2.destroyAllWindows()
