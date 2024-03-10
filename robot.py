@@ -316,10 +316,10 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotPeriodic(self):
         self.mechanism.periodic()
-        # if self.mechanism.indexBeamBroken():
-        #     LEDs.rainbowLED("purple-false")
-        #     print('purple-false')
-        if self.notedetector.hasTarget():
+        if self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple-false")
+            print('purple-false')
+        elif self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < 1.5 and self.notedetector.getTargetErrorX() > -1.5:
                 LEDs.rainbowLED("orange-flash")
                 #print('orange-flash')

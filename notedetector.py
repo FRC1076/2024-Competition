@@ -1,4 +1,5 @@
 from networktables import NetworkTables
+import cv2
 import math
 
 class NoteDetector:
@@ -8,6 +9,8 @@ class NoteDetector:
         NetworkTables.initialize(server='10.10.76.2')
         self.noteSub = NetworkTables.getTable('noteDetector')
         self.config = config
+        self.videoRequested = True
+        self.noteSub.putBoolean('videoRequested', self.videoRequested)
 
         # self.noteSub.putString('testKey', 'stuff')
     
@@ -22,6 +25,8 @@ class NoteDetector:
         return self.noteSub.getNumber('ymax', -1000)
     def hasTarget(self):
         return bool(self.noteSub.getBoolean('hasTarget', False))
+    def getVideo(self):
+        return self.noteSub.getRaw('video', False)
 
     def getTargetErrorAngle(self):
         # angle to the note, in degrees
@@ -45,6 +50,11 @@ class NoteDetector:
         self.targetAngleZ = (self.targetPixelZ/(self.config['CAMERA_PIXELS_Z']/2))*(self.config['CAMERA_FOV_Z']/2) + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
         self.targetErrorY = ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.targetAngleZ)))*(-1) + self.config['CAMERA_OFFSET_Y'] + self.config['NOTE_DIAMETER']/2
         return self.targetErrorY
+
+    def streamVideo():
+        if self.getVideo:
+            cv2.imshow('frame', self.getVideo())
+        return
     
     
 

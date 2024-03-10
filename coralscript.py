@@ -40,6 +40,11 @@ def publishBBox(obj):
         print('no target detected')
     return
 
+def publishVideo(image):
+    if image and notePub.getBoolean('videoRequested', False):
+        notePub.putRaw('video', image)
+    return
+
 def main():
     print("main called")
 
@@ -63,6 +68,7 @@ def main():
 
         cv2_im = frame
         cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
+        publishVideo(cv2_img_rgb.tobytes())
         cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, threshold)
