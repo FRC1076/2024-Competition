@@ -88,8 +88,6 @@ class MyRobot(wpilib.TimedRobot):
         
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
-        self.ledTimer = wpilib.Timer()
-        self.ledTimer.start()
         self.ledOn = True
         return
     
@@ -317,16 +315,10 @@ class MyRobot(wpilib.TimedRobot):
         if not self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple")
         else:
-            if(self.ledTimer.get() > 0.1):
-                if(not self.ledOn):
-                    if(self.vision.hasPriorityTargets() and abs(self.vision.gettargetErrorX()) < 1.5):
-                        LEDs.rainbowLED("green")
-                    else:
-                        LEDs.rainbowLED("purple")
-                else:
-                    LEDs.rainbowLED("off")
-                self.ledOn = not self.ledOn
-                self.ledTimer.reset()
+            if(self.vision.hasPriorityTargets() and abs(self.vision.gettargetErrorX()) < 1.5):
+                LEDs.rainbowLED("green")
+            else:
+                LEDs.rainbowLED("purple-flash")
         return True
     
     def teleopPeriodic(self):

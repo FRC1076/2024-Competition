@@ -10,27 +10,27 @@ class LEDs:
         digitalPin8 = wpilib.DigitalOutput(8)
         digitalPin9 = wpilib.DigitalOutput(9)
 
-        if color == "red":
+        if color == "purple":
             digitalPin7.set(True)
             digitalPin8.set(False)
             digitalPin9.set(False)
-        elif color == "orange":
+        elif color == "purple-flash":
             digitalPin7.set(False)
             digitalPin8.set(True)
             digitalPin9.set(False)  
-        elif color == "yellow":
+        elif color == "orange-left":
             digitalPin7.set(True)
             digitalPin8.set(True)
             digitalPin9.set(False)
-        elif color == "green":
+        elif color == "orange-right":
             digitalPin7.set(False)
             digitalPin8.set(False)
             digitalPin9.set(True)
-        elif color == "blue":
+        elif color == "orange-flash":
             digitalPin7.set(True)
             digitalPin8.set(False)
             digitalPin9.set(True)
-        elif color == "purple":
+        elif color == "green-flash":
             digitalPin7.set(False)
             digitalPin8.set(True)
             digitalPin9.set(True)
