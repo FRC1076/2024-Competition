@@ -169,6 +169,17 @@ class SwerveDrive:
 
         # TODO: 
         # - tune PID values
+        self.noteDrive_config
+        self.noteDrive_x_pid_controller = PIDController(0.01, 0 ,0)
+        self.noteDrive_x_pid_controller.setTolerance(0.5, 0.5)
+        self.noteDrive_x_pid_controller.setSetpoint(0)
+        self.noteDrive_y_pid_controller = PIDController(0.01, 0 ,0)
+        self.noteDrive_y_pid_controller.setTolerance(0.5, 0.5)
+        self.noteDrive_y_pid_controller.setSetpoint(0)
+        self.noteDrive_r_pid_controller = PIDController(0.03, 0 ,0)
+        self.noteDrive_r_pid_controller.setTolerance(0.5, 0.5)
+        self.noteDrive_r_pid_controller.setSetpoint(0)
+
         self.visionDrive_config = _visionDrive_cfg
         self.visionDrive_x_pid_controller = PIDController(self.visionDrive_config.x_visionDrive_kP, self.visionDrive_config.x_visionDrive_kI, self.visionDrive_config.x_visionDrive_kD)
         self.visionDrive_x_pid_controller.setTolerance(0.5, 0.5)
@@ -1120,15 +1131,16 @@ class SwerveDrive:
             #     self.set_rcw(rotationSpeed)
             #     #self.execute('center')
             #self.move(clamp(targetErrorX), clamp(targetErrorY), -targetErrorAngle, self.getBearing())
-            xMove = self.visionDrive_x_pid_controller.calculate(targetErrorX)
-            yMove = self.visionDrive_y_pid_controller.calculate(targetErrorY)
-            angleMove = self.visionDrive_r_pid_controller.calculate(targetErrorAngle)
+            xMove = self.noteDrive_x_pid_controller.calculate(targetErrorX)
+            yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
+            angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
             #yMove = 0
             #self.move(clamp(yMove), clamp(xMove), clamp(angleMove), self.getBearing())
             # self.move(-clamp(yMove), 0, -clamp(angleMove), self.getBearing())
             # self.move(0, 0, -clamp(angleMove), self.getBearing())
-            self.set_fwd(clamp(xMove))
-            self.set_strafe(clamp(yMove))
+
+            #self.set_fwd(clamp(xMove))
+            #self.set_strafe(clamp(yMove))
             self.set_rcw(-clamp(angleMove))
             self.execute('center')
         else:
