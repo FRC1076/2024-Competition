@@ -120,7 +120,7 @@ class Mechanism:
         #print(self.getSprocketAngle())
         self.sprocketLimitStop()
         #print('targetPosition', targetPosition)
-        return abs(targetPosition - self.getSprocketAngle()) < 0.5
+        return abs(targetPosition - self.getSprocketAngle()) < 1
     
     def stopSprocket(self):
         config = self.config

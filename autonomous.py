@@ -125,7 +125,7 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
                 self.mechanism.setShootState(True)
                 self.mechanism.indexNote()
-            if(self.autonTimer.get() - self.lastTime > 0.35):
+            if(self.autonTimer.get() - self.lastTime > 0.25):
                 #self.mechanism.sprocketToPosition(-37)
                 self.mechanism.setShootState(False)
                 self.mechanism.stopIndexing()
@@ -144,6 +144,7 @@ class Autonomous:
                     self.mechanism.stopSprocket()
                     self.lastTime = -1
                     self.taskListCounter += 1
+
         elif self.autonTask[0] == 'LOWER_ARM':
             if self.mechanism.sprocketToPosition(self.autonTask[1]):
                 self.mechanism.stopIndexing()
