@@ -1106,8 +1106,8 @@ class SwerveDrive:
         x, y, r = self.swervometer.getCOF()
 
         if(self.notedetector.hasTarget()):
-            targetErrorX = -(self.notedetector.getTargetErrorX() - offsetX)
-            targetErrorY = -(self.notedetector.getTargetErrorY() - offsetY)
+            targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
+            targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
             #targetErrorAngle = math.degrees(math.atan(targetErrorX / targetErrorY))
             targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
             #targetErrorAngle = 0

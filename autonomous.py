@@ -9,7 +9,7 @@ from pathplannerlib.controller import PPHolonomicDriveController
 import math
 class Autonomous:
 
-    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer, starting_angle):
+    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, notedetector, swervometer, starting_angle):
         taskListName = config["TASK"]
         self.taskList = []
         for cmd in config[taskListName]:
@@ -25,6 +25,7 @@ class Autonomous:
         self.autonHasStarted = False
         self.drivetrain = drivetrain
         self.mechanism = mechanism
+        self.notedetector = notedetector
         self.lastTime = -1
         self.hasRolledBack = False
 
@@ -175,6 +176,20 @@ class Autonomous:
                     self.drivetrain.set_rcw(0)
                     self.taskListCounter += 1
             self.drivetrain.execute('center')
+
+        elif self.autonTask[0] == 'POINT_TO_NOTE':
+            self.goToNote = self.autonTask[1]
+            self.backupTask = self.autonTask[2]
+            if self.notedetector.hasTarget():
+                if abs(self.notedetector.getTargetErrorX) < 2.0:
+                    if self.goToNote:
+                        self.taskList.insert(self.taskListCounter + 1, ['MOVE', self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()])
+                    self.taskListCounter += 1 
+                else:
+                    self.drivetrain.alignWithNote(0, 0, 0)
+            else:
+                self.taskList.insert(self.taskListCounter + 1, self.backupTask)
+
         return False
     
     def move(self):
