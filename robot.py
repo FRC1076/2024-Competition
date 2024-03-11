@@ -93,6 +93,12 @@ class MyRobot(wpilib.TimedRobot):
         self.ledTimer = wpilib.Timer()
         self.ledTimer.start()
         self.ledOn = True
+
+        if self.notedetector:
+            if self.notedetector.isAlive():
+                print("Coral Dev Board connected")
+            else:
+                print("Coral Dev Board not connected")
         return
     
     def disabledExit(self):
