@@ -64,49 +64,11 @@ class MyRobot(wpilib.TimedRobot):
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
         autonPlans = list(filter(lambda k: "NOTE" in k, self.config["AUTON"].keys()))
-        
-        print("I AM THE AUTTONNNN PLAAAAANS",list(autonPlans)) #= list of filtered plans from robotconfig.autonConfig
-        #from robotconfig import autonConfig
-        #print(autonConfig) #the whole auton config list with all autonplan sublists
-
+ 
         self.elastic = Elastic(autonPlans)
         self.elastic.displayMainWindow()
-        #self.elastic.summonTheButtons()
         self.elastic.autonDisplay()
 
-        """
-        #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
-        #self.dashboard.putString(DASH_PREFIX, 'Starting Position', "")
-
-        self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', False)
-
-        self.dashboard.putNumber(DASH_PREFIX, 'kP',0)
-        self.dashboard.putNumber(DASH_PREFIX, 'kI',0)
-        self.dashboard.putNumber(DASH_PREFIX, 'kD',0)
-
-        self.dashboard.putNumber(DASH_PREFIX, 'Starting Location (x)',0)
-        self.dashboard.putNumber(DASH_PREFIX, 'Starting Location (y)',0)
-
-        self.dashboard.putNumber(DASH_PREFIX, 'Auton Plan #',0)
-
-        self.dashboard.putBoolean(DASH_PREFIX, 'Note Inside', False)
-        self.dashboard.putBoolean(DASH_PREFIX, 'Note Detected', True)
-        """
-        """
-        Recieve:
-        - Limelight video
-        - Is there note on robot
-        - Is there note in sight of cameria
-        - List of visible April tags
-        - Robot Stats
-        - Current sprocket angles
-
-        """
-
-        #self.dashboard.putData(DASH_PREFIX, 'putData',0)
-        #self.dashboard.putField(DASH_PREFIX, 'putField',0)
-        #self.dashboard.putRaw(DASH_PREFIX, 'putRaw',0)
-        
 
         dir = ''
         if TEST_MODE:
@@ -119,9 +81,7 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'CONTROLLERS':
                 controllers = self.controllerInit(config)
                 self.driver = controllers[0]
-                self.operator = controllers[1]
-            if key == 'AUTON':
-                self.auton = self.initAuton(config)
+                self.operator = controllers[1]                
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
@@ -343,15 +303,8 @@ class MyRobot(wpilib.TimedRobot):
         swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight)
 
         return swerve
-
-    def initAuton(self, config):
-        self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
-        self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.swervometer, self.starting_angle, self.elastic.selectedTaskKey)
-        return auton
     
     def teleopInit(self):
-        self.elastic.getSelectedAuton()
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
@@ -668,11 +621,15 @@ class MyRobot(wpilib.TimedRobot):
             return 'center'
     
     def autonomousInit(self): 
-
-        self.autonomousCommand = self.container.getAutonomousCommand()
-
-        if self.autonomousCommand:
-            self.autonomousCommand.schedule()
+        config = self.config["AUTON"]
+        self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
+        self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
+        taskListName = self.elastic.getSelectedAuton()
+        if taskListName is None:
+            taskListName = config["TASK"]
+            print("WARNING: Falling back to default Auton plan:", taskListName)
+        print("Selected Auton plan:", taskListName)
+        self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, taskListName)
 
         if not self.auton:
             return
