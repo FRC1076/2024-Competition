@@ -81,7 +81,7 @@ class Vision:
         s = 39.37 # scalar to convert meters to inches
         pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
         #print("POSE IS: ", pose)
-        if len(pose) != 0:
+        if not(pose is None) and len(pose) != 0:
             return (pose[0] * s, pose[1] * s, pose[2] * s)
         else:
             return (-1, -1, -1)
@@ -89,7 +89,7 @@ class Vision:
     def getAvgDistance(self):
         s = 39.37 # scalar to convert meters to inches
         pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
-        if len(pose) != 0:
+        if not(pose is None) and len(pose) != 0:
             return (pose[9] * s)
         else:
             return (-1)
@@ -97,7 +97,7 @@ class Vision:
     def getOrientation(self):
         pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
         #print("POSE IS: ", pose)
-        if len(pose) != 0:
+        if not(pose is None) and len(pose) != 0:
             return (pose[3], pose[4], pose[5])
         else:
             return (-1, -1, -1)
@@ -106,7 +106,7 @@ class Vision:
         pose = self.table.getNumberArray('targetpose_cameraspace', None) # returns [x, y, z, roll, pitch, yaw]
         s = 39.37 # scalar to convert meters to inches
         #print("POSE IS: ", pose)
-        if len(pose) != 0:
+        if not(pose is None) and len(pose) != 0:
             return (pose[0] * s, pose[1] * s, pose[2] * s, pose[3], pose[4], pose[5])
         else:
             return (-1, -1, -1, -1, -1, -1)
@@ -115,7 +115,7 @@ class Vision:
         pose = self.table.getNumberArray('targetpose_robotspace', None) # returns [x, y, z, roll, pitch, yaw]
         s = 39.37 # scalar to convert meters to inches
         #print("POSE IS: ", pose)
-        if len(pose) != 0:
+        if not(pose is None) and len(pose) != 0:
             return (pose[0] * s, pose[1] * s, pose[2] * s, pose[3], pose[4], pose[5])
         else:
             return (-1, -1, -1, -1, -1, -1)
