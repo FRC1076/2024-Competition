@@ -49,11 +49,12 @@ class SwerveModule:
         self.rotateMotor = _rotateMotor
         self.rotateEncoder = _rotateEncoder
 
-        self.drivePID = PIDController(1,0,0)
+        self.drivePID = PIDController(1.5,1,0)
         self.driveFeedforward = wpimath.controller.SimpleMotorFeedforwardMeters(0,4.3)
 
 
         self.driveMotor = _driveMotor
+        self.driveMotor.enableVoltageCompensation(12)
         self.driveEncoder = _driveEncoder
         self.driveEncoder.setPosition(0)
         self.driveEncoder.setPositionConversionFactor(self.cfg.position_conversion)
