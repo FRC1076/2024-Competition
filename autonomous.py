@@ -7,10 +7,10 @@ from wpimath.geometry import Rotation2d
 from pathplannerlib.config import PIDConstants
 from pathplannerlib.controller import PPHolonomicDriveController
 import math
+
 class Autonomous:
 
-    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer, starting_angle):
-        taskListName = config["TASK"]
+    def __init__(self, config, team_is_red, field_start_position, drivetrain, mechanism, swervometer, starting_angle, taskListName):
         self.taskList = []
         for cmd in config[taskListName]:
             if cmd[0] == 'NOTE':
@@ -42,7 +42,6 @@ class Autonomous:
         self.maxSpeed = config['MAX_SPEED_M/S']
 
     def executeAuton(self):
-        #print(self.taskListCounter)
         if not self.autonHasStarted:
             self.autonTimer.start()
             self.autonHasStarted = True

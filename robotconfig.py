@@ -263,6 +263,14 @@ mechanismConfig = {
     "CLIMB_MOTOR_ID": 60,
 }
 
+elasticConfig = {
+    "AUTONLIST": 0,
+    "NOTE_IS_DETECTED": False,
+    "NOTE_ON_LEFT": False,
+    "NOTE_ON_RIGHT": False,
+    "NOTE_IS_LOADED": False,
+
+}
 robotConfig = {
     "CONTROLLERS": controllerConfig,
     "MECHANISM": mechanismConfig,
