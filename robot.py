@@ -35,6 +35,11 @@ from dashboard import Dashboard
 from autonomous import Autonomous
 from mechanism import Mechanism
 from notedetector import NoteDetector
+from elastic import Elastic
+
+from wpilib.shuffleboard import Shuffleboard
+from wpilib.shuffleboard import BuiltInWidgets
+
 from leds import LEDs
 
 ARCADE = 1
@@ -59,6 +64,12 @@ class MyRobot(wpilib.TimedRobot):
         self.config = robotConfig
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
+        autonPlans = list(filter(lambda k: "NOTE" in k, self.config["AUTON"].keys()))
+ 
+        self.elastic = Elastic(autonPlans)
+        #self.elastic.displayMainWindow()
+        self.elastic.autonDisplay()
+
 
         dir = ''
         if TEST_MODE:
@@ -71,9 +82,7 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'CONTROLLERS':
                 controllers = self.controllerInit(config)
                 self.driver = controllers[0]
-                self.operator = controllers[1]
-            if key == 'AUTON':
-                self.auton = self.initAuton(config)
+                self.operator = controllers[1]                
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
@@ -97,6 +106,10 @@ class MyRobot(wpilib.TimedRobot):
                 print("Coral Dev Board connected")
             else:
                 print("Coral Dev Board not connected")
+
+        field = wpilib.Field2d()
+        field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(field)
         return
     
     def disabledExit(self):
@@ -134,12 +147,12 @@ class MyRobot(wpilib.TimedRobot):
             teamGyroAdjustment = 180 # Blue Team faces 0 degrees at start.
             teamMoveAdjustment = -1 # Blue Team start is oriented 180 degrees from field.
 
-        self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', self.team_is_red)
+        #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', self.team_is_red)
 
         self.log("FIELD_START_POSITION:", config['FIELD_START_POSITION'])
 
         if (config['FIELD_START_POSITION'] == 'A'):
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
+            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
             self.fieldStartPosition = 'A'
             if self.team_is_red:
                 starting_position_x = config['FIELD_RED_A_START_POSITION_X']
@@ -150,7 +163,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_y = config['FIELD_BLU_A_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_A_START_ANGLE']
         elif (config['FIELD_START_POSITION'] == 'B'):
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'B')
+            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'B')
             self.fieldStartPosition = 'B'
             if self.team_is_red:
                 starting_position_x = config['FIELD_RED_B_START_POSITION_X']
@@ -191,7 +204,7 @@ class MyRobot(wpilib.TimedRobot):
             actual_bumper_dimension_x = 0.0
             actual_bumper_dimension_y = 0.0
 
-        self.dashboard.putBoolean(DASH_PREFIX, 'Has Bumpers Attached', bumpers_attached)
+        #self.dashboard.putBoolean(DASH_PREFIX, 'Has Bumpers Attached', bumpers_attached)
 
         field_cfg = FieldConfig(sd_prefix='Field_Module',
                                 origin_x=config['FIELD_ORIGIN_X'],
@@ -301,12 +314,6 @@ class MyRobot(wpilib.TimedRobot):
         swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 
         return swerve
-
-    def initAuton(self, config):
-        self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
-        self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain, self.mechanism, self.notedetector, self.swervometer, self.starting_angle)
-        return auton
     
     def teleopInit(self):
         self.log("teleopInit ran")
@@ -345,6 +352,7 @@ class MyRobot(wpilib.TimedRobot):
         #     print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         # else:
         #     print('no target')
+        self.elastic.getSelectedAuton()
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
@@ -638,6 +646,16 @@ class MyRobot(wpilib.TimedRobot):
             return 'center'
     
     def autonomousInit(self): 
+        config = self.config["AUTON"]
+        self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
+        self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
+        taskListName = self.elastic.getSelectedAuton()
+        if taskListName is None:
+            taskListName = config["TASK"]
+            print("WARNING: Falling back to default Auton plan:", taskListName)
+        print("Selected Auton plan:", taskListName)
+        self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, taskListName)
+
         if not self.auton:
             return
         if not self.drivetrain:

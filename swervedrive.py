@@ -85,7 +85,7 @@ class SwerveDrive:
 
         # Get Smart Dashboard
         #self.sd = NetworkTables.getTable('SmartDashboard')
-        self.dashboard = Dashboard.getDashboard()
+        #self.dashboard = Dashboard.getDashboard()
 
         # should do this here rather than above
         # self.lower_input_thresh = ntproperty('/SmartDashboard/drive/drive/lower_input_thresh', 0.001)
@@ -208,7 +208,7 @@ class SwerveDrive:
 
         x, y, r = self.swervometer.getCOF()
         self.field = wpilib.Field2d()
-        self.field.setRobotPose(wpimath.geometry.Pose2d((x + 248.625) * 0.0254, (y + 115.25) * 0.0254, wpimath.geometry.Rotation2d(self.getGyroAngle() * math.pi / 180)))
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.pointToTagPID = PIDController(0.06, 0.03, 0)
 
     def setInAuton(self, state):
@@ -581,6 +581,7 @@ class SwerveDrive:
             #x_error = 0
             #y_error = 0
 
+            """
             if self.visionDrive_x_pid_controller.atSetpoint():
                 if self.visionDrive_y_pid_controller.atSetpoint():
                     self.idle()
@@ -597,6 +598,7 @@ class SwerveDrive:
                 self.execute('center')
                 self.update_smartdash()
                 return False
+            """
 
     def vision_drive_clamp(self, num, min_value, max_value):
         if num >= 0:
@@ -705,7 +707,7 @@ class SwerveDrive:
         else:
             self.move(x_error, y_error, 0, bearing)
             
-            self.update_smartdash()
+            #self.update_smartdash()
             self.execute('center')
             # self.log("xPositionError: ", self.target_x_pid_controller.getPositionError(), "yPositionError: ", self.target_y_pid_controller.getPositionError(), "rcwPositionError: ", self.target_rcw_pid_controller.getPositionError())
             # self.log("xPositionTolerance: ", self.target_x_pid_controller.getPositionTolerance(), "yPositionTolerance: ", self.target_y_pid_controller.getPositionTolerance(), "rcwPositionTolerance: ", self.target_rcw_pid_controller.getPositionTolerance())
@@ -1033,7 +1035,7 @@ class SwerveDrive:
         Sends the speeds and angles to each corresponding wheel module.
         Executes the doit in each wheel module.
         """
-        self.update_smartdash()
+        #self.update_smartdash()
         #print(self.getGyroAngle())
         self.log("Swervedrive: Execute: axis_of_rotation: ", axis_of_rotation)
 
@@ -1247,10 +1249,11 @@ class SwerveDrive:
         for key in self.modules:
             self.modules[key].idle()
             
+    """
     def update_smartdash(self):
-        """
-        Log current state for telemetry
-        """
+        
+        #Log current state for telemetry
+        
         self.dashboard.putNumber(DASH_PREFIX, '/front_left_req_ang', self._requested_angles['front_left'])
         self.dashboard.putNumber(DASH_PREFIX, '/front_right_req_ang', self._requested_angles['front_right'])
         self.dashboard.putNumber(DASH_PREFIX, '/rear_left_req_ang', self._requested_angles['rear_left'])
@@ -1294,5 +1297,6 @@ class SwerveDrive:
         self.field.setRobotPose(wpimath.geometry.Pose2d((x + 248.625) * 0.0254, (y + 115.25) * 0.0254, wpimath.geometry.Rotation2d(self.getGyroAngle() * math.pi / 180))) #convert our coordinate system to theirs
         self.dashboard.putField(DASH_PREFIX, '/Field', self.field)
                 
+    """
     def log(self, *dataToLog):
         self.logger.log(DASH_PREFIX, dataToLog)   
