@@ -712,6 +712,43 @@ class SwerveDrive:
             # self.log("currentX: ", currentX, " targetX: ", x, "x_error: ", x_error, " currentY: ", currentY, " targetY: ", y, " y_error: ", y_error, " currentBearing: ", currentRCW, " self.bearing: ", self.bearing, " target bearing: ", bearing)
             return False
 
+    def goToRelativePose(self, x, y, bearing):
+        
+        #Questions: field switching for red and blue (applies to auton +- note error too)
+        #Why is relative angle not used right now?
+        self.log("SWERVEDRIVE Going to pose:", x, y, bearing)
+
+        # for telemetry
+        currentX, currentY, currentBearing = self.swervometer.getCOF()
+        self.pose_target_x = currentX + (x * math.cos(currentBearing))
+        self.pose_target_y = currentY + (self.pose_target_x * math.tan(currentBearing + math.atan(y/x)))
+        self.pose_target_bearing = currentBearing + bearing
+
+        x_error = self.target_x_pid_controller.calculate(currentX, self.pose_target_x)
+        y_error = -self.target_y_pid_controller.calculate(currentY, self.pose_target_y)
+        
+        #self.log("hello: x: ", self.target_x_pid_controller.getSetpoint(), " y: ", self.target_y_pid_controller.getSetpoint())
+        if self.target_x_pid_controller.atSetpoint():
+            self.log("X at set point")
+        if self.target_y_pid_controller.atSetpoint():
+            self.log("Y at set point")
+        
+        if (abs(self.target_x_pid_controller.getVelocityError()) < self.target_x_pid_controller.getVelocityTolerance() 
+            and abs(self.target_y_pid_controller.getVelocityError()) < self.target_y_pid_controller.getVelocityTolerance()
+            and abs(self.target_x_pid_controller.getPositionError()) < self.target_x_pid_controller.getPositionTolerance()
+            and abs(self.target_y_pid_controller.getPositionError()) < self.target_y_pid_controller.getPositionTolerance()): 
+            #self.update_smartdash()
+            return True
+        else:
+            self.move(x_error, y_error, 0, bearing)
+            
+            self.update_smartdash()
+            self.execute('center')
+            # self.log("xPositionError: ", self.target_x_pid_controller.getPositionError(), "yPositionError: ", self.target_y_pid_controller.getPositionError(), "rcwPositionError: ", self.target_rcw_pid_controller.getPositionError())
+            # self.log("xPositionTolerance: ", self.target_x_pid_controller.getPositionTolerance(), "yPositionTolerance: ", self.target_y_pid_controller.getPositionTolerance(), "rcwPositionTolerance: ", self.target_rcw_pid_controller.getPositionTolerance())
+            # self.log("currentX: ", currentX, " targetX: ", x, "x_error: ", x_error, " currentY: ", currentY, " targetY: ", y, " y_error: ", y_error, " currentBearing: ", currentRCW, " self.bearing: ", self.bearing, " target bearing: ", bearing)
+            return False
+
     def _calculate_vectors(self):
         """
         Calculate the requested speed and angle of each modules from self._requested_vectors and store them in
@@ -1107,42 +1144,21 @@ class SwerveDrive:
         x, y, r = self.swervometer.getCOF()
 
         if(self.notedetector.hasTarget()):
-            targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
-            targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
-            #targetErrorAngle = math.degrees(math.atan(targetErrorX / targetErrorY))
-            targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
-            #targetErrorAngle = 0
-            #print(self.vision.getTargetPoseCameraSpace()[4])
-            #print()
-            #print(targetErrorAngle)
 
-            # if(abs(targetErrorX) < 3):
-            #     targetErrorX /= 2
-            # if(abs(targetErrorY) < 3):
-            #     targetErrorY /= 2
-            # rotationSpeed = self.visionDrive_r_pid_controller.calculate(-self.filteredValues)
-            # if(not self.visionDrive_r_pid_controller.atSetpoint()):
-            #     self.set_rcw(rotationSpeed)
-            # self.goToPose(x + targetErrorY, y - targetErrorX, self.getBearing())
-            # #self.move(0, 0, clamp(targetErrorAngle) / 5, self.getBearing())
-            # #print(self.visionDrive_r_pid_controller.getPositionError())
-            # rotationSpeed = self.visionDrive_r_pid_controller.calculate(-self.filteredValues)
-            # #print(self.visionDrive_r_pid_controller.atSetpoint())
-            # if(not self.visionDrive_r_pid_controller.atSetpoint()):
-            #     self.set_rcw(rotationSpeed)
-            #     #self.execute('center')
-            #self.move(clamp(targetErrorX), clamp(targetErrorY), -targetErrorAngle, self.getBearing())
-            xMove = -self.noteDrive_x_pid_controller.calculate(targetErrorX)
-            yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
-            angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
-            #yMove = 0
-            #self.move(clamp(yMove), clamp(xMove), clamp(angleMove), self.getBearing())
-            # self.move(-clamp(yMove), 0, -clamp(angleMove), self.getBearing())
-            # self.move(0, 0, -clamp(angleMove), self.getBearing())
+            if offsetX != False:
+                targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
+                xMove = -self.noteDrive_x_pid_controller.calculate(targetErrorX)
+                self.set_fwd(clamp(xMove))
 
-            self.set_fwd(clamp(xMove))
-            #self.set_strafe(clamp(yMove))
-            #self.set_rcw(-clamp(angleMove))
+            if offsetY != False:
+                targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
+                yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
+                self.set_strafe(clamp(yMove))
+
+            if offsetAngle != False
+                targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
+                angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
+                self.set_rcw(-clamp(angleMove))
             self.execute('center')
         else:
             print("no note found")

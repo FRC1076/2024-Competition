@@ -38,6 +38,7 @@ class Autonomous:
                                     config['DRIVE_BASE_RADIUS'], 
                                     config['PERIOD'])
         self.swervometer = swervometer
+        self.currentX, self.currentY, self.currentBearing = self.swervometer.getCOF()
         self.team_is_red = team_is_red
 
         self.maxSpeed = config['MAX_SPEED_M/S']
@@ -68,6 +69,18 @@ class Autonomous:
                 self.drivetrain.set_rcw(0)
                 self.drivetrain.execute('center')
                 self.taskListCounter += 1 # Move on to next task.
+            return True
+        
+        elif self.autonTask[0] == 'MOVE_RELATIVE':
+            x = self.autonTask[1]
+            y = self.autonTask[2]
+            bearing = self.autonTask[3]
+            if self.drivetrain.goToRelativePose(x, y, bearing):
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.taskListCounter += 1
             return True
         
         elif self.autonTask[0] == 'PATH':
@@ -194,11 +207,30 @@ class Autonomous:
                         pass
                     self.taskListCounter += 1 
                 else:
-                    self.drivetrain.alignWithNote(0, 20, 0)
+                    self.drivetrain.alignWithNote(False, False, 0)
             else:
                 self.taskList.insert(self.taskListCounter + 1, self.backupTask)
                 self.taskListCounter += 1
 
+        elif self.autonTask[0] == 'MOVE_TO_NOTE':
+            expectedX = self.autonTask[1]
+            expectedY = self.autonTask[2]
+            bearing = self.autonTask[3]
+            waitTime = self.autonTask[4]
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+
+            if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
+                if self.notedetector.hasTarget() and self.notedetector.getErrorY() < 30 and self.autonTimer.get() - self.lastTime > waitTime:
+                    self.taskList.insert(self.taskListCounter + 1, ['MOVE_RELATIVE', self.notedetector.getTargetErrorX(), self.notedetector.getTargerErrorY(), 0])
+                    self.taskListCounter += 1
+            else:
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.taskListCounter += 1
+            
         return False
     
     def move(self):

@@ -23,9 +23,29 @@ class NoteDetector:
     def getYMax(self):
         return self.noteSub.getNumber('ymax', -1000)
     def hasTarget(self):
-        return bool(self.noteSub.getBoolean('hasTarget', False))
+        if self.isAlive() and self.testCoral():
+            return bool(self.noteSub.getBoolean('hasTarget', False))
+        else:
+            return False
     def isAlive(self):
         return bool(self.noteSub.getBoolean('isAlive', False))
+    def testCoral(self):
+        self.lastX = -1000
+        self.lastY = -1000
+        self.sameCounter = 0
+        if self.getXMax == self.lastX and self.getYMax == self.lastY and self.lastX != -1000:
+            self.sameCounter +=1
+        else:
+            self.sameCounter = 0
+
+        self.lastX = self.getXMax
+        self.lastY = self.getYMax
+
+        if self.sameCounter > 5:    
+            return False
+        else:
+            return True
+
     def getVideo(self):
         return self.noteSub.getRaw('video', False)
 
