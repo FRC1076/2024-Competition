@@ -209,6 +209,7 @@ class SwerveDrive:
         x, y, r = self.swervometer.getCOF()
         self.field = wpilib.Field2d()
         self.field.setRobotPose(wpimath.geometry.Pose2d((x + 248.625) * 0.0254, (y + 115.25) * 0.0254, wpimath.geometry.Rotation2d(self.getGyroAngle() * math.pi / 180)))
+        self.pointToTagPID = PIDController(0.06, 0.03, 0)
 
     def setInAuton(self, state):
         self.inAuton = state
@@ -1168,8 +1169,8 @@ class SwerveDrive:
     
     def pointToPriorityTag(self):
         if(self.vision.hasPriorityTargets()):
-            if(abs(self.vision.gettargetErrorX()) > 2):
-                self.set_rcw(clamp(self.vision.gettargetErrorX() * 0.05) * 0.2)
+            if(abs(self.vision.gettargetErrorX()) > 0.5):
+                self.set_rcw(clamp(self.pointToTagPID.calculate(-self.vision.gettargetErrorX(), 2)) * 0.2)
             else:
                 self.set_rcw(0)
 

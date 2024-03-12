@@ -67,8 +67,8 @@ class Mechanism:
     #r1 shoots the note
     def shootNote(self):
         #self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
-        self.setLeftShooterRPM(-4000)
-        self.setRightShooterRPM(5000)
+        self.setLeftShooterRPM(-4500)
+        self.setRightShooterRPM(5500)
         #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
@@ -120,7 +120,7 @@ class Mechanism:
         #print(self.getSprocketAngle())
         self.sprocketLimitStop()
         #print('targetPosition', targetPosition)
-        return abs(targetPosition - self.getSprocketAngle()) < 0.5
+        return abs(targetPosition - self.getSprocketAngle()) < 1
     
     def stopSprocket(self):
         config = self.config
@@ -143,6 +143,11 @@ class Mechanism:
     def indexNote(self):
         self.inARollBack = False
         self.indexMotor.set(self.config["INDEX_SPEED"])
+        return
+    
+    def fullIndex(self):
+        self.inARollBack = False
+        self.indexMotor.set(1)
         return
     
     def reverseIndex(self):
@@ -200,3 +205,24 @@ class Mechanism:
 
     def reverseClimb(self):
         self.climbMotor.set(0.2)
+
+
+    def getAutoAimAngle(self, distance, yaw):
+        v = 695
+        r = 1.2
+        radyaw = math.radians(yaw)
+        l = math.atan(
+            (49 + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12)      
+        )
+        if (yaw <= 48.974) or ((yaw >= 131.026) and (yaw <= 228.974)) or (yaw >= 311.026):
+            u = math.atan(
+            (53.875 + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12 - (18 / math.cos(radyaw)))
+            ) 
+        else:
+            u = math.atan(
+            (53.875 - (4.875 - (0.2708333 * (20.6875 / math.tan(radyaw)))) + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12 - (20.6875 / math.sin(radyaw)))
+            )
+        
+        angle = math.degrees(((u+l)/-2)+0.523599)
+
+        return(angle)
