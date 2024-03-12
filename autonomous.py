@@ -181,14 +181,17 @@ class Autonomous:
             self.goToNote = self.autonTask[1]
             self.backupTask = self.autonTask[2]
             if self.notedetector.hasTarget():
-                if abs(self.notedetector.getTargetErrorX) < 2.0:
+                print(self.notedetector.getTargetErrorX())
+                if abs(self.notedetector.getTargetErrorX()) < 2.0:
                     if self.goToNote:
-                        self.taskList.insert(self.taskListCounter + 1, ['MOVE', self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()])
+                        #self.taskList.insert(self.taskListCounter + 1, ['MOVE', self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY() - 5, self.notedetector.getTargetErrorAngle()])
+                        pass
                     self.taskListCounter += 1 
                 else:
-                    self.drivetrain.alignWithNote(0, 0, 0)
+                    self.drivetrain.alignWithNote(0, 20, 0)
             else:
                 self.taskList.insert(self.taskListCounter + 1, self.backupTask)
+                self.taskListCounter += 1
 
         return False
     
