@@ -63,3 +63,6 @@ class Elastic:
 
     def getSelectedAuton(self):
         return self.chooser.getSelected()
+    
+    def putField(self, field):
+        SmartDashboard.putData(field)

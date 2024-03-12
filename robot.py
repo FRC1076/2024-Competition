@@ -66,7 +66,7 @@ class MyRobot(wpilib.TimedRobot):
         autonPlans = list(filter(lambda k: "NOTE" in k, self.config["AUTON"].keys()))
  
         self.elastic = Elastic(autonPlans)
-        self.elastic.displayMainWindow()
+        #self.elastic.displayMainWindow()
         self.elastic.autonDisplay()
 
 
@@ -97,6 +97,10 @@ class MyRobot(wpilib.TimedRobot):
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
         self.ledOn = True
+
+        field = wpilib.Field2d()
+        field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(field)
         return
     
     def disabledExit(self):

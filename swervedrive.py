@@ -195,7 +195,7 @@ class SwerveDrive:
 
         x, y, r = self.swervometer.getCOF()
         self.field = wpilib.Field2d()
-        self.field.setRobotPose(wpimath.geometry.Pose2d((x + 248.625) * 0.0254, (y + 115.25) * 0.0254, wpimath.geometry.Rotation2d(self.getGyroAngle() * math.pi / 180)))
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.pointToTagPID = PIDController(0.06, 0.03, 0)
 
     def setInAuton(self, state):
