@@ -157,7 +157,7 @@ autonConfig = {
     'TEST': [['PATH', 'TEST']],
     
     #'NOTE_GRAB_TEST': [['START_INTAKE'], [[]'POINT_TO_NOTE', True, ['ROTATE', -90]]],
-    'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', 0, 64, 0, 0]]
+    'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', 0, 64, 0, 0]],
 
     # #RED TEAM,
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],

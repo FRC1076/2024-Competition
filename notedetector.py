@@ -10,7 +10,8 @@ class NoteDetector:
         self.config = config
         self.videoRequested = False
         self.noteSub.putBoolean('videoRequested', self.videoRequested)
-
+        self.lastX = -1000
+        self.lastY = -1000
         # self.noteSub.putString('testKey', 'stuff')
     
     # get the camera pixel coordinates of the bounding box

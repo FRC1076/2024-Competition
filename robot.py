@@ -545,8 +545,8 @@ class MyRobot(wpilib.TimedRobot):
         if(driver.getAButton()):
             self.drivetrain.alignWithApril(0, 75, 0)
             return False
-        if(driver.getXButton()):
-            self.drivetrain.alignWithNote(0, 20, 0)
+        if(driver.getXButtonReleased()):
+            self.drivetrain.goToRelativePose(20, 20, 0)
             return False
 
         

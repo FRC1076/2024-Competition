@@ -1155,7 +1155,7 @@ class SwerveDrive:
                 yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
                 self.set_strafe(clamp(yMove))
 
-            if offsetAngle != False
+            if offsetAngle != False:
                 targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
                 angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
                 self.set_rcw(-clamp(angleMove))
