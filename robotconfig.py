@@ -156,7 +156,8 @@ autonConfig = {
     'A_THREE_NOTE_NO_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -15], ['PATH', 'A-ABACK'], ['ROTATE', 50], ['SHOOT_NOTE'], ['ROTATE', 0], ['WAIT', 1.5], ['LOWER_ARM_START', -37], ['PATH', 'ABACK-1'], ['RAISE_ARM_START', 0], ['PATH', '1-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -25.9], ['PATH', '3-B'], ['SHOOT_NOTE']],
     'TEST': [['PATH', 'TEST']],
     
-    'NOTE_GRAB_TEST': [['START_INTAKE'], ['POINT_TO_NOTE', True, ['ROTATE', -90]]],
+    #'NOTE_GRAB_TEST': [['START_INTAKE'], [[]'POINT_TO_NOTE', True, ['ROTATE', -90]]],
+    'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', 0, 64, 0, 0]]
 
     # #RED TEAM,
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],

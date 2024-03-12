@@ -30,18 +30,17 @@ class NoteDetector:
     def isAlive(self):
         return bool(self.noteSub.getBoolean('isAlive', False))
     def testCoral(self):
-        self.lastX = -1000
-        self.lastY = -1000
         self.sameCounter = 0
         if self.getXMax == self.lastX and self.getYMax == self.lastY and self.lastX != -1000:
             self.sameCounter +=1
+        
         else:
             self.sameCounter = 0
 
         self.lastX = self.getXMax
         self.lastY = self.getYMax
 
-        if self.sameCounter > 5:    
+        if self.sameCounter > 10:    
             return False
         else:
             return True
