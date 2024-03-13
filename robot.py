@@ -327,7 +327,8 @@ class MyRobot(wpilib.TimedRobot):
                 LEDs.rainbowLED("purple-flash")
         field = wpilib.Field2d()
         field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
+        #self.elastic.putField(field)
         return True
     
     def teleopPeriodic(self):

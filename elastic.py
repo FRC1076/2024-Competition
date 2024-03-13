@@ -66,3 +66,6 @@ class Elastic:
     
     def putField(self, field):
         SmartDashboard.putData(field)
+
+    def putNumber(self, key, num):
+        SmartDashboard.putNumber(key, num)
