@@ -743,8 +743,6 @@ class SwerveDrive:
             return True
         else:
             self.move(x_error, y_error, 0, bearing)
-            
-            self.update_smartdash()
             self.execute('center')
             # self.log("xPositionError: ", self.target_x_pid_controller.getPositionError(), "yPositionError: ", self.target_y_pid_controller.getPositionError(), "rcwPositionError: ", self.target_rcw_pid_controller.getPositionError())
             # self.log("xPositionTolerance: ", self.target_x_pid_controller.getPositionTolerance(), "yPositionTolerance: ", self.target_y_pid_controller.getPositionTolerance(), "rcwPositionTolerance: ", self.target_rcw_pid_controller.getPositionTolerance())
@@ -1146,18 +1144,21 @@ class SwerveDrive:
         x, y, r = self.swervometer.getCOF()
 
         if(self.notedetector.hasTarget()):
-
-            if offsetX != False:
+            print("has target")
+            if not offsetX is None:
+                print("x")
                 targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
-                xMove = -self.noteDrive_x_pid_controller.calculate(targetErrorX)
+                xMove = self.noteDrive_x_pid_controller.calculate(targetErrorX)
                 self.set_fwd(clamp(xMove))
 
-            if offsetY != False:
+            if not offsetY is None:
+                print("y")
                 targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
                 yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
                 self.set_strafe(clamp(yMove))
 
-            if offsetAngle != False:
+            if not offsetAngle is None:
+                print('angle')
                 targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
                 angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
                 self.set_rcw(-clamp(angleMove))

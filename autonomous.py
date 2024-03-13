@@ -221,13 +221,18 @@ class Autonomous:
 
             if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
                 if self.notedetector.hasTarget() and self.notedetector.getErrorY() < 30 and self.autonTimer.get() - self.lastTime > waitTime:
-                    self.taskList.insert(self.taskListCounter + 1, ['MOVE_RELATIVE', self.notedetector.getTargetErrorX(), self.notedetector.getTargerErrorY(), 0])
+                    self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
                     self.taskListCounter += 1
             else:
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
                 self.drivetrain.set_rcw(0)
                 self.drivetrain.execute('center')
+                self.taskListCounter += 1
+        
+        elif self.autonTask[0] == 'PICK_UP_NOTE':
+            self.drivetrain.alignWithNote(0, 0, False)
+            if self.mechanism.indexBeamBroken():
                 self.taskListCounter += 1
             
         return False

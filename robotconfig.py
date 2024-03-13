@@ -157,7 +157,7 @@ autonConfig = {
     'TEST': [['PATH', 'TEST']],
     
     #'NOTE_GRAB_TEST': [['START_INTAKE'], [[]'POINT_TO_NOTE', True, ['ROTATE', -90]]],
-    'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', 0, 64, 0, 0]],
+    'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', -(275 - 64), 57, 180, 0]],
 
     # #RED TEAM,
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
@@ -270,7 +270,7 @@ noteDetectorConfig = {
     "CAMERA_HEIGHT": 15.75,
     "NOTE_HEIGHT": 2.0,
     "NOTE_DIAMETER": 14.0,
-    "CAMERA_ANGLE_ABOVE_HORIZONTAL": -38.1,
+    "CAMERA_ANGLE_ABOVE_HORIZONTAL": -37.5,
     "CAMERA_OFFSET_X": 0,
     "CAMERA_OFFSET_Y": 10.5,
     "CAMERA_FOV_Z": 41.232,
