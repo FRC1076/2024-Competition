@@ -14,6 +14,7 @@ Use 'try' to prevent crashing/use networktables to send ready signal"""
 
 NetworkTables.initialize(server='10.10.76.2') # NetworkTables server IP must be the same on the coral and the robot
 notePub = NetworkTables.getTable('noteDetector')
+counter = 0
 
 def getClosestNote(objs):
     #print('getClosestNote called')
@@ -26,8 +27,9 @@ def getClosestNote(objs):
 
 def publishBBox(obj):
     notePub.putBoolean('isAlive', True)
+    notePub.putNumber('counter', counter)
     if obj:
-        notePub.putString('testKey', 'Hello world')
+        # notePub.putString('testKey', 'Hello world')
         notePub.putBoolean('hasTarget', True)
         notePub.putNumber('xmin', obj.bbox.xmin)
         notePub.putNumber('xmax', obj.bbox.xmax)
@@ -56,8 +58,10 @@ def main():
     interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
     inference_size = input_size(interpreter)
-
     print(inference_size)
+
+    counter += 1
+
     try:   
         cap = cv2.VideoCapture(source)
         while cap.isOpened():
@@ -69,7 +73,7 @@ def main():
 
             cv2_im = frame
             cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-            publishVideo(cv2_im_rgb.tobytes())
+            # publishVideo(cv2_im_rgb.tobytes())
             cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
             run_inference(interpreter, cv2_im_rgb.tobytes())
             objs = get_objects(interpreter, threshold)
@@ -79,9 +83,13 @@ def main():
                 break
     except cv2.error as error:
         print("[Error]: {}".format(error))
+        notePub.putBoolean('isAlive', False)
+        notePub.putBoolean('hasTarget', False)
         raise
     except Exception as exc:
         print("[Exception]: {}".format(exc))
+        notePub.putBoolean('isAlive', False)
+        notePub.putBoolean('hasTarget', False)
         raise
 
     cap.release()
