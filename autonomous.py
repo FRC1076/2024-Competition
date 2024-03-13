@@ -224,6 +224,17 @@ class Autonomous:
                     self.taskListCounter += 1
             self.drivetrain.execute('center')
 
+        # elif self.autonTask[0] == 'AIM':
+        #     if not self.team_is_red:
+        #         distance = self.vision.getAvgDistance()
+        #         if distance == -1:
+        #             distance = self.swervometer.distanceToPose(-326, 57) - 15
+        #     else:
+        #         distance = self.vision.getAvgDistance()
+        #         if distance == -1:
+        #             distance = self.swervometer.distanceToPose(326, 57) - 15
+        #     self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
+
         elif self.autonTask[0] == 'POINT_TO_NOTE':
             self.goToNote = self.autonTask[1]
             self.backupTask = self.autonTask[2]
@@ -241,7 +252,9 @@ class Autonomous:
                 self.taskListCounter += 1
 
         elif self.autonTask[0] == 'MOVE_TO_NOTE':
-            expectedX = self.autonTask[1]
+            expectedX = abs(self.autonTask[1])
+            if not self.team_is_red:
+                expectedX *= -1
             expectedY = self.autonTask[2]
             bearing = self.autonTask[3]
             waitTime = self.autonTask[4]
