@@ -89,7 +89,6 @@ class SwerveModule:
         self.sd.putNumber(DASH_PREFIX, 'Heading kD', self.heading_pid_controller.getD())
 
         self.swerveModulePosition = SwerveModulePosition(0, Rotation2d(0))
-        self.driveMotor.enableVoltageCompensation(12)
 
     def reset(self):
         
@@ -292,6 +291,12 @@ class SwerveModule:
 
     def getSwerveModulePosition(self):
         return self.swerveModulePosition
+    
+    def enableVoltageCompensation(self):
+        self.driveMotor.enableVoltageCompensation(12)
+
+    def disableVoltageCompensation(self):
+        self.driveMotor.disableVoltageCompensation()
 
     def update_smartdash(self):
         """

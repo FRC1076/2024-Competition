@@ -1173,6 +1173,14 @@ class SwerveDrive:
     def idle(self):
         for key in self.modules:
             self.modules[key].idle()
+
+    def enableVoltageCompensation(self):
+        for key in self.modules:
+            self.modules[key].enableVoltageCompensation()
+
+    def disableVoltageCompensation(self):
+        for key in self.modules:
+            self.modules[key].disableVoltageCompensation()
             
     """
     def update_smartdash(self):

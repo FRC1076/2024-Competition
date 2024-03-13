@@ -314,6 +314,7 @@ class MyRobot(wpilib.TimedRobot):
         self.dropArmTimer.start()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         self.allowDropArm = True
+        self.drivetrain.disableVoltageCompensation()
         return
 
     def robotPeriodic(self):
@@ -648,6 +649,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.drivetrain.setBearing(0)
         self.drivetrain.setRampRates(self.autonOpenLoopRampRate, self.autonClosedLoopRampRate)
+        self.drivetrain.enableVoltageCompensation()
         return
     
     def autonomousPeriodic(self):
