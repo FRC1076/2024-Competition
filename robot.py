@@ -405,26 +405,28 @@ class MyRobot(wpilib.TimedRobot):
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
+            self.allowDropArm = False
         #subwoofer
         elif self.operator.xboxController.getAButton():
             self.mechanism.sprocketToPosition(-23)
+            self.allowDropArm = False
         #podium
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(0)
+            self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80) 
+            self.allowDropArm = False
         #auto aim
         elif self.operator.xboxController.getBButton():
+            distance = -1
             if self.team_is_blu:
                 distance = self.vision.getAvgDistance()
-                if distance == -1:
-                    distance = self.swervometer.distanceToPose(-326, 57) - 15
             else:
                 distance = self.vision.getAvgDistance()
-                if distance == -1:
-                    distance = self.swervometer.distanceToPose(326, 57) - 15
-            self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
+            if distance != -1:
+                self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
             #print('current pose', self.swervometer.getCOF())
             #print('angle', angle)
             #print('sprocket angle', self.mechanism.getSprocketAngle())
