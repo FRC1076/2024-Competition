@@ -89,6 +89,7 @@ class SwerveModule:
         self.sd.putNumber(DASH_PREFIX, 'Heading kD', self.heading_pid_controller.getD())
 
         self.swerveModulePosition = SwerveModulePosition(0, Rotation2d(0))
+        self.driveMotor.enableVoltageCompensation(12)
 
     def reset(self):
         
@@ -272,6 +273,7 @@ class SwerveModule:
         #use wpilib's swerve module position. must add the position change because wpilib can't take into account the positionSign, so we must take it into account before we feed it in
         self.swerveModulePosition = SwerveModulePosition((self.swerveModulePosition.distance * 39.37 + self.positionChange) * 0.0254 , Rotation2d((self.newAngle - 90) % 360 * math.pi / 180))
         self.lastPosition = self.newPosition
+        print("module velocity", (self.get_current_velocity() / 60) * 1.86 * 0.0254)
         self.update_smartdash()
     
     def testMove(self, driveInput, rotateInput):

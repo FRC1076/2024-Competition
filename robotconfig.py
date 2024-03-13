@@ -142,7 +142,7 @@ autonConfig = {
     'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
     'TASK': 'TEST',
-    'B_FAST_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+    'B_FAST_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', 0], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_THREE_NOTE_STAGE_SIDE': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4']],
@@ -177,7 +177,7 @@ autonConfig = {
     #     'NOTE 15': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 148.31, 180], ['MOVE', 19.9, 123, 180]],
     #     'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]], 
     # },
-    'MAX_SPEED_M/S': 4.6,
+    'MAX_SPEED_M/S': 4.0,
     'TRANSLATION_KP': 1.5,
     'TRANSLATION_KI': 1.1,
     'TRANSLATION_KD': 0,
