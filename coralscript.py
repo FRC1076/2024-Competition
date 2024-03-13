@@ -7,10 +7,9 @@ from networktables import NetworkTables
 import numpy as np
 import cv2
 
-"""To Do:
-When robot code is enabled before coralscript2 runs, robot code crashes upon coralscript2 running
-Account for note height
-Use 'try' to prevent crashing/use networktables to send ready signal"""
+"""To Do: :)
+When robot code is enabled before coralscript runs, robot code may crash upon coralscript running
+"""
 
 NetworkTables.initialize(server='10.10.76.2') # NetworkTables server IP must be the same on the coral and the robot
 notePub = NetworkTables.getTable('noteDetector')
