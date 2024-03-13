@@ -376,7 +376,7 @@ class MyRobot(wpilib.TimedRobot):
         if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
             self.mechanism.stopShooting()
-            LEDs.rainbowLED("purple")
+            #LEDs.rainbowLED("purple")
             if self.previousBeamIsBrokenState:
                 self.dropArmTimer.reset()
                 self.allowDropArm = True

@@ -105,6 +105,35 @@ class Autonomous:
                 self.lastTime = -1
                 self.taskListCounter += 1
             self.drivetrain.execute('center')
+
+        elif self.autonTask[0] == 'PATH_TO_NOTE':
+            self.waitTime = self.autonTask[2]
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+                self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
+                if(self.team_is_red):
+                    self.path = self.path.flipPath()
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
+            self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
+            self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
+            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/self.maxSpeed)
+            self.drivetrain.set_strafe(self.chassisSpeeds.vx/self.maxSpeed)
+            if self.drivetrain.shouldSteerStraight():
+                if(self.team_is_red):
+                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
+                else:
+                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
+            if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 45 and self.autonTimer.get() - self.lastTime > waitTime:
+                    self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
+                    self.lastTime = -1
+                    self.taskListCounter += 1
+            elif(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.lastTime = -1
+                self.taskListCounter += 1
+            self.drivetrain.execute('center')
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)
@@ -222,17 +251,25 @@ class Autonomous:
             if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
                 if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 45 and self.autonTimer.get() - self.lastTime > waitTime:
                     self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
+                    self.lastTime = -1
                     self.taskListCounter += 1
             else:
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
                 self.drivetrain.set_rcw(0)
                 self.drivetrain.execute('center')
+                self.lastTime = -1
                 self.taskListCounter += 1
         
         elif self.autonTask[0] == 'PICK_UP_NOTE':
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
             self.drivetrain.alignWithNote(0, 0, False)
             if self.mechanism.indexBeamBroken():
+                self.lastTime = -1
+                self.taskListCounter += 1
+            elif self.autonTimer.get() - self.lastTime > 2:
+                self.lastTime = -1
                 self.taskListCounter += 1
             
         return False
