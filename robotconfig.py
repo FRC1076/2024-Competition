@@ -136,27 +136,136 @@ visionConfig = {
 }
 
 autonConfig = {
-    'SCORE_EXISTING': True,
-    'BALANCE_BOT': True,
-    'DO_COMMUNITY': False, # Only applies for position B
-    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
-    'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
     'TASK': 'TEST',
-    'B_FAST_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', 0], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'B_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'B_THREE_NOTE_STAGE_SIDE': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'B_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4']],
-    #'B_ONE_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-8']],
-    'A_ONE_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -7], ['PATH', 'A-AOUT'], ['ROTATE', 75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['WAIT', 7], ['ROTATE', 0], ['PATH', 'A-LEAVE']],
-    #'C_ONE_NOTE':[['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-8-ROTATE']],
-    
-    #'A_THREE_NOTE_AMP_SIDE_CENTER_LINE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-5']],
+
+    'A_ONE_NOTE': [['START_INTAKE'],
+                   ['RAISE_ARM_START', -7],
+                   ['PATH', 'A-AOUT'],
+                   ['ROTATE', 75],
+                   ['SHOOT_NOTE'],
+                   ['LOWER_ARM_START', -37],
+                   ['WAIT', 7],
+                   ['ROTATE', 0],
+                   ['PATH', 'A-LEAVE']],
+
     #A_THREE_NOTE_AMP_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-1'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'C_TWO_NOTE_CENTER_LINE':[['START_INTAKE'], ['RAISE_ARM_START', -7], ['PATH', 'C-COUT'], ['ROTATE', -75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['ROTATE', 0], ['PATH', 'COUT-8'], ['RAISE_ARM_START', -7], ['PATH', '8-COUT'], ['ROTATE', -75], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
-    'A_THREE_NOTE_NO_CENTER': [['START_INTAKE'], ['RAISE_ARM_START', -15], ['PATH', 'A-ABACK'], ['ROTATE', 50], ['SHOOT_NOTE'], ['ROTATE', 0], ['WAIT', 1.5], ['LOWER_ARM_START', -37], ['PATH', 'ABACK-1'], ['RAISE_ARM_START', 0], ['PATH', '1-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', -25.9], ['PATH', '3-B'], ['SHOOT_NOTE']],
+
+    #'A_THREE_NOTE_AMP_SIDE_CENTER_LINE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'A-5']],
+
+    'A_THREE_NOTE_NO_CENTER': [['START_INTAKE'],
+                               ['RAISE_ARM_START', -15],
+                               ['PATH', 'A-ABACK'],
+                               ['ROTATE', 50],
+                               ['SHOOT_NOTE'],
+                               ['ROTATE', 0],
+                               ['WAIT', 1.5],
+                               ['LOWER_ARM_START', -37],
+                               ['PATH', 'ABACK-1'],
+                               ['RAISE_ARM_START', 0],
+                               ['PATH', '1-2'],
+                               ['SHOOT_NOTE'],
+                               ['LOWER_ARM_START', -37],
+                               ['PATH', '2-3'],
+                               ['RAISE_ARM_START', -25.9],
+                               ['PATH', '3-B'],
+                               ['SHOOT_NOTE']],
+
+    #'B_ONE_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-8']],
+
+    'B_THREE_NOTE_AMP_SIDE': [['START_INTAKE'],
+                              ['WAIT', 0.5],
+                              ['RAISE_ARM_START', -25.9],
+                              ['SHOOT_NOTE'],
+                              ['LOWER_ARM_START', -37],
+                              ['PATH', 'B-1'],
+                              ['RAISE_ARM_START', -10],
+                              ['PATH', '1-SHOT'],
+                              ['SHOOT_NOTE'],
+                              ['LOWER_ARM_START', -37],
+                              ['PATH', 'SHOT-2'],
+                              ['RAISE_ARM_START', 0],
+                              ['WAIT', 0.5],
+                              ['SHOOT_NOTE'],
+                              ['LOWER_ARM_START', -37],
+                              ['PATH', '2-4']],
+
+    'B_THREE_NOTE_STAGE_SIDE': [['START_INTAKE'],
+                                ['WAIT', 0.5],
+                                ['RAISE_ARM_START', -25.9],
+                                ['SHOOT_NOTE'],
+                                ['LOWER_ARM_START', -37],
+                                ['PATH', 'B-2'],
+                                ['RAISE_ARM_START', 0],
+                                ['SHOOT_NOTE'],
+                                ['LOWER_ARM_START', -37],
+                                ['PATH', '2-3'],
+                                ['RAISE_ARM_START', 0],
+                                ['WAIT', 0.5],
+                                ['PATH', '3-2'],
+                                ['SHOOT_NOTE'],
+                                ['LOWER_ARM_START', -37]],
+
+    'B_FAST_FOUR_NOTE': [['START_INTAKE'],
+                         ['RAISE_ARM_START', -25.9],
+                         ['WAIT', 1],
+                         ['SHOOT_NOTE'],
+                         ['LOWER_ARM_START', -37],
+                         ['PATH', 'B-1[FAST]'],
+                         ['RAISE_ARM_START', -10],
+                         ['PATH', '1-SHOT[FAST]'],
+                         ['SHOOT_NOTE'],
+                         ['LOWER_ARM_START', -37],
+                         ['PATH', 'SHOT-2'],
+                         ['RAISE_ARM_START', 0],
+                         ['WAIT', 0.5],
+                         ['SHOOT_NOTE'],
+                         ['LOWER_ARM_START', -37],
+                         ['PATH', '2-3[FAST]'],
+                         ['RAISE_ARM_START', 0],
+                         ['PATH', '3-2'],
+                         ['SHOOT_NOTE'],
+                         ['LOWER_ARM_START', -37]],
+
+    'B_FOUR_NOTE': [['START_INTAKE'],
+                    ['RAISE_ARM_START', -25.9],
+                    ['WAIT', 1],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', -37],
+                    ['PATH', 'B-1'],
+                    ['RAISE_ARM_START', -10],
+                    ['PATH', '1-SHOT'],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', -37],
+                    ['PATH', 'SHOT-2'],
+                    ['RAISE_ARM_START', 0],
+                    ['WAIT', 0.5],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', -37],
+                    ['PATH', '2-3'],
+                    ['RAISE_ARM_START', -5],
+                    ['PATH', '3-2'],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', -37]],
+
+    #'C_ONE_NOTE':[['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'C-8-ROTATE']],
+
+    'C_TWO_NOTE_CENTER_LINE':[['START_INTAKE'],
+                              ['RAISE_ARM_START', -7],
+                              ['PATH', 'C-COUT'],
+                              ['ROTATE', -75],
+                              ['SHOOT_NOTE'],
+                              ['LOWER_ARM_START', -37],
+                              ['ROTATE', 0],
+                              ['PATH', 'COUT-8'],
+                              ['RAISE_ARM_START', -7],
+                              ['PATH', '8-COUT'],
+                              ['ROTATE', -75],
+                              ['SHOOT_NOTE'],
+                              ['LOWER_ARM_START', -37]],
+
     'TEST': [['PATH', 'TEST']],
-    
-    # #RED TEAM,
+
+    ### RED TEAM ###
     #     'NOTE 1': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 216.5, 57, 0], ['MOVE', 275, 57, 0]],
     #     'NOTE 2': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 114, 0], ['MOVE', 216.5, 114, 0], ['MOVE', 275, 57, 0] ],#[['WAIT', 1], ['UPDATE_POSE'], ['MOVE', 262.25, 114, 0], ['MOVE', 230.5, 114, 0]],
     #     'NOTE 3': [['WAIT', 0], ['UPDATE_POSE'], ['MOVE', 240.25, 0, 0], ['MOVE', 216.5, 0, 0], ['MOVE', 275, 57, 0]],
@@ -166,7 +275,7 @@ autonConfig = {
     #     'NOTE 6 POSITIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, 148.31, 0], ['MOVE', 19.9, 57,0]],
     #     'NOTE 7': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, 148.31, 0], ['MOVE', 19.9, 123, 0]],
     #     'NOTE 8': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, 189, 0], ['MOVE', 19.9, 189, 0]],
-    #     #BLUE TEAM
+    ### BLUE TEAM ###
     #     'NOTE 9': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -207.03, 57, 180]],
     #     'NOTE 10': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -216.875, 114, 180], ['MOVE', -207.03, 114, 180]],
     #     'NOTE 11': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -216.875, 0, 180], ['MOVE', -207.03, 0, 180]],
@@ -175,17 +284,22 @@ autonConfig = {
     #     'NOTE 14 NEGATIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, -34.41, 180], ['MOVE', 19.9, 57, 180]],
     #     'NOTE 14 POSITIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 148.31, 180], ['MOVE', 19.9, 57, 180]],
     #     'NOTE 15': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 148.31, 180], ['MOVE', 19.9, 123, 180]],
-    #     'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]], 
-    # },
-    'MAX_SPEED_M/S': 4.0,
-    'TRANSLATION_KP': 1.5,
-    'TRANSLATION_KI': 1.1,
-    'TRANSLATION_KD': 0,
-    'ROTATION_KP': 0,
-    'ROTATION_KI': 0,
-    'ROTATION_KD': 0,
+    #     'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]],
+
+    'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
+    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
+    'BALANCE_BOT': True,
+    'DO_COMMUNITY': False, # Only applies for position B
     'DRIVE_BASE_RADIUS': 0.5388,
+    'MAX_SPEED_M/S': 4.0,
     'PERIOD': 0.02,
+    'ROTATION_KD': 0,
+    'ROTATION_KI': 0,
+    'ROTATION_KP': 0,
+    'SCORE_EXISTING': True,
+    'TRANSLATION_KD': 0,
+    'TRANSLATION_KI': 1.1,
+    'TRANSLATION_KP': 1.5,
 }
 
 
@@ -208,7 +322,7 @@ loggingConfig = {
     MODULE_NAMES.SWERVEDRIVE: False,
     MODULE_NAMES.SWERVEMODULE: False,
     MODULE_NAMES.SWERVOMETER: False,
-    MODULE_NAMES.VISION: False,    
+    MODULE_NAMES.VISION: False,
 }
 
 dashboardConfig = {
@@ -216,7 +330,7 @@ dashboardConfig = {
     MODULE_NAMES.SWERVEDRIVE: True,
     MODULE_NAMES.SWERVEMODULE: True,
     MODULE_NAMES.SWERVOMETER: True,
-    MODULE_NAMES.VISION: True,   
+    MODULE_NAMES.VISION: True,
 }
 
 #all unknown values equal 0
@@ -227,7 +341,7 @@ mechanismConfig = {
     "INDEX_MOTOR_ID": 61,
     "INDEX_SPEED": 0.35,
     "INDEX_ROLL_BACK_ROTATIONS": 6,
-    
+
     "SHOOTER_LEFT_MOTOR_ID": 28,
     "SHOOTER_RIGHT_MOTOR_ID": 8,
     "SHOOTER_LEFT_SPEED": -0.85, #0.6 - good value for accuracy (on compliant wheels)
