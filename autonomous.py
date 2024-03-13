@@ -220,7 +220,7 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
 
             if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
-                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 30 and self.autonTimer.get() - self.lastTime > waitTime:
+                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 45 and self.autonTimer.get() - self.lastTime > waitTime:
                     self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
                     self.taskListCounter += 1
             else:

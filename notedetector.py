@@ -24,10 +24,13 @@ class NoteDetector:
     def getYMax(self):
         return self.noteSub.getNumber('ymax', -1000)
     def hasTarget(self):
-        if self.isAlive() and self.testCoral():
+        if self.trustCoral():
             return bool(self.noteSub.getBoolean('hasTarget', False))
         else:
             return False
+    def trustCoral(self):
+        #return False
+        return self.isAlive() and self.testCoral()
     def isAlive(self):
         return bool(self.noteSub.getBoolean('isAlive', False))
     def testCoral(self):

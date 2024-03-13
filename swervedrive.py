@@ -1144,27 +1144,22 @@ class SwerveDrive:
         x, y, r = self.swervometer.getCOF()
 
         if(self.notedetector.hasTarget()):
-            print("has target")
             if not offsetX is None:
-                print("x")
                 targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
                 xMove = self.noteDrive_x_pid_controller.calculate(targetErrorX)
                 self.set_fwd(clamp(xMove))
 
             if not offsetY is None:
-                print("y")
                 targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
                 yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
                 self.set_strafe(clamp(yMove))
 
             if not offsetAngle is None:
-                print('angle')
                 targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
                 angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
                 self.set_rcw(-clamp(angleMove))
             self.execute('center')
         else:
-            print("no note found")
             self.set_rcw(0)
             self.execute('center')
     

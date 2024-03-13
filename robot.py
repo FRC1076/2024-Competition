@@ -326,6 +326,11 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
+        if self.notedetector.hasTarget():
+            print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+        else:
+            #print('no target')
+            pass
         self.mechanism.periodic()
         if self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple-flash")
@@ -347,7 +352,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        #print(self.mechanism.shootingMotorRPMs)
+        print(self.mechanism.shootingMotorRPMs)
         # if self.notedetector.hasTarget():
         #     print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         # else:
