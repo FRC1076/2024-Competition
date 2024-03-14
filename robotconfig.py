@@ -215,7 +215,7 @@ loggingConfig = {
     MODULE_NAMES.SWERVEMODULE: False,
     MODULE_NAMES.SWERVOMETER: False,
     MODULE_NAMES.VISION: False,
-    PDH_LOGGING: True,
+    "PDH_LOGGING": False,
 }
 
 dashboardConfig = {

@@ -7,7 +7,7 @@ from datetime import datetime
 import wpilib
 import wpilib.drive
 import wpimath.controller
-from wpilib import interfaces, SmartDashboard
+from wpilib import interfaces
 import rev
 from phoenix5.sensors import CANCoder
 from navx import AHRS
@@ -74,6 +74,10 @@ class MyRobot(wpilib.TimedRobot):
         dir = ''
         if TEST_MODE:
             dir = os.getcwd() # this doesn't work on mac, will write to python dir. Fix later.
+        
+        self.logger = self.initLogger(dir, self.config["LOGGING"])
+        self.log('Robot init; TEST_MODE =', TEST_MODE)
+
 
         for key, config in self.config.items():
             if key == 'CONTROLLERS':
@@ -90,10 +94,8 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
             if key == 'NOTEDETECTOR':
                 self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
-            if key == 'LOGGING':
-                self.logger = self.initLogger(dir, config)
+            
 
-        self.log('Robot init; TEST_MODE =', TEST_MODE)
 
         if self.drivetrain:
             self.drivetrain.resetGyro()
@@ -118,7 +120,7 @@ class MyRobot(wpilib.TimedRobot):
         if self.drivetrain:
             self.drivetrain.reset()
 
-    def initLogger(self, dir):
+    def initLogger(self, dir, config):
         if config["PDH_LOGGING"]:
             self.pdh = wpilib.PowerDistribution()
         return Logger.getLogger(dir)
@@ -354,13 +356,13 @@ class MyRobot(wpilib.TimedRobot):
                 LEDs.rainbowLED("purple")
 
         if self.pdh is not None:
-            coral_channel = 11
-            self.dashboard.putNumber("PDH", "Coral Current (11)", self.pdh.getCurrent(coralChannel))
+            coralChannel = 11
+            wpilib.SmartDashboard.putNumber("Coral Current (11)", self.pdh.getCurrent(coralChannel))
 
             vrmChannel = 20
-            self.dashboard.putNumber("PDH", "VRM Current (20)", self.pdh.getCurrent(vrmChannel))
+            wpilib.SmartDashboard.putNumber("VRM Current (20)", self.pdh.getCurrent(vrmChannel))
 
-            self.dashboard.putNumber("PDH", "Total Current", self.pdh.getTotalCurrent())
+            wpilib.SmartDashboard.putNumber("Total Current", self.pdh.getTotalCurrent())
         return True
 
     def teleopPeriodic(self):
