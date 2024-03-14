@@ -42,6 +42,7 @@ class Autonomous:
         self.team_is_red = team_is_red
 
         self.maxSpeed = config['MAX_SPEED_M/S']
+        self.maxPickUpDistance = config['MAX_PICK_UP_DISTANCE']
 
     def executeAuton(self):
         if not self.autonHasStarted:
@@ -125,7 +126,7 @@ class Autonomous:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
                 else:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
-            if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 70 and self.autonTimer.get() - self.lastTime > waitTime:
+            if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime:
                     self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
                     self.lastTime = -1
                     self.taskListCounter += 1
@@ -226,33 +227,6 @@ class Autonomous:
                     self.taskListCounter += 1
             self.drivetrain.execute('center')
 
-        # elif self.autonTask[0] == 'AIM':
-        #     if not self.team_is_red:
-        #         distance = self.vision.getAvgDistance()
-        #         if distance == -1:
-        #             distance = self.swervometer.distanceToPose(-326, 57) - 15
-        #     else:
-        #         distance = self.vision.getAvgDistance()
-        #         if distance == -1:
-        #             distance = self.swervometer.distanceToPose(326, 57) - 15
-        #     self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
-
-        elif self.autonTask[0] == 'POINT_TO_NOTE':
-            self.goToNote = self.autonTask[1]
-            self.backupTask = self.autonTask[2]
-            if self.notedetector.hasTarget():
-                #print(self.notedetector.getTargetErrorX())
-                if abs(self.notedetector.getTargetErrorX()) < 2.0:
-                    if self.goToNote:
-                        #self.taskList.insert(self.taskListCounter + 1, ['MOVE', self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY() - 5, self.notedetector.getTargetErrorAngle()])
-                        pass
-                    self.taskListCounter += 1 
-                else:
-                    self.drivetrain.alignWithNote(False, False, 0)
-            else:
-                self.taskList.insert(self.taskListCounter + 1, self.backupTask)
-                self.taskListCounter += 1
-
         elif self.autonTask[0] == 'MOVE_TO_NOTE':
             expectedX = abs(self.autonTask[1])
             if not self.team_is_red:
@@ -264,7 +238,7 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
 
             if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
-                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 80 and self.autonTimer.get() - self.lastTime > waitTime:
+                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime:
                     self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
                     self.lastTime = -1
                     self.taskListCounter += 1

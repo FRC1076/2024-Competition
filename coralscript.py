@@ -7,13 +7,17 @@ from networktables import NetworkTables
 import numpy as np
 import cv2
 
-"""To Do: :)
-When robot code is enabled before coralscript runs, robot code may crash upon coralscript running
-"""
+# coral IP is 10.10.76.16
 
-NetworkTables.initialize(server='10.10.76.2') # NetworkTables server IP must be the same on the coral and the robot
+config = {
+    "MODEL": "/home/mendel/notedetector29/edgetpu.tflite", # absolute path of the tflite model in the DevBoard
+    "SOURCE_ID": 1, # default USB camera source ID is often 0, but the DevBoard likes 1
+    "CONFIDENCE_THRESHOLD": 0.75, # minimum confidence threshold
+    "NETWORKTABLES_IP": '10.10.76.2',
+}
+
+NetworkTables.initialize(server=config["NETWORKTABLES_IP"]) # NetworkTables server IP must be the same on the coral and the robot
 notePub = NetworkTables.getTable('noteDetector')
-counter = -1
 
 def getClosestNote(objs):
     #print('getClosestNote called')
@@ -26,10 +30,7 @@ def getClosestNote(objs):
 
 def publishBBox(obj):
     notePub.putBoolean('isAlive', True)
-    notePub.putNumber('counter', counter)
-    print(counter)
     if obj:
-        # notePub.putString('testKey', 'Hello world')
         notePub.putBoolean('hasTarget', True)
         notePub.putNumber('xmin', obj.bbox.xmin)
         notePub.putNumber('xmax', obj.bbox.xmax)
@@ -43,27 +44,16 @@ def publishBBox(obj):
         print('no target detected')
     return
 
-def publishVideo(image):
-    if image and notePub.getBoolean('videoRequested', False):
-        notePub.putRaw('video', image)
-    return
-
 def main():
     print("main called")
 
-    model = "/home/mendel/notedetector29/edgetpu.tflite" # absolute path of the tflite model in the DevBoard
-    source = 1 # default USB camera source ID is often 0, but the DevBoard likes 1
-    threshold = 0.75 # minimum confidence threshold
-
-    interpreter = make_interpreter(model)
+    interpreter = make_interpreter(config["MODEL"])
     interpreter.allocate_tensors()
     inference_size = input_size(interpreter)
     print(inference_size)
 
-    #counter += 1
-
     try:   
-        cap = cv2.VideoCapture(source)
+        cap = cv2.VideoCapture(config["SOURCE_ID"])
         while cap.isOpened():
             #print("cap opened")
             ret, frame = cap.read()
@@ -73,12 +63,11 @@ def main():
 
             cv2_im = frame
             cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-            # publishVideo(cv2_im_rgb.tobytes())
             cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
             run_inference(interpreter, cv2_im_rgb.tobytes())
-            objs = get_objects(interpreter, threshold)
-
+            objs = get_objects(interpreter, config["CONFIDENCE_THRESHOLD"])
             publishBBox(getClosestNote(objs))
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     except cv2.error as error:

@@ -334,26 +334,22 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
-        #print(self.mechanism.indexBeamBroken())
         if self.notedetector.hasTarget():
             print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
-            #print('no target')
-            #print(self.notedetector.trustCoral())
-            #print(self.notedetector.getCounter())
             pass
         self.mechanism.periodic()
         if self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple-flash")
-            #print('purple-flash')
+            print('purple-flash')
         elif self.notedetector.hasTarget():
-            if self.notedetector.getTargetErrorX() < 6 and self.notedetector.getTargetErrorX() > -6:
+            if self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"] and self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
                 LEDs.rainbowLED("orange-flash")
-                #print('orange-flash')
-            elif self.notedetector.getTargetErrorX() > -6:
+                print('orange-flash')
+            elif self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
                 LEDs.rainbowLED("orange-right")
                 #print('orange-right')
-            elif self.notedetector.getTargetErrorX() < 6:
+            elif self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"]:
                 LEDs.rainbowLED("orange-left")
                 #print('orange-left')
         elif (self.vision.hasPriorityTargets() and abs(self.vision.gettargetErrorX()) < 1.5):
@@ -377,15 +373,10 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
-        # if self.notedetector.hasTarget():
-        #     print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
-        # else:
-        #     print('no target')
         self.elastic.getSelectedAuton()
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
-        #LEDs.rainbowLED("purple")
         self.teleopMechanism()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
@@ -583,10 +574,9 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(True)
         else:
             self.drivetrain.setWheelLock(False)
-        if(driver.getAButton()):
-            self.drivetrain.alignWithApril(0, 75, 0)
-            return False
-        if(driver.getYButton()):
+
+        if (driver.getYButton()):
+            # drive so that the center of the bot is on the center of the note, without rotating
             self.drivetrain.alignWithNote(0, 0, None)
             return False
 

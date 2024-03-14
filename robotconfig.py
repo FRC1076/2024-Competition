@@ -192,6 +192,7 @@ autonConfig = {
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 1.1,
     'TRANSLATION_KP': 1.5,
+    'MAX_PICK_UP_DISTANCE': 70,
 }
 
 
@@ -281,6 +282,10 @@ noteDetectorConfig = {
     "CAMERA_FOV_X": 62.548,
     "CAMERA_PIXELS_Z": 300,
     "CAMERA_PIXELS_X": 300,
+    "NETWORKTABLES_IP": '10.10.76.2',
+    "DEFAULT_BBOX": -1000,
+    "INTAKE_RIGHT_ERROR_MARGIN": 6,
+    "INTAKE_LEFT_ERROR_MARGIN": -6,
 }
 
 elasticConfig = {
