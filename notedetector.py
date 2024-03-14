@@ -37,7 +37,7 @@ class NoteDetector:
 
     def trustCoral(self):
         #return False
-        return self.isAlive() and self.testCounter()
+        return self.isAlive()
     def isAlive(self):
         return bool(self.noteSub.getBoolean('isAlive', False))
     def testCounter(self):

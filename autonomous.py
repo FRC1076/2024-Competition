@@ -107,7 +107,7 @@ class Autonomous:
             self.drivetrain.execute('center')
 
         elif self.autonTask[0] == 'PATH_TO_NOTE':
-            self.waitTime = self.autonTask[2]
+            waitTime = self.autonTask[2]
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
                 self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
@@ -123,7 +123,7 @@ class Autonomous:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
                 else:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
-            if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 45 and self.autonTimer.get() - self.lastTime > waitTime:
+            if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 70 and self.autonTimer.get() - self.lastTime > waitTime:
                     self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
                     self.lastTime = -1
                     self.taskListCounter += 1
@@ -262,7 +262,7 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
 
             if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
-                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 45 and self.autonTimer.get() - self.lastTime > waitTime:
+                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < 80 and self.autonTimer.get() - self.lastTime > waitTime:
                     self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
                     self.lastTime = -1
                     self.taskListCounter += 1
@@ -277,12 +277,20 @@ class Autonomous:
         elif self.autonTask[0] == 'PICK_UP_NOTE':
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
-            self.drivetrain.alignWithNote(0, 0, False)
+            self.drivetrain.alignWithNote(0, -3, None)
             if self.mechanism.indexBeamBroken():
                 self.lastTime = -1
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
                 self.taskListCounter += 1
             elif self.autonTimer.get() - self.lastTime > 2:
                 self.lastTime = -1
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
                 self.taskListCounter += 1
             
         return False

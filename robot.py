@@ -333,11 +333,13 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
-        print(self.mechanism.indexBeamBroken())
+        #print(self.mechanism.indexBeamBroken())
         if self.notedetector.hasTarget():
             print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
             #print('no target')
+            #print(self.notedetector.trustCoral())
+            #print(self.notedetector.getCounter())
             pass
         self.mechanism.periodic()
         if self.mechanism.indexBeamBroken():

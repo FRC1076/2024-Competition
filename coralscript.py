@@ -13,7 +13,7 @@ When robot code is enabled before coralscript runs, robot code may crash upon co
 
 NetworkTables.initialize(server='10.10.76.2') # NetworkTables server IP must be the same on the coral and the robot
 notePub = NetworkTables.getTable('noteDetector')
-counter = 0
+counter = -1
 
 def getClosestNote(objs):
     #print('getClosestNote called')
@@ -27,6 +27,7 @@ def getClosestNote(objs):
 def publishBBox(obj):
     notePub.putBoolean('isAlive', True)
     notePub.putNumber('counter', counter)
+    print(counter)
     if obj:
         # notePub.putString('testKey', 'Hello world')
         notePub.putBoolean('hasTarget', True)
@@ -59,7 +60,7 @@ def main():
     inference_size = input_size(interpreter)
     print(inference_size)
 
-    counter += 1
+    #counter += 1
 
     try:   
         cap = cv2.VideoCapture(source)
