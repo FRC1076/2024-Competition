@@ -425,8 +425,9 @@ class MyRobot(wpilib.TimedRobot):
                 distance = self.vision.getAvgDistance()
             else:
                 distance = self.vision.getAvgDistance()
-            if distance != -1:
+            if distance != -1 and distance != 0:
                 self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
+            #print(distance)
             #print('current pose', self.swervometer.getCOF())
             #print('angle', angle)
             #print('sprocket angle', self.mechanism.getSprocketAngle())
