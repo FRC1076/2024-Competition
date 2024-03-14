@@ -59,9 +59,11 @@ class Autonomous:
         self.autonTask = self.taskList[self.taskListCounter]
 
         if self.autonTask[0] == "MOVE":
-            x = self.autonTask[1]
+            x = abs(self.autonTask[1])
             y = self.autonTask[2]
             bearing = self.autonTask[3]
+            if not self.team_is_red:
+                x = -x
             if self.drivetrain.goToPose(x, y, bearing):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)

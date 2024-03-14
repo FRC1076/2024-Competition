@@ -136,11 +136,6 @@ visionConfig = {
 }
 
 autonConfig = {
-    'SCORE_EXISTING': True,
-    'BALANCE_BOT': True,
-    'DO_COMMUNITY': False, # Only applies for position B
-    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
-    'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
     'TASK': 'TEST',
     'B_FOUR_NOTE_GRAB': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', 'B-1', 0.5], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', 'SHOT-2', 0.3], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-3', 0.3], ['RAISE_ARM_START', -5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', -(275 - 64), 57, 180, 0], ['RAISE_ARM_START', 0]],
@@ -172,7 +167,7 @@ autonConfig = {
     #     'NOTE 6 POSITIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, 148.31, 0], ['MOVE', 19.9, 57,0]],
     #     'NOTE 7': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, 148.31, 0], ['MOVE', 19.9, 123, 0]],
     #     'NOTE 8': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', 115.31, 189, 0], ['MOVE', 19.9, 189, 0]],
-    #     #BLUE TEAM
+    ### BLUE TEAM ###
     #     'NOTE 9': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -207.03, 57, 180]],
     #     'NOTE 10': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -216.875, 114, 180], ['MOVE', -207.03, 114, 180]],
     #     'NOTE 11': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -216.875, 0, 180], ['MOVE', -207.03, 0, 180]],
@@ -182,16 +177,21 @@ autonConfig = {
     #     'NOTE 14 POSITIVE': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 148.31, 180], ['MOVE', 19.9, 57, 180]],
     #     'NOTE 15': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 148.31, 180], ['MOVE', 19.9, 123, 180]],
     #     'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]],
-    # },
-    'MAX_SPEED_M/S': 4.6,
-    'TRANSLATION_KP': 1.5,
-    'TRANSLATION_KI': 1.1,
-    'TRANSLATION_KD': 0,
-    'ROTATION_KP': 0,
-    'ROTATION_KI': 0,
-    'ROTATION_KD': 0,
+
+    'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
+    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
+    'BALANCE_BOT': True,
+    'DO_COMMUNITY': False, # Only applies for position B
     'DRIVE_BASE_RADIUS': 0.5388,
+    'MAX_SPEED_M/S': 4.0,
     'PERIOD': 0.02,
+    'ROTATION_KD': 0,
+    'ROTATION_KI': 0,
+    'ROTATION_KP': 0,
+    'SCORE_EXISTING': True,
+    'TRANSLATION_KD': 0,
+    'TRANSLATION_KI': 1.1,
+    'TRANSLATION_KP': 1.5,
 }
 
 

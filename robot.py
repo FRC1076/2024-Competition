@@ -330,6 +330,7 @@ class MyRobot(wpilib.TimedRobot):
         self.dropArmTimer.start()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         self.allowDropArm = True
+        self.drivetrain.disableVoltageCompensation()
         return
 
     def robotPeriodic(self):
@@ -368,6 +369,10 @@ class MyRobot(wpilib.TimedRobot):
             wpilib.SmartDashboard.putNumber("VRM Current (20)", self.pdh.getCurrent(vrmChannel))
 
             wpilib.SmartDashboard.putNumber("Total Current", self.pdh.getTotalCurrent())
+
+        field = wpilib.Field2d()
+        field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
         return True
 
     def teleopPeriodic(self):
@@ -390,6 +395,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
         #print('RPM', self.mechanism.getShooterRPM())
+        #print('ANGLE', self.mechanism.getSprocketAngle())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -447,26 +453,29 @@ class MyRobot(wpilib.TimedRobot):
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
+            self.allowDropArm = False
         #subwoofer
         elif self.operator.xboxController.getAButton():
             self.mechanism.sprocketToPosition(-23)
+            self.allowDropArm = False
         #podium
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(0)
+            self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
-            self.mechanism.sprocketToPosition(80)
+            self.mechanism.sprocketToPosition(80) 
+            self.allowDropArm = False
         #auto aim
         elif self.operator.xboxController.getBButton():
+            distance = -1
             if self.team_is_blu:
                 distance = self.vision.getAvgDistance()
-                if distance == -1:
-                    distance = self.swervometer.distanceToPose(-326, 57) - 15
             else:
                 distance = self.vision.getAvgDistance()
-                if distance == -1:
-                    distance = self.swervometer.distanceToPose(326, 57) - 15
-            self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
+            if distance != -1 and distance != 0:
+                self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
+            #print(distance)
             #print('current pose', self.swervometer.getCOF())
             #print('angle', angle)
             #print('sprocket angle', self.mechanism.getSprocketAngle())
@@ -698,6 +707,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.drivetrain.setBearing(0)
         self.drivetrain.setRampRates(self.autonOpenLoopRampRate, self.autonClosedLoopRampRate)
+        self.drivetrain.enableVoltageCompensation()
         return
 
     def autonomousPeriodic(self):
