@@ -376,7 +376,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
 
     def teleopPeriodic(self):
-        print(self.mechanism.shootingMotorRPMs)
+        #print(self.mechanism.shootingMotorRPMs)
         # if self.notedetector.hasTarget():
         #     print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         # else:

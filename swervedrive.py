@@ -1161,6 +1161,7 @@ class SwerveDrive:
             self.execute('center')
         else:
             self.set_rcw(0)
+            self.set_strafe(-0.2)
             self.execute('center')
     
     def pointToPose(self, x, y):
