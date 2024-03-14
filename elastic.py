@@ -61,6 +61,22 @@ class Elastic:
 
         SmartDashboard.putData(self.chooser)
 
+    def startLocationDisplay(self):
+        self.locationChooser = wpilib.SendableChooser()
+        self.locationChooser.setDefaultOption('B', 'B')
+        self.locationChooser.addOption('A', 'A')
+        self.locationChooser.addOption('C', 'C')
+        SmartDashboard.putData(self.locationChooser)
+
+    def putTeamIsRed(self, teamIsRed):
+        SmartDashboard.putBoolean("Team Is Red", teamIsRed)
+
+    def getSelectedStartLocation(self):
+        return self.locationChooser.getSelected()
+    
+    def getTeamIsRed(self):
+        return SmartDashboard.getBoolean("Team Is Red", None)
+
     def getSelectedAuton(self):
         return self.chooser.getSelected()
     

@@ -68,6 +68,8 @@ class MyRobot(wpilib.TimedRobot):
         self.elastic = Elastic(autonPlans)
         #self.elastic.displayMainWindow()
         self.elastic.autonDisplay()
+        self.elastic.startLocationDisplay()
+        self.elastic.putTeamIsRed(self.config['SWERVOMETER']['TEAM_IS_RED'])
 
 
         dir = ''
@@ -126,6 +128,15 @@ class MyRobot(wpilib.TimedRobot):
     
     def initSwervometer(self, config):
         self.log("initSwervometer ran")
+
+        team = self.elastic.getTeamIsRed()
+        start = self.elastic.getSelectedStartLocation()
+        if team is None:
+            team = True
+        
+        config['TEAM_IS_RED'] = team
+        config['FIELD_START_POSITION'] = start
+        print("START_LOCATION", start)
         
         if (config['TEAM_IS_RED']):
             self.team_is_red = True

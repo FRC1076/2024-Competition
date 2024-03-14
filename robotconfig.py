@@ -48,7 +48,7 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_BLU_C_START_ANGLE': 180.0, # Heading angle of starting position C when on blue team
     'FIELD_RED_D_START_POSITION_X': 300,
     'FIELD_RED_D_START_POSITION_Y': 114,
-    'FIELD_RED_D_START_POSITION_ANGLE': 0,
+    'FIELD_RED_D_START_ANGLE': 0,
     'FIELD_BLU_D_START_POSITION_X': -300,
     'FIELD_BLU_D_START_POSITION_Y': 114,
     'FIELD_BLU_D_START_ANGLE': 0,
