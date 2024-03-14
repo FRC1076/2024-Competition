@@ -123,6 +123,8 @@ class MyRobot(wpilib.TimedRobot):
     def initLogger(self, dir, config):
         if config["PDH_LOGGING"]:
             self.pdh = wpilib.PowerDistribution()
+        else:
+            self.pdh = None
         return Logger.getLogger(dir)
 
     def controllerInit(self, config):
@@ -331,6 +333,7 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
+        print(self.mechanism.indexBeamBroken())
         if self.notedetector.hasTarget():
             print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
