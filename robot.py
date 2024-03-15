@@ -335,17 +335,18 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotPeriodic(self):
         if self.notedetector.hasTarget():
-            print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+            pass
+            #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
             pass
         self.mechanism.periodic()
         if self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple-flash")
-            print('purple-flash')
+            #print('purple-flash')
         elif self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"] and self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
                 LEDs.rainbowLED("orange-flash")
-                print('orange-flash')
+                #print('orange-flash')
             elif self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
                 LEDs.rainbowLED("orange-right")
                 #print('orange-right')

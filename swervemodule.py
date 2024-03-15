@@ -90,6 +90,8 @@ class SwerveModule:
 
         self.swerveModulePosition = SwerveModulePosition(0, Rotation2d(0))
 
+        #self.isVoltageCompensation = False
+
     def reset(self):
         
         #print("In swervemodule reset")
@@ -272,7 +274,7 @@ class SwerveModule:
         #use wpilib's swerve module position. must add the position change because wpilib can't take into account the positionSign, so we must take it into account before we feed it in
         self.swerveModulePosition = SwerveModulePosition((self.swerveModulePosition.distance * 39.37 + self.positionChange) * 0.0254 , Rotation2d((self.newAngle - 90) % 360 * math.pi / 180))
         self.lastPosition = self.newPosition
-        print("module velocity", (self.get_current_velocity() / 60) * 1.86 * 0.0254)
+        #print("module velocity", (self.get_current_velocity() / 60) * 1.86 * 0.0254)
         self.update_smartdash()
     
     def testMove(self, driveInput, rotateInput):
@@ -294,9 +296,11 @@ class SwerveModule:
     
     def enableVoltageCompensation(self):
         self.driveMotor.enableVoltageCompensation(12)
+        #self.isVoltageCompensation = True
 
     def disableVoltageCompensation(self):
         self.driveMotor.disableVoltageCompensation()
+        #self.isVoltageCompensation = False
 
     def update_smartdash(self):
         """

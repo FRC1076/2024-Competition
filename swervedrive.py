@@ -170,7 +170,7 @@ class SwerveDrive:
         # TODO: 
         # - tune PID values
         self.noteDrive_config = None
-        self.noteDrive_x_pid_controller = PIDController(0.025, 0 ,0)
+        self.noteDrive_x_pid_controller = PIDController(0.015, 0 ,0)
         self.noteDrive_x_pid_controller.setTolerance(0.5, 0.5)
         self.noteDrive_x_pid_controller.setSetpoint(0)
         self.noteDrive_y_pid_controller = PIDController(0.003, 0 ,0)
