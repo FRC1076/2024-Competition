@@ -5,7 +5,6 @@ class NoteDetector:
     def __init__ (self, config):
         #IP of the coral
         #10.10.76.16
-        self.noteSub = NetworkTables.getTable('noteDetector')
         self.config = config
         self.lastX = self.config["DEFAULT_BBOX"]
         self.lastY = self.config["DEFAULT_BBOX"]
@@ -13,6 +12,7 @@ class NoteDetector:
         self.sameCounterCounter = 0
         self.sameCounterBBox = 0
         NetworkTables.initialize(server=self.config["NETWORKTABLES_IP"])
+        self.noteSub = NetworkTables.getTable('noteDetector')
     
     # get the camera pixel coordinates of the bounding box
     def getXMin(self):
@@ -25,7 +25,7 @@ class NoteDetector:
         return self.noteSub.getNumber('ymin', self.config["DEFAULT_BBOX"])
 
     def getYMax(self):
-        return self.noteSub.getNumber('ymax', -self.config["DEFAULT_BBOX"])
+        return self.noteSub.getNumber('ymax', self.config["DEFAULT_BBOX"])
 
     def getCounter(self):
         # the 'counter' value on the coral should increase by 1 each cycle
