@@ -462,9 +462,11 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getBButton():
             distance = -1
             if self.team_is_blu:
-                distance = self.vision.getAvgDistance()
+                #distance = self.vision.getAvgDistance()
+                distance = self.swervometer.distanceToPose(-326, 57) - 7 #should be -15 but we are calibrated to be at COF as opposed to front of robot which is used in the auto aim calculations
             else:
-                distance = self.vision.getAvgDistance()
+                #distance = self.vision.getAvgDistance()
+                distance = self.swervometer.distanceToPose(326, 57) - 7
             if distance != -1 and distance != 0:
                 self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
             #print(distance)
