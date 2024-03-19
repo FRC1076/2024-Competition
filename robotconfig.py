@@ -192,11 +192,11 @@ autonConfig = {
     'PERIOD': 0.02,
     'ROTATION_KD': 0,
     'ROTATION_KI': 0,
-    'ROTATION_KP': 0,
+    'ROTATION_KP': 5,
     'SCORE_EXISTING': True,
     'TRANSLATION_KD': 0,
-    'TRANSLATION_KI': 1.1,
-    'TRANSLATION_KP': 1.5,
+    'TRANSLATION_KI': 0,
+    'TRANSLATION_KP': 5,
     'MAX_PICK_UP_DISTANCE': 70,
 }
 
