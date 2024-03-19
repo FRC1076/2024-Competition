@@ -371,6 +371,7 @@ class MyRobot(wpilib.TimedRobot):
 
         field = wpilib.Field2d()
         field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(field)
         self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
         return True
 
