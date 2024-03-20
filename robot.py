@@ -586,6 +586,12 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.alignWithNote(0, 0, None)
             return False
 
+        if (driver.get___):
+            self.drivertrain.alignWithNote(None, None, 0)
+        
+        if (driver.get____):
+            self.drivetrain.driveStraight(0.5)
+            return
 
         # Regular driving, not a maneuver
         if False:
