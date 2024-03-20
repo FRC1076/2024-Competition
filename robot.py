@@ -586,11 +586,9 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.alignWithNote(0, 0, None)
             return False
 
-        if (driver.get___):
+        if (driver.getRightTriggerAxis() > 0.7 and not driver.getLeftTriggerAxis() > 0.7):
             self.drivertrain.alignWithNote(None, None, 0)
-        
-        if (driver.get____):
-            self.drivetrain.driveStraight(0.5)
+            self.drivetrain.driveStraight(self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone))
             return
 
         # Regular driving, not a maneuver
