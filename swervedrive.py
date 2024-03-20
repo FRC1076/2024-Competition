@@ -1098,7 +1098,6 @@ class SwerveDrive:
     def driveStraight(self, speed):
         self.set_strafe(clamp(speed))
         self.set_fwd(0)
-        self.set_rcw(0)
         self.execute()
 
     def alignWithApril(self, offsetX, offsetY, offsetAngle):
