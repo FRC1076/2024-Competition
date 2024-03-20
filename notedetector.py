@@ -40,7 +40,7 @@ class NoteDetector:
         return self.limelight.getNumber('tx')
 
     def getTargetAngleZ(self):
-        return self.limelight.getNumber('ty')
+        return self.limelight.getNumber('ty') + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
 
     def getHeartbeat(self):
         return self.limelight.getNumber('hb', 0)
