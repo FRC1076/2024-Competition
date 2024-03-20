@@ -377,6 +377,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
+        print(self.mechanism.indexBeamBroken())
         self.elastic.getSelectedAuton()
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
