@@ -417,7 +417,7 @@ class SwerveDrive:
         if self.squared_inputs:
             rcw = self.square_input(rcw)
 
-        rcw *= self.rotation_multiplier
+        rcw *= 1#self.rotation_multiplier
 
         self._requested_vectors['rcw'] = rcw
 
@@ -1035,6 +1035,10 @@ class SwerveDrive:
         """
         #self.update_smartdash()
         #print(self.getGyroAngle())
+
+        for key in self.modules:
+            print(key, self.modules[key].get_current_velocity() * 1.86 * 0.0254 / 60)
+
         self.log("Swervedrive: Execute: axis_of_rotation: ", axis_of_rotation)
 
         if axis_of_rotation == 'center':

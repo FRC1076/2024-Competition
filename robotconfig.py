@@ -25,7 +25,7 @@ swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': True, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'C', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
-    'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
+    'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_RED_A_START_POSITION_X': 308, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
@@ -66,7 +66,7 @@ swervometerConfig = { # All positions measured in inches
     'ROBOT_CAMERA_OFFSET_Y': 0.0, # Y-offset of center of camera lens (relative to center of frame)
     'ROBOT_CAMERA_HEIGHT': 12.1875, # Height of camera eye relative to gyroscope: 11 3/16+ 2 -1
     'ROBOT_SWERVE_MODULE_OFFSET_X': 11.75, # X-offset of swerve module center from COF  (2023: 13.75)
-    'ROBOT_SWERVE_MODULE_OFFSET_Y': 9.75, # Y-offset of swerve module center from COF   (2023: 9.75)
+    'ROBOT_SWERVE_MODULE_OFFSET_Y': 11.75, # Y-offset of swerve module center from COF   (2023: 9.75)
 }
 
 drivetrainConfig = {
@@ -99,8 +99,8 @@ drivetrainConfig = {
     'BEARING_KI': 0.0,
     'BEARING_KD': 0.000,
     'ROBOT_INCHES_PER_ROTATION': 1.0, #1.793, # Inches per rotation of wheels
-    'TELEOP_OPEN_LOOP_RAMP_RATE': 0.125, # Improves maneuverability of bot.
-    'TELEOP_CLOSED_LOOP_RAMP_RATE': 0.125,
+    'TELEOP_OPEN_LOOP_RAMP_RATE': 0, #0.125, # Improves maneuverability of bot.
+    'TELEOP_CLOSED_LOOP_RAMP_RATE': 0,#0.125,
     'AUTON_STEER_STRAIGHT': True,
     'TELEOP_STEER_STRAIGHT': False,
     'ROTATE_CLOCKWISE': [['ROTATE', 179]], # 179, not -180 to ensure direction
