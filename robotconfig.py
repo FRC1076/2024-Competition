@@ -65,7 +65,7 @@ swervometerConfig = { # All positions measured in inches
     'ROBOT_CAMERA_OFFSET_X': 17.0, # X-offset of center of camera lens (relative to center of frame)
     'ROBOT_CAMERA_OFFSET_Y': 0.0, # Y-offset of center of camera lens (relative to center of frame)
     'ROBOT_CAMERA_HEIGHT': 12.1875, # Height of camera eye relative to gyroscope: 11 3/16+ 2 -1
-    'ROBOT_SWERVE_MODULE_OFFSET_X': 11.75, # X-offset of swerve module center from COF  (2023: 13.75)
+    'ROBOT_SWERVE_MODULE_OFFSET_X': 9.75, # X-offset of swerve module center from COF  (2023: 13.75)
     'ROBOT_SWERVE_MODULE_OFFSET_Y': 9.75, # Y-offset of swerve module center from COF   (2023: 9.75)
 }
 
@@ -180,7 +180,7 @@ autonConfig = {
     'TRANSLATION_KP': 1.5,
     'TRANSLATION_KI': 0,
     'TRANSLATION_KD': 0,
-    'ROTATION_KP': 0,
+    'ROTATION_KP': 1.5,
     'ROTATION_KI': 0,
     'ROTATION_KD': 0,
     'DRIVE_BASE_RADIUS': 0.5388,
