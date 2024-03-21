@@ -77,6 +77,7 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
+            print("desired angle", self.pathState.heading.degrees(), "our angle", self.swervometer.getPathPlannerPose().rotation().degrees())
             self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(self.chassisSpeeds)
             self.modules = self.drivetrain.getModules()
             self.modules['front_left'].move(self.moduleStates[0].speed / self.maxSpeed, (self.moduleStates[0].angle.degrees() + 270) % 360)
