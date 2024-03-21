@@ -73,7 +73,7 @@ class Swervometer:
         return self.currentX, self.currentY, self.currentBearing
     
     def getPathPlannerPose(self):
-        return Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees(self.currentBearing))
+        return Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees((self.currentBearing + 180) % 360))
 
     def setCOF(self, x, y, bearing):
         self.currentX = x

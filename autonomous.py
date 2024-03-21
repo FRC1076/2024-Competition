@@ -6,6 +6,7 @@ from wpimath.kinematics import ChassisSpeeds
 from wpimath.geometry import Rotation2d
 from pathplannerlib.config import PIDConstants
 from pathplannerlib.controller import PPHolonomicDriveController
+from pathplannerlib.telemetry import PPLibTelemetry
 import math
 
 class Autonomous:
@@ -86,21 +87,36 @@ class Autonomous:
             return True
         
         elif self.autonTask[0] == 'PATH':
+            #when this command is first called
             if self.lastTime == -1:
+                #update the time
                 self.lastTime = self.autonTimer.get()
+                #load the path, and flip depending on side
                 self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
+                rotation = Rotation2d()
                 if(self.team_is_red):
+                    rotation = Rotation2d.fromDegrees(180)
                     self.path = self.path.flipPath()
-                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
+                #log the path the pathplanner's telemetry
+                PPLibTelemetry.setCurrentPath(self.path)
+
+            #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/self.maxSpeed)
-            self.drivetrain.set_strafe(self.chassisSpeeds.vx/self.maxSpeed)
+            #log the current pose and target pose to pathplanner's telemetry
+            PPLibTelemetry.setCurrentPose(self.swervometer.getPathPlannerPose())
+            PPLibTelemetry.setTargetPose(self.pathState.getTargetHolonomicPose())
+            #drive the robot
+            self.drivetrain.set_fwd(self.chassisSpeeds.vy/self.maxSpeed)
+            self.drivetrain.set_strafe(-self.chassisSpeeds.vx/self.maxSpeed)
+            #lock the heading for the robot
             if self.drivetrain.shouldSteerStraight():
                 if(self.team_is_red):
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
                 else:
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
+            #if the speeds are minimal and minimum time has elapsed, move onto the next task
             if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
@@ -111,16 +127,23 @@ class Autonomous:
 
         elif self.autonTask[0] == 'PATH_TO_NOTE':
             waitTime = self.autonTask[2]
+            #when this command is first called
             if self.lastTime == -1:
+                #update the time
                 self.lastTime = self.autonTimer.get()
+                #load the path, and flip depending on side
                 self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
+                rotation = Rotation2d()
                 if(self.team_is_red):
+                    rotation = Rotation2d.fromDegrees(180)
                     self.path = self.path.flipPath()
-                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
+                #log the path the pathplanner's telemetry
+                PPLibTelemetry.setCurrentPath(self.path)
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/self.maxSpeed)
-            self.drivetrain.set_strafe(self.chassisSpeeds.vx/self.maxSpeed)
+            self.drivetrain.set_fwd(self.chassisSpeeds.vy/self.maxSpeed)
+            self.drivetrain.set_strafe(-self.chassisSpeeds.vx/self.maxSpeed)
             if self.drivetrain.shouldSteerStraight():
                 if(self.team_is_red):
                     self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
