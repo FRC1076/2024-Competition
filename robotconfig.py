@@ -25,7 +25,7 @@ swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': True, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'C', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
-    'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
+    'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_RED_A_START_POSITION_X': 308, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
@@ -58,8 +58,8 @@ swervometerConfig = { # All positions measured in inches
     'ROBOT_BUMPER_DIMENSION_Y': 3.0, # Width of bumper (Y-axis)
     'ROBOT_COF_OFFSET_X': 15.0, # X-offset of center of frame (assume half frame dimension) (2023: 17.0)
     'ROBOT_COF_OFFSET_Y': 15.0, # Y-offset of center of frame (assume half frame dimension) (2023: 13.0)
-    'ROBOT_COM_OFFSET_X': -0.75, # X-offset of center of mass (relative to center of frame)
-    'ROBOT_COM_OFFSET_Y': -0.75, # Y-offset of center of mass (relative to center of frame)
+    'ROBOT_COM_OFFSET_X': 3, # X-offset of center of mass (relative to center of frame) #to find these we rotated the bot in place and tested
+    'ROBOT_COM_OFFSET_Y': 3, # Y-offset of center of mass (relative to center of frame) #to find these we rotated the bot in place and tested
     'ROBOT_GYRO_OFFSET_X': 18.5, # X-offset of center of gyro (relative to lower left frame) 18.5 (2023: 15.0)
     'ROBOT_GYRO_OFFSET_Y': 4.25, # Y-offset of center of gyro (relative to lower left frame) 4.25 (2023: 12.0)
     'ROBOT_CAMERA_OFFSET_X': 17.0, # X-offset of center of camera lens (relative to center of frame)
