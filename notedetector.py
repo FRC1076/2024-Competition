@@ -37,10 +37,10 @@ class NoteDetector:
             return False
 
     def getTargetAngleX(self):
-        return self.limelight.getNumber('tx')
+        return self.limelight.getNumber('tx', self.config['DEFAULT_BBOX'])
 
     def getTargetAngleZ(self):
-        return self.limelight.getNumber('ty') + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
+        return self.limelight.getNumber('ty', self.config['DEFAULT_BBOX']) + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
 
     def getHeartbeat(self):
         return self.limelight.getNumber('hb', 0)
@@ -62,9 +62,9 @@ class NoteDetector:
         else:
             self.sameCounter = 0
 
-        self.lastHeartbeat = self.getHeartbeat():
+        self.lastHeartbeat = self.getHeartbeat()
 
-        if self.sameCounter > 3:
+        if self.sameCounter > 10:
             return False
         else:
             return True

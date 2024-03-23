@@ -328,6 +328,9 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
+        #print(self.notedetector.trustLimelight())
+        #print(self.notedetector.sameCounter)
+        print('{}, {}'.format(self.notedetector.limelight.getNumber('tl', 0), self.notedetector.limelight.getNumber('cl', 0)))
         if self.notedetector.hasTarget():
             pass
             print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
