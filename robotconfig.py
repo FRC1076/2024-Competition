@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
@@ -157,6 +157,10 @@ autonConfig = {
     'B_FOUR_NOTE_GRAB_AMP_SIDE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-4', 1.5], ['RAISE_ARM_START', -25.9], ['PATH', '4-B'], ['SHOOT_NOTE']],
     'B_THREE_HALF_NOTE_GRAB_STAGE_SIDE_DRAGONS': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-6', 1.5], ['PATH', '6-STAGE']],
     'B_THREE_HALF_NOTE_GRAB_AMP_SIDE_DRAGONS': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-6', 1.5], ['PATH', '6-STAGE']],
+    'B_FIVE_NOTE_TEST': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4'], ['RAISE_ARM_START', 0], ['PATH', '4-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -23], ['PATH', '3-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+
+    #'B_FAST_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -23], ['PATH', '3-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+
     #'B_FOUR_NOTE_TWO_FAR_GRAB': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-5', 1.5], ['RAISE_ARM_START', 0], ['PATH', '5-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
 
     #'NOTE_GRAB_TEST': [['START_INTAKE'], [[]'POINT_TO_NOTE', True, ['ROTATE', -90]]],
@@ -192,11 +196,11 @@ autonConfig = {
     'PERIOD': 0.02,
     'ROTATION_KD': 0,
     'ROTATION_KI': 0,
-    'ROTATION_KP': 0,
+    'ROTATION_KP': 4,
     'SCORE_EXISTING': True,
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 0,
-    'TRANSLATION_KP': 3,
+    'TRANSLATION_KP': 2,
     'MAX_PICK_UP_DISTANCE': 70,
 }
 
