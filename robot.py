@@ -104,12 +104,6 @@ class MyRobot(wpilib.TimedRobot):
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
         self.ledOn = True
 
-        if self.notedetector:
-            if self.notedetector.isAlive():
-                print("Coral Dev Board connected")
-            else:
-                print("Coral Dev Board not connected")
-
         field = wpilib.Field2d()
         field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.elastic.putField(field)
@@ -245,7 +239,7 @@ class MyRobot(wpilib.TimedRobot):
         return swervometer
 
     def initVision(self, config):
-        vision = Vision(NetworkTables.getTable('limelight'),
+        vision = Vision(NetworkTables.getTable('limelight-g'),
                         config['APRILTAGS'],
                         config['RETROREFLECTIVE'],
                         config['MIN_TARGET_ASPECT_RATIO_REFLECTIVE'],
@@ -254,11 +248,11 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
-        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
+        NetworkTables.getTable('limelight-g').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
-            NetworkTables.getTable('limelight').putNumber('priorityid', 7)
+            NetworkTables.getTable('limelight-g').putNumber('priorityid', 7)
         else:
-            NetworkTables.getTable('limelight').putNumber('priorityid', 4)
+            NetworkTables.getTable('limelight-g').putNumber('priorityid', 4)
         return vision
 
     def initDrivetrain(self, config):
@@ -336,7 +330,7 @@ class MyRobot(wpilib.TimedRobot):
     def robotPeriodic(self):
         if self.notedetector.hasTarget():
             pass
-            #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
+            print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
             pass
         self.mechanism.periodic()
