@@ -68,6 +68,17 @@ class MyRobot(wpilib.TimedRobot):
         self.elastic = Elastic(autonPlans)
         self.elastic.displayMainWindow()
         self.elastic.autonDisplay()
+        condition = True
+        while condition:
+            print(str(self.elastic.printThis()))
+
+        while not(self.elastic.elasticSubmitCheck()):
+            self.selectedAuton = self.elastic.getSelectedAuton()
+            print("womp",self.elastic.elasticSubmitCheck())
+        print("ELASTIC SUBMITTED... PROCEEDING OTHER INIT FUNCTIONS")
+
+
+        self.TEAM_IS_RED = True
 
 
         dir = ''
@@ -329,7 +340,6 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        self.elastic.getSelectedAuton()
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
@@ -624,7 +634,7 @@ class MyRobot(wpilib.TimedRobot):
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        taskListName = self.elastic.getSelectedAuton()
+        taskListName = self.selectedAuton
         if taskListName is None:
             taskListName = config["TASK"]
             print("WARNING: Falling back to default Auton plan:", taskListName)

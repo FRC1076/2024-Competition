@@ -20,35 +20,23 @@ class Elastic:
         self.isNoteLeft = self.config["NOTE_ON_LEFT"]
         self.isNoteRight = self.config["NOTE_ON_RIGHT"]
         self.isNoteLoaded = self.config["NOTE_IS_LOADED"]
+        self.isElasticSubmitted = False
+        self.submitButton = False
+        self.testButton = False
 
     def displayMainWindow(self):
         tab = "Main Window"
-
         (Shuffleboard.getTab(tab)
-        .add("Note Detected!", self.isNoteDetected)
+        .add("Submit",self.submitButton)
         .withSize(4,4)
-        .withPosition(17,0)
+        .withPosition(0,0)
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
         (Shuffleboard.getTab(tab)
-        .add("Note on Left", self.isNoteLeft)
+        .add("Test",self.testButton)
         .withSize(4,4)
-        .withPosition(13,0)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry())
-
-        (Shuffleboard.getTab(tab)
-        .add("Note on Right", self.isNoteRight)
-        .withSize(4,4)
-        .withPosition(21,0)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry())
-
-        (Shuffleboard.getTab(tab)
-        .add("Note Loaded!",self.isNoteLoaded)
-        .withSize(4,4)
-        .withPosition(17,4)
+        .withPosition(0,0)
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
@@ -63,3 +51,19 @@ class Elastic:
 
     def getSelectedAuton(self):
         return self.chooser.getSelected()
+    
+    def printThis(self):
+        if self.testButton==True:
+            return "TRUE"
+        elif self.testButton==False:
+            return "FALSE"
+        else:
+            return "NOTHING"
+
+
+    def elasticSubmitCheck(self):
+        if self.submitButton == False:
+            return False
+        
+        else:
+            return True
