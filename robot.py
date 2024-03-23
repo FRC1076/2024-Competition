@@ -643,9 +643,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.drivetrain.move(fwd, strafe, rcw, self.drivetrain.getBearing())
 
                 self.log("TeleopDriveTrain: POV: ", driver.getPOV())
-                if self.getPOVCorner(driver.getPOV()) == 'front_left':
+                if self.getPOVCorner(driver.getPOV()) == 'front_left' or driver.getLeftTriggerAxis() > 0.7:
                     self.drivetrain.execute('front_left')
-                elif self.getPOVCorner(driver.getPOV()) == 'front_right':
+                elif self.getPOVCorner(driver.getPOV()) == 'front_right'  or driver.getRightTriggerAxis() > 0.7:
                     self.drivetrain.execute('front_right')
                 elif self.getPOVCorner(driver.getPOV()) == 'rear_left':
                     self.drivetrain.execute('rear_left')
