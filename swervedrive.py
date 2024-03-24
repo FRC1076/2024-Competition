@@ -1189,7 +1189,7 @@ class SwerveDrive:
     def pointToPriorityTag(self):
         if(self.vision.hasPriorityTargets()):
             if(abs(self.vision.gettargetErrorX()) > 0.5):
-                self.set_rcw(clamp(self.pointToTagPID.calculate(-self.vision.gettargetErrorX(), 2)) * 0.2)
+                self.set_rcw(clamp(self.pointToTagPID.calculate(-self.vision.gettargetErrorX(), 2)) * 0.1)
             else:
                 self.set_rcw(0)
 
