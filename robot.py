@@ -68,18 +68,17 @@ class MyRobot(wpilib.TimedRobot):
         self.elastic = Elastic(autonPlans)
         self.elastic.displayMainWindow()
         self.elastic.autonDisplay()
-        condition = True
-        while condition:
-            print(str(self.elastic.printThis()))
 
-        while not(self.elastic.elasticSubmitCheck()):
+        """
+        while True:
             self.selectedAuton = self.elastic.getSelectedAuton()
             print("womp",self.elastic.elasticSubmitCheck())
+            if self.elastic.elasticSubmitCheck():
+                break
         print("ELASTIC SUBMITTED... PROCEEDING OTHER INIT FUNCTIONS")
-
+        """
 
         self.TEAM_IS_RED = True
-
 
         dir = ''
         if TEST_MODE:
@@ -340,6 +339,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
+        print(self.elastic.elasticSubmitCheck())
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)

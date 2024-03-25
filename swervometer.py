@@ -30,7 +30,8 @@ RobotPropertyConfig = namedtuple('RobotPropertyConfig', ['sd_prefix',
 class Swervometer:
     def __init__(self, field_cfg, robot_property_cfg):
         self.field = field_cfg
-        self.robotProperty = robot_property_cfg
+        self.robotPr
+        operty = robot_property_cfg
         self.teamGyroAdjustment=self.robotProperty.team_gyro_adjustment
         self.teamMoveAdjustment=self.robotProperty.team_move_adjustment
         self.useCOMadjustment = self.robotProperty.use_com_adjustment

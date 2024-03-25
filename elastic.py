@@ -53,17 +53,21 @@ class Elastic:
         return self.chooser.getSelected()
     
     def printThis(self):
-        if self.testButton==True:
+        x = SmartDashboard.getBoolean("submitButton", False)
+        if x==True:
             return "TRUE"
-        elif self.testButton==False:
+        elif x==False:
             return "FALSE"
         else:
             return "NOTHING"
 
 
     def elasticSubmitCheck(self):
-        if self.submitButton == False:
-            return False
+        if SmartDashboard.getBoolean("Main Window",self.submitButton):
+            return "True"
+        
+        elif SmartDashboard.getBoolean("Main Window",self.submitButton) == False:
+            return "False"
         
         else:
-            return True
+            return "NOTHING"
