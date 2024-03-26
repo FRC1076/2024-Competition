@@ -53,9 +53,20 @@ class Swervometer:
     
         self.calcLeverArmLengths()
 
+    """
     def updateTeamAndFieldStartPosition(self, team_gyro_adjustment, team_move_adjustment, start_position_x, start_position_y, start_angle):
         self.teamGyroAdjustment = team_gyro_adjustment
         self.teamMoveAdjustment = team_move_adjustment
+        self.currentX = start_position_x
+        self.currentY = start_position_y
+        self.currentBearing = start_angle
+    """
+    
+    def updateTeam(self, team_gyro_adjustment, team_move_adjustment):
+        self.teamGyroAdjustment = team_gyro_adjustment
+        self.teamMoveAdjustment = team_move_adjustment
+
+    def updateFieldStartPosition(self, start_position_x, start_position_y, start_angle):
         self.currentX = start_position_x
         self.currentY = start_position_y
         self.currentBearing = start_angle
