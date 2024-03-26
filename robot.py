@@ -108,9 +108,9 @@ class MyRobot(wpilib.TimedRobot):
             else:
                 print("Coral Dev Board not connected")
 
-        field = wpilib.Field2d()
-        field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.field = wpilib.Field2d()
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(self.field)
         return
 
     def disabledExit(self):
@@ -367,9 +367,7 @@ class MyRobot(wpilib.TimedRobot):
 
             wpilib.SmartDashboard.putNumber("Total Current", self.pdh.getTotalCurrent())
 
-        field = wpilib.Field2d()
-        field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
         return True
 
