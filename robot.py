@@ -90,15 +90,13 @@ class MyRobot(wpilib.TimedRobot):
                 self.swervometer = self.initSwervometer(config)
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
+                self.drivetrain.resetGyro()
             if key == 'MECHANISM':
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
             if key == 'NOTEDETECTOR':
                 self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
+        
             
-
-
-        if self.drivetrain:
-            self.drivetrain.resetGyro()
 
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
@@ -110,15 +108,15 @@ class MyRobot(wpilib.TimedRobot):
             else:
                 print("Coral Dev Board not connected")
 
-        field = wpilib.Field2d()
-        field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.field = wpilib.Field2d()
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(self.field)
         return
 
     def disabledExit(self):
         self.log("no longer disabled")
-        if self.drivetrain:
-            self.drivetrain.reset()
+        #if self.drivetrain:
+            #self.drivetrain.reset()
 
     def initLogger(self, dir, config):
         if config["PDH_LOGGING"]:
@@ -369,9 +367,7 @@ class MyRobot(wpilib.TimedRobot):
 
             wpilib.SmartDashboard.putNumber("Total Current", self.pdh.getTotalCurrent())
 
-        field = wpilib.Field2d()
-        field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
         return True
 
@@ -698,7 +694,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.drivetrain.setInAuton(True)
 
-        self.drivetrain.resetGyro()
+        #self.drivetrain.resetGyro()
         if self.team_is_red:
             self.drivetrain.setBearing(180)
         else:

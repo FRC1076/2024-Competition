@@ -73,7 +73,10 @@ class Swervometer:
         return self.currentX, self.currentY, self.currentBearing
     
     def getPathPlannerPose(self):
+        #if (-(self.currentBearing + 180)) % 360 < 180:
         return Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees((-(self.currentBearing + 180)) % 360)) #Rotation2d.fromDegrees(180))#
+        #else:
+            #return Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees(((-(self.currentBearing + 180)) % 360) - 360))
 
     def setCOF(self, x, y, bearing):
         self.currentX = x
@@ -226,14 +229,15 @@ class Swervometer:
         rearRightModule = modules['rear_right'].getSwerveModulePosition()
         #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentBearing = gyroAngle
+        #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
-        """
-        if(self.vision.hasTargets() and not inAuton):
-            try:
-                self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
-            except:
-                pass
-        """
+        
+        #if(self.vision.hasTargets() and not inAuton):
+        #    try:
+        #        self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
+        #    except:
+        #        pass
+        
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37

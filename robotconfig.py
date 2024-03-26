@@ -22,36 +22,39 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
-    'FIELD_RED_A_START_POSITION_X': 308, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
-    'FIELD_RED_A_START_POSITION_Y': 114, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
-    'FIELD_RED_A_START_ANGLE': 0, # Heading angle of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_X': 300, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_Y': 101, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
+    'FIELD_RED_A_START_ANGLE': 60, # Heading angle of starting position A when on red team
     'FIELD_RED_B_START_POSITION_X': 275, # X-Coordinate of starting position B when on red team
     'FIELD_RED_B_START_POSITION_Y': 57, #-28.25, # Y-Coordinate of starting postion B when on red team
     'FIELD_RED_B_START_ANGLE': 0, # Heading angle of starting position B when on red team
-    'FIELD_RED_C_START_POSITION_X': 308, # X-Coordinate of starting position C when on red team
-    'FIELD_RED_C_START_POSITION_Y': 0, #-137.90, # Y-Coordinate of starting postion C when on red team
-    'FIELD_RED_C_START_ANGLE': 0, # Heading angle of starting position C when on red team
-    'FIELD_BLU_A_START_POSITION_X': -308, # X-Coordinate of starting position A when on blue team
-    'FIELD_BLU_A_START_POSITION_Y': 114, # 40.15, # Y-Coordinate of starting postion A when on blue team
-    'FIELD_BLU_A_START_ANGLE': 180, # Heading angle of starting position A when on blue team
+    'FIELD_RED_C_START_POSITION_X': 300, # X-Coordinate of starting position C when on red team
+    'FIELD_RED_C_START_POSITION_Y': 13, #-137.90, # Y-Coordinate of starting postion C when on red team
+    'FIELD_RED_C_START_ANGLE': 360-60, # Heading angle of starting position C when on red team
+    'FIELD_BLU_A_START_POSITION_X': -300, # X-Coordinate of starting position A when on blue team
+    'FIELD_BLU_A_START_POSITION_Y': 101, # 40.15, # Y-Coordinate of starting postion A when on blue team
+    'FIELD_BLU_A_START_ANGLE': 180 - 60, # Heading angle of starting position A when on blue team
     'FIELD_BLU_B_START_POSITION_X': -275, # X-Coordinate of starting position B when on blue team
     'FIELD_BLU_B_START_POSITION_Y': 57, #-28.25, # Y-Coordinate of starting postion B when on blue team
     'FIELD_BLU_B_START_ANGLE': 180.0, # Heading angle of starting position B when on blue team
-    'FIELD_BLU_C_START_POSITION_X': -308, # X-Coordinate of starting position C when on blue team
-    'FIELD_BLU_C_START_POSITION_Y': 0, # -137.90, # Y-Coordinate of starting postion C when on blue team
-    'FIELD_BLU_C_START_ANGLE': 180.0, # Heading angle of starting position C when on blue team
+    'FIELD_BLU_C_START_POSITION_X': -300, # X-Coordinate of starting position C when on blue team
+    'FIELD_BLU_C_START_POSITION_Y': 13, # -137.90, # Y-Coordinate of starting postion C when on blue team
+    'FIELD_BLU_C_START_ANGLE': 180.0 + 60, # Heading angle of starting position C when on blue team
+
+    #DON"T USE THESE
     'FIELD_RED_D_START_POSITION_X': 300,
     'FIELD_RED_D_START_POSITION_Y': 114,
     'FIELD_RED_D_START_POSITION_ANGLE': 0,
     'FIELD_BLU_D_START_POSITION_X': -300,
     'FIELD_BLU_D_START_POSITION_Y': 114,
     'FIELD_BLU_D_START_ANGLE': 0,
+
     'ROBOT_FRAME_DIMENSION_X': 30.0, # X-coordinate length of robot frame  (2023: 34.0)
     'ROBOT_FRAME_DIMENSION_Y': 30.0, # Y-coordinate length of robot frame  (2023: 26.0)
     'ROBOT_BUMPER_DIMENSION_X': 3.0, # Width of bumper (X-axis)
@@ -83,7 +86,7 @@ drivetrainConfig = {
     'REARRIGHT_ENCODER': 23,
     'REARLEFT_ENCODER': 24,
     'DRIVETYPE': SWERVE,
-    'HEADING_KP': 0.005, #0.005 - reverted to this
+    'HEADING_KP': 0.007, #0.005 - reverted to this
     'HEADING_KI': 0.00001, #0.00001 - reverted to this
     'HEADING_KD':  0.00001, #0.00001 - reverted to this
     'BALANCE_PITCH_KP': 0.01, #0.02, #0.01
@@ -158,6 +161,7 @@ autonConfig = {
     'B_THREE_HALF_NOTE_GRAB_STAGE_SIDE_DRAGONS': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-6', 1.5], ['PATH', '6-STAGE']],
     'B_THREE_HALF_NOTE_GRAB_AMP_SIDE_DRAGONS': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-6', 1.5], ['PATH', '6-STAGE']],
     'B_FIVE_NOTE_TEST': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4'], ['RAISE_ARM_START', 0], ['PATH', '4-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -23], ['PATH', '3-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+
     'B_FAR_FOUR_NOTE_TEST': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4'], ['RAISE_ARM_START', 8], ['PATH', '4-FAR'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'FAR-5'], ['RAISE_ARM_START', 8], ['PATH', '5-FAR'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     
     
@@ -165,6 +169,7 @@ autonConfig = {
     
     'B_FAR_FIVE_NOTE_TEST': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4'], ['RAISE_ARM_START', 9.5], ['PATH', '4-FAR'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'FAR-5'], ['RAISE_ARM_START', 9.5], ['PATH', '5-FAR'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     'B_FIVE_NOTE_ROTATE_TEST': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', .25], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]-ROTATE'], ['RAISE_ARM_START', -10], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '1-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-4'], ['RAISE_ARM_START', 0], ['PATH', '4-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -23], ['PATH', '3-1-ROTATE'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
+
     #'B_FAST_FOUR_NOTE': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-1[FAST]'], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT[FAST]'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'SHOT-2'], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', '2-3[FAST]'], ['RAISE_ARM_START', -23], ['PATH', '3-B'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
 
     #'B_FOUR_NOTE_TWO_FAR_GRAB': [['START_INTAKE'], ['WAIT', 0.5], ['RAISE_ARM_START', -25.9], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH', 'B-2'], ['RAISE_ARM_START', 0], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-5', 1.5], ['RAISE_ARM_START', 0], ['PATH', '5-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
@@ -194,7 +199,7 @@ autonConfig = {
     #     'NOTE 16': [['WAIT', 2], ['UPDATE_POSE'], ['MOVE', -91.84, 189, 180], ['MOVE', 19.9, 189, 180]],
 
     'AUTON_CLOSED_LOOP_RAMP_RATE': 0,
-    'AUTON_OPEN_LOOP_RAMP_RATE': 0.5, # Improves the quality of swervometery by avoiding slippage.
+    'AUTON_OPEN_LOOP_RAMP_RATE': 0, # Improves the quality of swervometery by avoiding slippage.
     'BALANCE_BOT': True,
     'DO_COMMUNITY': False, # Only applies for position B
     'DRIVE_BASE_RADIUS': 0.5388,
