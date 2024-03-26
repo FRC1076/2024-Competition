@@ -90,15 +90,13 @@ class MyRobot(wpilib.TimedRobot):
                 self.swervometer = self.initSwervometer(config)
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
+                self.drivetrain.resetGyro()
             if key == 'MECHANISM':
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
             if key == 'NOTEDETECTOR':
                 self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
+        
             
-
-
-        if self.drivetrain:
-            self.drivetrain.resetGyro()
 
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
@@ -117,8 +115,8 @@ class MyRobot(wpilib.TimedRobot):
 
     def disabledExit(self):
         self.log("no longer disabled")
-        if self.drivetrain:
-            self.drivetrain.reset()
+        #if self.drivetrain:
+            #self.drivetrain.reset()
 
     def initLogger(self, dir, config):
         if config["PDH_LOGGING"]:
@@ -698,7 +696,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.drivetrain.setInAuton(True)
 
-        self.drivetrain.resetGyro()
+        #self.drivetrain.resetGyro()
         if self.team_is_red:
             self.drivetrain.setBearing(180)
         else:

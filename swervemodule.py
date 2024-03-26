@@ -89,7 +89,11 @@ class SwerveModule:
         self.sd.putNumber(DASH_PREFIX, 'Heading kD', self.heading_pid_controller.getD())
 
         self.swerveModulePosition = SwerveModulePosition(0, Rotation2d(0))
+        
+        self.driveMotor.setSmartCurrentLimit(40)
+        self.driveMotor.burnFlash()
 
+        self.maxCurrent = 0
         #self.isVoltageCompensation = False
 
     def reset(self):
@@ -276,6 +280,9 @@ class SwerveModule:
         self.lastPosition = self.newPosition
         #print("module velocity", (self.get_current_velocity() / 60) * 1.86 * 0.0254)
         self.update_smartdash()
+        if self.driveMotor.getOutputCurrent() > self.maxCurrent:
+            self.maxCurrent = self.driveMotor.getOutputCurrent()
+        print(self.driveMotor.getOutputCurrent(), self.maxCurrent)
     
     def testMove(self, driveInput, rotateInput):
         self.driveMotor.set(clamp(driveInput))
