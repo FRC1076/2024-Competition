@@ -49,6 +49,9 @@ TEST_MODE = False
 
 DASH_PREFIX = MODULE_NAMES.ROBOT
 
+TEAM_COLOR = "GREEN"
+BOT_POSITION = 9
+
 class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
         self.drivetrain = None
@@ -57,7 +60,7 @@ class MyRobot(wpilib.TimedRobot):
         self.operator = None
         self.auton = None
         self.vision = None
-
+    
         # Even if no drivetrain, defaults to drive phase
 
         self.config = robotConfig
@@ -68,6 +71,8 @@ class MyRobot(wpilib.TimedRobot):
         self.elastic = Elastic(autonPlans)
         self.elastic.displayMainWindow()
         self.elastic.autonDisplay()
+        self.elastic.teamDisplay()
+        self.elastic.positionDisplay()
 
         #self.TEAM_IS_RED = True
 
@@ -331,7 +336,29 @@ class MyRobot(wpilib.TimedRobot):
     def checkTeamColorAndFieldPosition(self): 
         teamColorIsRed = True
         fieldStartPosition = 'A'
+
         #if team color has changed
+        selectedTeam = self.elastic.getSelectedTeam()
+        if selectedTeam != TEAM_COLOR:
+            TEAM_COLOR = selectedTeam
+            if selectedTeam == "RED":
+                teamColorIsRed = True
+            elif selectedTeam == "BLUE":
+                teamColorIsRed = False
+            else: #team has not been selected
+                None
+        selectedPosition = self.elastic.getSelectedPosition()
+        if selectedPosition != BOT_POSITION:
+            BOT_POSITION = selectedPosition
+            if selectedPosition == "A":
+                fieldStartPosition = selectedPosition
+            elif selectedPosition == "B":
+                fieldStartPosition = selectedPosition
+            elif selectedPosition == "C":
+                fieldStartPosition = selectedPosition
+            else: #position has not been selected
+                None
+
         teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(teamColorIsRed)
         starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition(fieldStartPosition)
         self.swervometer.updateTeamAndFieldStartPosition(teamGyroAdjustment, teamMoveAdjustment, starting_position_x, starting_position_y, starting_angle)
@@ -353,7 +380,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
     
     def teleopPeriodic(self):
-        print(self.elastic.elasticSubmitCheck())
+        #print(self.elastic.elasticSubmitCheck())
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
@@ -648,7 +675,7 @@ class MyRobot(wpilib.TimedRobot):
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        taskListName = self.selectedAuton
+        taskListName = self.selectedAuto n #Does this even work???
         if taskListName is None:
             taskListName = config["TASK"]
             print("WARNING: Falling back to default Auton plan:", taskListName)

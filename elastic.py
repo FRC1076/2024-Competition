@@ -42,23 +42,36 @@ class Elastic:
 
     def teamDisplay(self):
         self.teamChooser = wpilib.SendableChooser()
-        self.teamChooser.setDefaultOption("Green", 0)
-        self.teamChooser.addOption("Red", True)
-        self.teamChooser.addOption("Blue", False)
+        self.teamChooser.setDefaultOption("Green (Default)", "GREEN")
+        self.teamChooser.addOption("Red Alliance", "RED")
+        self.teamChooser.addOption("Blue Alliance", "BLUE")
         SmartDashboard.putData(self.teamChooser)
+    
+    def positionDisplay(self):
+        self.positionChooser = wpilib.SendableChooser()
+        self.positionChooser.setDefaultOption("Position Z (Default)", "Z")
+        self.positionChooser.addOption("Position A", "A")
+        self.positionChooser.addOption("Position B", "B")
+        self.positionChooser.addOption("Position C", "C")
+        SmartDashboard.putData(self.positionChooser)
 
     def autonDisplay(self):
         self.chooser = wpilib.SendableChooser()
         self.chooser.setDefaultOption(self.autonPlans[0], self.autonPlans[0])
-
         for plan in self.autonPlans:
             self.chooser.addOption(plan, plan)
-
         SmartDashboard.putData(self.chooser)
 
     def getSelectedAuton(self):
         return self.chooser.getSelected()
     
+    def getSelectedTeam(self):
+        return self.teamChooser.getSelected()
+    
+    def getSelectedPosition(self):
+        return self.positionChooser.getSelected()
+    
+"""
     def printThis(self):
         x = SmartDashboard.getBoolean("submitButton", False)
         if x==True:
@@ -78,3 +91,5 @@ class Elastic:
         
         else:
             return "NOTHING"
+
+"""
