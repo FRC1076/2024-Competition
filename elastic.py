@@ -40,6 +40,13 @@ class Elastic:
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
+    def teamDisplay(self):
+        self.teamChooser = wpilib.SendableChooser()
+        self.teamChooser.setDefaultOption("Green", 0)
+        self.teamChooser.addOption("Red", True)
+        self.teamChooser.addOption("Blue", False)
+        SmartDashboard.putData(self.teamChooser)
+
     def autonDisplay(self):
         self.chooser = wpilib.SendableChooser()
         self.chooser.setDefaultOption(self.autonPlans[0], self.autonPlans[0])
