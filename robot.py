@@ -90,8 +90,8 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
-                self.swervometer = self.initSwervometer(config)
                 self.savedSwervometerConfig = config
+                self.swervometer = self.initSwervometer(config)
                 print("HELLO WORLD")
                 
             if key == 'DRIVETRAIN':
