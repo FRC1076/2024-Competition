@@ -282,7 +282,7 @@ class SwerveModule:
         self.update_smartdash()
         if self.driveMotor.getOutputCurrent() > self.maxCurrent:
             self.maxCurrent = self.driveMotor.getOutputCurrent()
-        print(self.driveMotor.getOutputCurrent(), self.maxCurrent)
+        #print(self.driveMotor.getOutputCurrent(), self.maxCurrent)
     
     def testMove(self, driveInput, rotateInput):
         self.driveMotor.set(clamp(driveInput))

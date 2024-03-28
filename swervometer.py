@@ -217,10 +217,11 @@ class Swervometer:
                                              Translation2d(self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254),
                                              Translation2d(-self.swerveModuleOffsetX * 0.0254, self.swerveModuleOffsetY * 0.0254),
                                              Translation2d(-self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254))
-        gyroAngle = Rotation2d(self.teamGyroAdjustment * math.pi / 180)
+        gyroAngle = Rotation2d().fromDegrees(self.teamGyroAdjustment)
         swerveModules = (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule)
         self.poseEstimator =  SwerveDrive4PoseEstimator(self.kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180), (0.1, 0.1, 0.1), (1.8, 1.8, 1.8))
         self.vision = vision
+        self.currentBearing = self.teamGyroAdjustment
 
     def updatePoseEstimator(self, gyroAngle, modules, inAuton):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
