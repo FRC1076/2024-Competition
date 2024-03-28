@@ -11,9 +11,10 @@ from wpilib.shuffleboard import Shuffleboard
 
 class Elastic:
 
-    def __init__(self,autonPlans):
+    def __init__(self, autonPlans, activeStartingPositions):
         self.config = elasticConfig
         self.autonPlans = autonPlans
+        self.startingPositions = activeStartingPositions
         self.autonConfig = autonConfig
         self.selectedTaskKey = autonConfig['B_THREE_NOTE_AMP_SIDE']
         self.isNoteDetected = self.config["NOTE_IS_DETECTED"]
@@ -23,6 +24,8 @@ class Elastic:
         self.isElasticSubmitted = False
         self.submitButton = False
         self.testButton = False
+        self.controllerDriverElastic = False
+        self.controllerOperatorElastic = False
 
     def displayMainWindow(self):
         tab = "Main Window"
@@ -40,6 +43,20 @@ class Elastic:
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
+        (Shuffleboard.getTab(tab)
+        .add("Driver Controller", self.controllerDriverElastic)
+        .withSize(2,2)
+        .withPosition(0,0)
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .getEntry())
+
+        (Shuffleboard.getTab(tab)
+        .add("Operator Controller", self.controllerOperatorElastic)
+        .withSize(2,2)
+        .withPosition(0,0)
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .getEntry())
+
     def teamDisplay(self):
         self.teamChooser = wpilib.SendableChooser()
         self.teamChooser.setDefaultOption("Green (Default)", "GREEN")
@@ -53,6 +70,8 @@ class Elastic:
         self.positionChooser.addOption("Position A", "A")
         self.positionChooser.addOption("Position B", "B")
         self.positionChooser.addOption("Position C", "C")
+        self.positionChooser.addOption("Position D", "D")
+        #self.positionChooser.addOption("Position E", "E")
         SmartDashboard.putData(self.positionChooser)
 
     def autonDisplay(self):
@@ -70,26 +89,3 @@ class Elastic:
     
     def getSelectedPosition(self):
         return self.positionChooser.getSelected()
-    
-"""
-    def printThis(self):
-        x = SmartDashboard.getBoolean("submitButton", False)
-        if x==True:
-            return "TRUE"
-        elif x==False:
-            return "FALSE"
-        else:
-            return "NOTHING"
-
-
-    def elasticSubmitCheck(self):
-        if SmartDashboard.getBoolean("Main Window",self.submitButton):
-            return "True"
-        
-        elif SmartDashboard.getBoolean("Main Window",self.submitButton) == False:
-            return "False"
-        
-        else:
-            return "NOTHING"
-
-"""

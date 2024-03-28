@@ -24,6 +24,7 @@ controllerConfig = {
 swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
+    'ALL_ACTIVE_POSITIONS': ['A','B','C','D'],
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': True, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -48,7 +49,7 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_BLU_C_START_ANGLE': 180.0, # Heading angle of starting position C when on blue team
     'FIELD_RED_D_START_POSITION_X': 300,
     'FIELD_RED_D_START_POSITION_Y': 114,
-    'FIELD_RED_D_START_POSITION_ANGLE': 0,
+    'FIELD_RED_D_START_ANGLE': 0,
     'FIELD_BLU_D_START_POSITION_X': -300,
     'FIELD_BLU_D_START_POSITION_Y': 114,
     'FIELD_BLU_D_START_ANGLE': 0,
