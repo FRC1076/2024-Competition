@@ -694,7 +694,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.drivetrain.setInAuton(True)
 
-        #self.drivetrain.resetGyro()
+        self.drivetrain.resetGyro()
         if self.team_is_red:
             self.drivetrain.setBearing(180)
         else:
