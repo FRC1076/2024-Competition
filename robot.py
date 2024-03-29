@@ -90,29 +90,26 @@ class MyRobot(wpilib.TimedRobot):
                 self.swervometer = self.initSwervometer(config)
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
+                self.drivetrain.resetGyro()
             if key == 'MECHANISM':
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
             if key == 'NOTEDETECTOR':
                 self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
+        
             
-
-
-        if self.drivetrain:
-            self.drivetrain.resetGyro()
 
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
         self.ledOn = True
-
-        field = wpilib.Field2d()
-        field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.field = wpilib.Field2d()
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(self.field)
         return
 
     def disabledExit(self):
         self.log("no longer disabled")
-        if self.drivetrain:
-            self.drivetrain.reset()
+        #if self.drivetrain:
+            #self.drivetrain.reset()
 
     def initLogger(self, dir, config):
         if config["PDH_LOGGING"]:
@@ -366,14 +363,13 @@ class MyRobot(wpilib.TimedRobot):
 
             wpilib.SmartDashboard.putNumber("Total Current", self.pdh.getTotalCurrent())
 
-        field = wpilib.Field2d()
-        field.setRobotPose(self.swervometer.getPathPlannerPose())
-        self.elastic.putField(field)
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
         return True
 
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
+        #print(self.mechanism.indexBeamBroken())
         self.elastic.getSelectedAuton()
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
@@ -643,9 +639,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.drivetrain.move(fwd, strafe, rcw, self.drivetrain.getBearing())
 
                 self.log("TeleopDriveTrain: POV: ", driver.getPOV())
-                if self.getPOVCorner(driver.getPOV()) == 'front_left':
+                if self.getPOVCorner(driver.getPOV()) == 'front_left' or driver.getLeftTriggerAxis() > 0.7:
                     self.drivetrain.execute('front_left')
-                elif self.getPOVCorner(driver.getPOV()) == 'front_right':
+                elif self.getPOVCorner(driver.getPOV()) == 'front_right'  or driver.getRightTriggerAxis() > 0.7:
                     self.drivetrain.execute('front_right')
                 elif self.getPOVCorner(driver.getPOV()) == 'rear_left':
                     self.drivetrain.execute('rear_left')
