@@ -1095,6 +1095,11 @@ class SwerveDrive:
             self.log("New Bearing: ", self.bearing)
             self.updateBearing = False
 
+    def driveStraight(self, speed):
+        self.set_strafe(clamp(speed))
+        self.set_fwd(0)
+        self.execute()
+
     def alignWithApril(self, offsetX, offsetY, offsetAngle):
         x, y, r = self.swervometer.getCOF()
         #targetErrorX = self.vision.getPose()[0]
