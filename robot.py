@@ -575,13 +575,9 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(False)
 
         if (driver.getYButton()):
-            # drive so that the center of the bot is on the center of the note, without rotating
-            self.drivetrain.alignWithNote(0, 0, None)
-            return False
-
-        if (driver.getRightTriggerAxis() > 0.7 and not driver.getLeftTriggerAxis() > 0.7):
             self.drivertrain.alignWithNote(None, None, 0)
             self.drivetrain.driveStraight(self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone))
+            # self.drivetrain.alignWithNote(0, 0, None)
             return
 
         # Regular driving, not a maneuver
