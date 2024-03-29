@@ -16,7 +16,7 @@ class NoteDetector:
         #IP of the coral
         #10.10.76.16
         self.config = config
-        self.limelight = NetworkTables.getTable('limelight2')
+        self.limelight = NetworkTables.getTable('limelight-note')
         self.lastHeartbeat = 0
         self.sameCounter = 0
 
@@ -37,10 +37,10 @@ class NoteDetector:
             return False
 
     def getTargetAngleX(self):
-        return self.limelight.getNumber('tx')
+        return self.limelight.getNumber('tx', self.config['DEFAULT_BBOX'])
 
     def getTargetAngleZ(self):
-        return self.limelight.getNumber('ty') + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
+        return self.limelight.getNumber('ty', self.config['DEFAULT_BBOX']) + self.config['CAMERA_ANGLE_ABOVE_HORIZONTAL']
 
     def getHeartbeat(self):
         return self.limelight.getNumber('hb', 0)
@@ -51,15 +51,20 @@ class NoteDetector:
     def getTargetErrorY(self):
         return ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.getTargetAngleZ())))*(-1) + self.config['CAMERA_OFFSET_Y']
 
+    def getTargetErrorAngle(self):
+        # angle to the note, in degrees
+        # positive angle is to the right
+        return math.degrees(math.atan(self.getTargetErrorX()/self.getTargetErrorY()))
+
     def trustLimelight(self):
         if self.lastHeartbeat == self.getHeartbeat():
             self.sameCounter += 1
         else:
             self.sameCounter = 0
 
-        self.lastHeartbeat = self.getHeartbeat():
+        self.lastHeartbeat = self.getHeartbeat()
 
-        if self.sameCounter > 3:
+        if self.sameCounter > 10:
             return False
         else:
             return True
