@@ -334,12 +334,12 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
-        gyroAngle = self.drivetrain.getGyroAngle()
-        modules = self.drivetrain.getModules()
-        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
         for key in self.drivetrain.getModules():
             self.drivetrain.getModules()[key].periodic()
             pass
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
         if self.notedetector.hasTarget():
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
