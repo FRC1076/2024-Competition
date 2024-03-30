@@ -575,8 +575,8 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(False)
 
         if (driver.getYButton()):
-            self.drivertrain.alignWithNote(None, None, 0)
-            self.drivetrain.driveStraight(self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone))
+            self.drivetrain.alignWithNote(None, None, 0)
+            self.drivetrain.driveStraight(self.deadzoneCorrection(driver.getLeftY() * translational_clutch, self.driver.deadzone))
             # self.drivetrain.alignWithNote(0, 0, None)
             return
 
@@ -626,7 +626,6 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.rotateToAngle(0)
                 self.drivetrain.execute('center')
                 return
-
 
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.
 

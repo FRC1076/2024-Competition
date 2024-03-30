@@ -176,7 +176,7 @@ class SwerveDrive:
         self.noteDrive_y_pid_controller = PIDController(0.003, 0 ,0)
         self.noteDrive_y_pid_controller.setTolerance(0.5, 0.5)
         self.noteDrive_y_pid_controller.setSetpoint(0)
-        self.noteDrive_r_pid_controller = PIDController(0.015, 0 ,0.00)
+        self.noteDrive_r_pid_controller = PIDController(0.003, 0 ,0.00001)
         self.noteDrive_r_pid_controller.setTolerance(0.5, 0.5)
         self.noteDrive_r_pid_controller.setSetpoint(0)
 
@@ -1102,7 +1102,7 @@ class SwerveDrive:
     def driveStraight(self, speed):
         self.set_strafe(clamp(speed))
         self.set_fwd(0)
-        self.execute()
+        # self.execute('center') is not needed because it is called with alignWithNote
 
     def alignWithApril(self, offsetX, offsetY, offsetAngle):
         x, y, r = self.swervometer.getCOF()
@@ -1166,12 +1166,13 @@ class SwerveDrive:
             if offsetAngle is not None:
                 targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
                 angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
-                self.set_rcw(-clamp(angleMove))
+                self.set_rcw(clamp(angleMove))
             self.execute('center')
         else:
-            self.set_rcw(0)
-            self.set_strafe(-0.2)
-            self.execute('center')
+            if offsetX is not None:
+                self.set_rcw(0)
+                self.set_strafe(-0.2)
+                self.execute('center')
     
     def pointToPose(self, x, y):
         currentX, currentY, currentR = self.swervometer.getCOF()
