@@ -217,6 +217,7 @@ autonConfig = {
                           ['LOWER_ARM_START', -37]],
 
     'D_CENTER_FOUR_NOTE': [['START_INTAKE'],
+                          ['ROTATE', -35.56],
                           ['RAISE_ARM_START', -25.9],
                           ['WAIT', 0.5],
                           ['SHOOT_NOTE'],
@@ -239,6 +240,7 @@ autonConfig = {
                           ['LOWER_ARM_START', -37]],
 
     'D_CENTER5_FOUR_NOTE': [['START_INTAKE'],
+                          ['ROTATE', -35.56],
                           ['RAISE_ARM_START', -25.9],
                           ['WAIT', 0.5],
                           ['SHOOT_NOTE'],
@@ -276,6 +278,7 @@ autonConfig = {
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', -37]],
    'E_CENTER_THREE_NOTE': [['START_INTAKE'],
+                          ['ROTATE', 75],
                           ['RAISE_ARM_START', -25.9],
                           ['WAIT', 0.5],
                           ['SHOOT_NOTE'],
