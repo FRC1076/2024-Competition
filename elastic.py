@@ -57,6 +57,13 @@ class Elastic:
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
+        (Shuffleboard.getTab(tab)
+        .add("Note Detected", self.beamBreakBoolean)
+        .withSize(2,2)
+        .withPosition(0,0)
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .getEntry())
+
     def teamDisplay(self, defaultColor, defaultLabel):
         self.teamChooser = wpilib.SendableChooser()
         color = (defaultColor + " Alliance")
@@ -101,3 +108,25 @@ class Elastic:
 
     def putNumber(self, key, num):
         SmartDashboard.putNumber(key, num)
+
+    def updateBeamDisplay(self, noteDetected):
+        if noteDetected:
+            self.beamBreakBoolean = True
+        else: #noteDetected == False
+            self.beamBreakBoolean = False
+
+        SmartDashboard.putBoolean(self.beamBreakBoolean)
+
+    def updateControllerConnectedDisplay(self, driverConnected, operatorConnected):
+        if driverConnected:
+            self.controllerDriverElastic = True
+            SmartDashboard.putBoolean(self.controllerDriverElastic)
+        else:
+            self.controllerDriverElastic = False
+            SmartDashboard.putBoolean(self.controllerDriverElastic)
+        if operatorConnected:
+            self.controllerOperatorElastic = True
+            SmartDashboard.putBoolean(self.controllerOperatorElastic)
+        else:
+            self.controllerOperatorElastic = False
+            SmartDashboard.putBoolean(self.controllerOperatorElastic)

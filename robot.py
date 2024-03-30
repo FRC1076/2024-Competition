@@ -408,17 +408,20 @@ class MyRobot(wpilib.TimedRobot):
         #print(teamColorIsRed, fieldStartPosition, self.taskListName)
 
     def robotPeriodic(self):
-
-        """
-        #self.elastic.controllerDriverElastic = wpilib.XboxController.isConnected(0)
-        #self.elastic.controllerOperatorElastic = wpilib.DriverStation.isJoystickConnected(1)
-        if self.driver.xboxController.isConnected():
-            print("CONTROLLER 0 IS CONNECTED!!!!!!!")
-        else:
-            print("Controller not detected on elastic")
-        """
+        
         if (self.elastic):
+            """
+            #self.elastic.controllerDriverElastic = wpilib.XboxController.isConnected(0)
+            #self.elastic.controllerOperatorElastic = wpilib.DriverStation.isJoystickConnected(1)
+            if self.driver.xboxController.isConnected():
+                print("CONTROLLER 0 IS CONNECTED!!!!!!!")
+            else:
+                print("Controller not detected on elastic")
+            """
             self.checkTeamColorAndFieldPosition()
+            self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
+            self.elastic.updateControllerConnectedDisplay(isDriverConnected, isOperatorConnected)
+
 
         if self.notedetector.hasTarget():
             pass
