@@ -18,34 +18,22 @@ class Elastic:
         self.autonConfig = autonConfig
         self.selectedTaskKey = autonConfig['B_THREE_NOTE_AMP_SIDE']
         self.isElasticSubmitted = False
-        self.controllerDriverElastic = True
-        self.controllerOperatorElastic = True
+        self.controllerDriverElastic = False
+        self.controllerOperatorElastic = False
         self.beamBreakBoolean = False
 
     def displayMainWindow(self):
+        """
         tab = "Main Window"
-
         (Shuffleboard.getTab(tab)
         .add("Driver Controller", self.controllerDriverElastic)
         .withSize(2,2)
         .withPosition(0,0)
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
-
-        (Shuffleboard.getTab(tab)
-        .add("Operator Controller", self.controllerOperatorElastic)
-        .withSize(2,2)
-        .withPosition(0,0)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry())
-
-        (Shuffleboard.getTab(tab)
-        .add("Note Detected", self.beamBreakBoolean)
-        .withSize(2,2)
-        .withPosition(0,0)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry())
-
+        """
+        return
+    
     def teamDisplay(self, defaultColor, defaultLabel):
         self.teamChooser = wpilib.SendableChooser()
         color = (defaultColor + " Alliance")
@@ -75,6 +63,32 @@ class Elastic:
         for plan in self.autonPlans:
             self.chooser.addOption(plan, plan)
         SmartDashboard.putData(self.chooser)
+    
+    def updateBeamDisplay(self, noteDetected):
+        if noteDetected == True:
+            self.beamBreakBoolean = True
+            print("beambreak true")
+        elif noteDetected == False:
+            self.beamBreakBoolean = False
+            print("beambreak false")
+        else:
+            print("beambreak NOT WORKING")
+            
+        self.putBoolean("NOTE LOADED", self.beamBreakBoolean) #this works
+
+    def updateControllerConnectedDisplay(self, driverConnected, operatorConnected):
+        if driverConnected:
+            self.controllerDriverElastic = True
+            SmartDashboard.putBoolean("Driver Connected", self.controllerDriverElastic)
+        else:
+            self.controllerDriverElastic = False
+            SmartDashboard.putBoolean("Driver Connected", self.controllerDriverElastic)
+        if operatorConnected:
+            self.controllerOperatorElastic = True
+            SmartDashboard.putBoolean("Operator Connected", self.controllerOperatorElastic)
+        else:
+            self.controllerOperatorElastic = False
+            SmartDashboard.putBoolean("Operator Connected", self.controllerOperatorElastic)
 
     def getSelectedAuton(self):
         return self.chooser.getSelected()
@@ -84,35 +98,12 @@ class Elastic:
     
     def getSelectedPosition(self):
         return self.positionChooser.getSelected()
-    
+   
     def putField(self, field):
         SmartDashboard.putData(field)
 
     def putNumber(self, key, num):
         SmartDashboard.putNumber(key, num)
 
-    def updateBeamDisplay(self, noteDetected):
-        if noteDetected == True:
-            self.beamBreakBoolean = True
-            print("true")
-        elif noteDetected == False:
-            self.beamBreakBoolean = False
-            print("false")
-        else:
-            print("NOT WORKING")
-
-        SmartDashboard.putBoolean("Note Detected", False) #THIS DOES NOT WORKKKK WHy?????
-
-    def updateControllerConnectedDisplay(self, driverConnected, operatorConnected):
-        if driverConnected:
-            self.controllerDriverElastic = True
-            SmartDashboard.putBoolean("Driver Controller", self.controllerDriverElastic)
-        else:
-            self.controllerDriverElastic = False
-            SmartDashboard.putBoolean("Driver Controller", self.controllerDriverElastic)
-        if operatorConnected:
-            self.controllerOperatorElastic = True
-            SmartDashboard.putBoolean("Operator Controller", self.controllerOperatorElastic)
-        else:
-            self.controllerOperatorElastic = False
-            SmartDashboard.putBoolean("Operator Controller", self.controllerOperatorElastic)
+    def putBoolean(self, key, bool):
+        SmartDashboard.putBoolean(key, bool)

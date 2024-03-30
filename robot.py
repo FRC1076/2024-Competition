@@ -153,8 +153,7 @@ class MyRobot(wpilib.TimedRobot):
 
         elastic.controllerDriverElastic = wpilib.DriverStation.isJoystickConnected(0)
         elastic.controllerOperatorElastic = wpilib.DriverStation.isJoystickConnected(1)
-
-        elastic.displayMainWindow() #Booleans and other non-choosers
+        
         elastic.autonDisplay() #Displays are sendableChoosers
         if self.savedSwervometerConfig['TEAM_IS_RED']:
             elastic.teamDisplay('Red', 'RED')
@@ -422,10 +421,13 @@ class MyRobot(wpilib.TimedRobot):
 
             """
             self.checkTeamColorAndFieldPosition()
+            
+            #self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
             self.elastic.updateBeamDisplay(True)
-            #self.elastic.updateControllerConnectedDisplay(isDriverConnected, isOperatorConnected)
-            #self.elastic.updateControllerConnectedDisplay(True, True)
 
+            isDriverConnected = True
+            isOperatorConnected = True
+            self.elastic.updateControllerConnectedDisplay(isDriverConnected, isOperatorConnected)
 
         if self.notedetector.hasTarget():
             pass
