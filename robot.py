@@ -233,6 +233,8 @@ class MyRobot(wpilib.TimedRobot):
 
         swervometer = Swervometer(field_cfg, robot_cfg)
         self.starting_angle = starting_angle
+        self.starting_x = starting_position_x
+        self.starting_y = starting_position_y
         return swervometer
 
     def initVision(self, config):
@@ -325,6 +327,12 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
+        for key in self.drivetrain.getModules():
+            self.drivetrain.getModules()[key].periodic()
+            pass
         if self.notedetector.hasTarget():
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
@@ -368,9 +376,10 @@ class MyRobot(wpilib.TimedRobot):
         #print(self.mechanism.shootingMotorRPMs)
         #print(self.mechanism.indexBeamBroken())
         self.elastic.getSelectedAuton()
+        """
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
-        self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, False)"""
         self.teleopMechanism()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
@@ -693,12 +702,15 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setBearing(0)
         self.drivetrain.setRampRates(self.autonOpenLoopRampRate, self.autonClosedLoopRampRate)
         self.drivetrain.enableVoltageCompensation()
+
+        self.swervometer.resetPoseEstimator(self.drivetrain.getGyroAngle(), self.starting_x, self.starting_y, self.drivetrain.getModules())
         return
 
     def autonomousPeriodic(self):
+        """
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
-        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)"""
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()
