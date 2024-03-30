@@ -6,6 +6,7 @@ from wpimath.kinematics import ChassisSpeeds
 from wpimath.geometry import Rotation2d
 from pathplannerlib.config import PIDConstants
 from pathplannerlib.controller import PPHolonomicDriveController
+from pathplannerlib.telemetry import PPLibTelemetry
 import math
 
 class Autonomous:
@@ -27,6 +28,7 @@ class Autonomous:
         self.autonHasStarted = False
         self.drivetrain = drivetrain
         self.mechanism = mechanism
+        self.notedetector = notedetector
         self.lastTime = -1
         self.hasRolledBack = False
 
@@ -37,9 +39,11 @@ class Autonomous:
                                     config['DRIVE_BASE_RADIUS'], 
                                     config['PERIOD'])
         self.swervometer = swervometer
+        self.currentX, self.currentY, self.currentBearing = self.swervometer.getCOF()
         self.team_is_red = team_is_red
 
         self.maxSpeed = config['MAX_SPEED_M/S']
+        self.maxPickUpDistance = config['MAX_PICK_UP_DISTANCE']
 
     def executeAuton(self):
         if not self.autonHasStarted:
@@ -57,9 +61,11 @@ class Autonomous:
         self.autonTask = self.taskList[self.taskListCounter]
 
         if self.autonTask[0] == "MOVE":
-            x = self.autonTask[1]
+            x = abs(self.autonTask[1])
             y = self.autonTask[2]
             bearing = self.autonTask[3]
+            if not self.team_is_red:
+                x = -x
             if self.drivetrain.goToPose(x, y, bearing):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
@@ -68,29 +74,115 @@ class Autonomous:
                 self.taskListCounter += 1 # Move on to next task.
             return True
         
+        elif self.autonTask[0] == 'MOVE_RELATIVE':
+            x = self.autonTask[1]
+            y = self.autonTask[2]
+            bearing = self.autonTask[3]
+            if self.drivetrain.goToRelativePose(x, y, bearing):
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.taskListCounter += 1
+            return True
+        
         elif self.autonTask[0] == 'PATH':
+            #when this command is first called
             if self.lastTime == -1:
+                #update the time
                 self.lastTime = self.autonTimer.get()
+                #load the path, and flip depending on side
                 self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
+                rotation = self.swervometer.getPathPlannerPose().rotation()
                 if(self.team_is_red):
                     self.path = self.path.flipPath()
-                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), Rotation2d())
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
+                #log the path the pathplanner's telemetry
+                PPLibTelemetry.setCurrentPath(self.path)
+            #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            self.drivetrain.set_fwd(-self.chassisSpeeds.vy/self.maxSpeed)
-            self.drivetrain.set_strafe(self.chassisSpeeds.vx/self.maxSpeed)
-            if self.drivetrain.shouldSteerStraight():
-                if(self.team_is_red):
-                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 0))
-                else:
-                    self.drivetrain.set_rcw(self.drivetrain.steerStraight(0, 180))
+            #log the current pose and target pose to pathplanner's telemetry
+            PPLibTelemetry.setCurrentPose(self.swervometer.getPathPlannerPose())
+            PPLibTelemetry.setTargetPose(self.pathState.getTargetHolonomicPose())
+            #log the path inaccuracy as a distance
+            relativePose = self.pathState.getTargetHolonomicPose().relativeTo(self.swervometer.getPathPlannerPose())
+            inaccuracyDistance = math.sqrt(pow(relativePose.X(), 2) + pow(relativePose.Y(), 2))
+            PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
+
+            #if the speeds are minimal and minimum time has elapsed, move onto the next task
             if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
                 self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
                 self.lastTime = -1
                 self.taskListCounter += 1
-            self.drivetrain.execute('center')
+            else:
+                #drive the robot
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(self.chassisSpeeds)
+                self.modules = self.drivetrain.getModules()
+                self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)
+                self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                self.modules['front_left'].execute()
+                self.modules['front_right'].execute()
+                self.modules['rear_left'].execute()
+                self.modules['rear_right'].execute()
+            
+
+        elif self.autonTask[0] == 'PATH_TO_NOTE':
+            waitTime = self.autonTask[2]
+            #when this command is first called
+            if self.lastTime == -1:
+                #update the time
+                self.lastTime = self.autonTimer.get()
+                #load the path, and flip depending on side
+                self.path = PathPlannerPath.fromPathFile(self.autonTask[1])
+                rotation = self.swervometer.getPathPlannerPose().rotation()
+                if(self.team_is_red):
+                    self.path = self.path.flipPath()
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
+                #log the path the pathplanner's telemetry
+                PPLibTelemetry.setCurrentPath(self.path)
+
+            #get the target state of the robot (pathState) and calculate the robot's chassis speeds
+            self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
+            self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
+            #log the current pose and target pose to pathplanner's telemetry
+            PPLibTelemetry.setCurrentPose(self.swervometer.getPathPlannerPose())
+            PPLibTelemetry.setTargetPose(self.pathState.getTargetHolonomicPose())
+            #log the path inaccuracy as a distance
+            relativePose = self.pathState.getTargetHolonomicPose().relativeTo(self.swervometer.getPathPlannerPose())
+            inaccuracyDistance = math.sqrt(pow(relativePose.X(), 2) + pow(relativePose.Y(), 2))
+            PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
+
+            #if a note is seen, carry out the pick up note task
+            if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime:
+                    self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
+                    self.lastTime = -1
+                    self.taskListCounter += 1
+            #if the speeds are minimal and minimum time has elapsed, move onto the next task
+            elif(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.lastTime = -1
+                self.taskListCounter += 1
+            else:
+                #drive the robot
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(self.chassisSpeeds)
+                self.modules = self.drivetrain.getModules()
+                self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed*5), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed*5), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed*5), (self.moduleStates[2].angle.degrees() + 270) % 360)
+                self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed*5), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                self.modules['front_left'].execute()
+                self.modules['front_right'].execute()
+                self.modules['rear_left'].execute()
+                self.modules['rear_right'].execute()
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)
@@ -124,7 +216,7 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
                 self.mechanism.setShootState(True)
                 self.mechanism.indexNote()
-            if(self.autonTimer.get() - self.lastTime > 0.35):
+            if(self.autonTimer.get() - self.lastTime > 0.25):
                 #self.mechanism.sprocketToPosition(-37)
                 self.mechanism.setShootState(False)
                 self.mechanism.stopIndexing()
@@ -143,6 +235,7 @@ class Autonomous:
                     self.mechanism.stopSprocket()
                     self.lastTime = -1
                     self.taskListCounter += 1
+
         elif self.autonTask[0] == 'LOWER_ARM':
             if self.mechanism.sprocketToPosition(self.autonTask[1]):
                 self.mechanism.stopIndexing()
@@ -152,7 +245,7 @@ class Autonomous:
         elif self.autonTask[0] == 'RAISE_ARM_START':
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
-            if(self.autonTimer.get() - self.lastTime > 2.5):
+            if(self.autonTimer.get() - self.lastTime > 1.5):
                 self.mechanism.stopIndexing()
                 self.mechanism.setAutonSprocketPosition(self.autonTask[1])
                 self.lastTime = -1
@@ -179,6 +272,49 @@ class Autonomous:
                     self.drivetrain.set_rcw(0)
                     self.taskListCounter += 1
             self.drivetrain.execute('center')
+
+        elif self.autonTask[0] == 'MOVE_TO_NOTE':
+            expectedX = abs(self.autonTask[1])
+            if not self.team_is_red:
+                expectedX *= -1
+            expectedY = self.autonTask[2]
+            bearing = self.autonTask[3]
+            waitTime = self.autonTask[4]
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+
+            if not self.drivetrain.goToPose(expectedX, expectedY, bearing):
+                if self.notedetector.hasTarget() and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime:
+                    self.taskList.insert(self.taskListCounter + 1, ['PICK_UP_NOTE'])
+                    self.lastTime = -1
+                    self.taskListCounter += 1
+            else:
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.lastTime = -1
+                self.taskListCounter += 1
+        
+        elif self.autonTask[0] == 'PICK_UP_NOTE':
+            if self.lastTime == -1:
+                self.lastTime = self.autonTimer.get()
+            self.drivetrain.alignWithNote(0, -3, None)
+            if self.mechanism.indexBeamBroken():
+                self.lastTime = -1
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.taskListCounter += 1
+            elif self.autonTimer.get() - self.lastTime > 2:
+                self.lastTime = -1
+                self.drivetrain.set_fwd(0)
+                self.drivetrain.set_strafe(0)
+                self.drivetrain.set_rcw(0)
+                self.drivetrain.execute('center')
+                self.taskListCounter += 1
+            
         return False
     
     def move(self):

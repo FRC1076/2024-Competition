@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.356139746680443,
-      "y": 5.570246205735591
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,31 +8,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B-1"
+            "pathName": "B-2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1-SHOT"
+            "pathName": "2-4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "SHOT-2"
+            "pathName": "4-FAR"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2-3"
+            "pathName": "FAR-5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3-2"
+            "pathName": "5-FAR"
           }
         }
       ]

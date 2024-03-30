@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.356139746680443,
-      "y": 5.570246205735591
+      "x": 0.5374173925243158,
+      "y": 4.074791687489513
     },
     "rotation": 0
   },
@@ -14,31 +14,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B-1"
+            "pathName": "C-COUT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1-SHOT"
+            "pathName": "COUT-8"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "SHOT-2"
+            "pathName": "8-COUT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2-3"
+            "pathName": "COUT-7"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3-2"
+            "pathName": "7-COUT"
           }
         }
       ]

@@ -34,6 +34,7 @@ from dashboard import Dashboard
 
 from autonomous import Autonomous
 from mechanism import Mechanism
+from notedetector import NoteDetector
 from elastic import Elastic
 
 #from wpilib.shuffleboard import Shuffleboard
@@ -70,14 +71,15 @@ class MyRobot(wpilib.TimedRobot):
         if TEST_MODE:
             dir = os.getcwd() # this doesn't work on mac, will write to python dir. Fix later.
         
-        self.logger = self.initLogger(dir)
+        self.logger = self.initLogger(dir, self.config["LOGGING"])
         self.log('Robot init; TEST_MODE =', TEST_MODE)
+
 
         for key, config in self.config.items():
             if key == 'CONTROLLERS':
                 controllers = self.controllerInit(config)
                 self.driver = controllers[0]
-                self.operator = controllers[1]                
+                self.operator = controllers[1]
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
@@ -89,25 +91,39 @@ class MyRobot(wpilib.TimedRobot):
                 self.log('Calling elasticInit')
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
+                self.drivetrain.resetGyro()
             if key == 'MECHANISM':
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
-
-        if self.drivetrain:
-            self.drivetrain.resetGyro()
+            if key == 'NOTEDETECTOR':
+                self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
         
+            
+
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
-        self.ledTimer = wpilib.Timer()
-        self.ledTimer.start()
         self.ledOn = True
+
+        if self.notedetector:
+            if self.notedetector.isAlive():
+                print("Coral Dev Board connected")
+            else:
+                print("Coral Dev Board not connected")
+
+        self.field = wpilib.Field2d()
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putField(self.field)
         return
-    
+
     def disabledExit(self):
         self.log("no longer disabled")
-        if self.drivetrain:
-            self.drivetrain.reset()
+        #if self.drivetrain:
+            #self.drivetrain.reset()
 
-    def initLogger(self, dir):
+    def initLogger(self, dir, config):
+        if config["PDH_LOGGING"]:
+            self.pdh = wpilib.PowerDistribution()
+        else:
+            self.pdh = None
         return Logger.getLogger(dir)
 
     def controllerInit(self, config):
@@ -232,7 +248,7 @@ class MyRobot(wpilib.TimedRobot):
                                 start_position_x= starting_position_x,
                                 start_position_y= starting_position_y,
                                 start_angle= starting_angle)
-        
+
         robot_cfg = RobotPropertyConfig(sd_prefix='Robot_Property_Module',
                                 is_red_team=self.team_is_red,
                                 team_gyro_adjustment=teamGyroAdjustment,
@@ -256,7 +272,7 @@ class MyRobot(wpilib.TimedRobot):
         swervometer = Swervometer(field_cfg, robot_cfg)
         self.starting_angle = starting_angle
         return swervometer
-    
+
     def initVision(self, config):
         vision = Vision(NetworkTables.getTable('limelight'),
                         config['APRILTAGS'],
@@ -273,7 +289,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             NetworkTables.getTable('limelight').putNumber('priorityid', 4)
         return vision
-    
+
     def initDrivetrain(self, config):
         self.log("initDrivetrain ran")
         self.drive_type = config['DRIVETYPE']  # side effect!
@@ -288,12 +304,12 @@ class MyRobot(wpilib.TimedRobot):
             target_offsetX_reflective=config['REFLECTIVE_TARGET_OFFSET_X'], target_target_size_reflective=config['REFLECTIVE_TARGET_TARGET_SIZE'],
             target_offsetX_april=config['APRIL_TARGET_OFFSET_X'], target_target_size_april=config['APRIL_TARGET_TARGET_SIZE'],
             max_target_offset_x=config['MAX_TARGET_OFFSET_X'], min_target_size=config['MIN_TARGET_SIZE'])
-    
+
         flModule_cfg = ModuleConfig(sd_prefix='FrontLeft_Module', zero=125.4 + 90, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
         frModule_cfg = ModuleConfig(sd_prefix='FrontRight_Module', zero=293.6 + 90, inverted=True, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
         rlModule_cfg = ModuleConfig(sd_prefix='RearLeft_Module', zero=272.5 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
         rrModule_cfg = ModuleConfig(sd_prefix='RearRight_Module', zero=307.5 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        
+
         motor_type = rev.CANSparkLowLevel.MotorType.kBrushless
 
         # Drive motors
@@ -330,11 +346,11 @@ class MyRobot(wpilib.TimedRobot):
 
         #gyro = AHRS.create_spi()
         gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
-        
-        swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight)
+
+        swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 
         return swerve
-    
+
     def teleopInit(self):
         self.log("teleopInit ran")
         print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
@@ -344,6 +360,7 @@ class MyRobot(wpilib.TimedRobot):
         self.dropArmTimer.start()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         self.allowDropArm = True
+        self.drivetrain.disableVoltageCompensation()
         return
 
     def checkTeamColorAndFieldPosition(self):
@@ -392,48 +409,76 @@ class MyRobot(wpilib.TimedRobot):
         if (self.elastic):
             self.checkTeamColorAndFieldPosition()
 
-        self.mechanism.periodic()   
-        if not self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple")
+        if self.notedetector.hasTarget():
+            pass
+            #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
-            if(self.ledTimer.get() > 0.1):
-                if(not self.ledOn):
-                    LEDs.rainbowLED("purple")
-                else:
-                    LEDs.rainbowLED("off")
-                self.ledOn = not self.ledOn
-                self.ledTimer.reset()
+            pass
+        self.mechanism.periodic()   
+        if self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple-flash")
+            #print('purple-flash')
+        else:
+            LEDs.rainbowLED("purple")
+        """
+        elif self.notedetector.hasTarget():
+            if self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"] and self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
+                LEDs.rainbowLED("orange-flash")
+                #print('orange-flash')
+            elif self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
+                LEDs.rainbowLED("orange-right")
+                #print('orange-right')
+            elif self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"]:
+                LEDs.rainbowLED("orange-left")
+                #print('orange-left')
+        elif (self.vision.hasPriorityTargets() and abs(self.vision.gettargetErrorX()) < 1.5):
+                LEDs.rainbowLED("green-flash")
+        """
+
+        if self.pdh is not None:
+            coralChannel = 11
+            wpilib.SmartDashboard.putNumber("Coral Current (11)", self.pdh.getCurrent(coralChannel))
+
+            vrmChannel = 20
+            wpilib.SmartDashboard.putNumber("VRM Current (20)", self.pdh.getCurrent(vrmChannel))
+
+            wpilib.SmartDashboard.putNumber("Total Current", self.pdh.getTotalCurrent())
+
+        self.field.setRobotPose(self.swervometer.getPathPlannerPose())
+        self.elastic.putNumber('Match Time', wpilib.Timer.getMatchTime())
         return True
-    
+
     def teleopPeriodic(self):
+        #print(self.mechanism.shootingMotorRPMs)
+        #print(self.mechanism.indexBeamBroken())
         #print(self.elastic.elasticSubmitCheck())
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, False)
-        #LEDs.rainbowLED("purple")
         self.teleopMechanism()
         #print(self.vision.getPose()[0], self.vision.getPose()[1], self.vision.getPose()[2])
         self.drivetrain.visionPeriodic()
         self.teleopDrivetrain()
         return
-    
+
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
         #print('RPM', self.mechanism.getShooterRPM())
+        #print('ANGLE', self.mechanism.getSprocketAngle())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
             self.mechanism.indexNote()
             self.mechanism.stopShooting()
-            LEDs.rainbowLED("purple")
+            #LEDs.rainbowLED("purple")
             if self.previousBeamIsBrokenState:
                 self.dropArmTimer.reset()
                 self.allowDropArm = True
-            if (self.dropArmTimer.get() > 0.5 
-                and not self.operator.xboxController.getAButton() 
-                and not self.operator.xboxController.getBButton() 
-                and not self.operator.xboxController.getYButton() 
-                and not self.operator.xboxController.getXButton() 
+            if (self.dropArmTimer.get() > 0.5
+                and not self.operator.xboxController.getAButton()
+                and not self.operator.xboxController.getBButton()
+                and not self.operator.xboxController.getYButton()
+                and not self.operator.xboxController.getXButton()
                 and not abs(self.operator.xboxController.getLeftY()) > 0.1
                 and not self.operator.xboxController.getLeftTriggerAxis() > 0.5
                 and self.allowDropArm):
@@ -453,7 +498,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.mechanism.stopIntake()
         if(self.operator.xboxController.getRightTriggerAxis() > 0.5):
-            self.mechanism.indexNote()
+            self.mechanism.fullIndex()
 
         #manual index note
         if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
@@ -461,7 +506,7 @@ class MyRobot(wpilib.TimedRobot):
         elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
             self.mechanism.reverseIndex()
             self.mechanism.reverseIntake()
-        
+
         #Sprockt Controls
         #rotate sprocket down
         if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
@@ -477,46 +522,46 @@ class MyRobot(wpilib.TimedRobot):
         #intake
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
+            self.allowDropArm = False
         #subwoofer
         elif self.operator.xboxController.getAButton():
             self.mechanism.sprocketToPosition(-23)
+            self.allowDropArm = False
         #podium
         elif self.operator.xboxController.getXButton():
             self.mechanism.sprocketToPosition(0)
+            self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80) 
+            self.allowDropArm = False
         #auto aim
         elif self.operator.xboxController.getBButton():
+            distance = -1
             if self.team_is_blu:
-                distance = self.swervometer.distanceToPose(-326, 57) - 15
+                distance = self.vision.getAvgDistance()
+                #distance = self.swervometer.distanceToPose(-326, 57) - 15 #should be -15 but we are calibrated to be at COF as opposed to front of robot which is used in the auto aim calculations
             else:
-                distance = self.swervometer.distanceToPose(326, 57) - 15
-
-            v = 580
-            u = math.atan(
-                (51 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance + 13.1)
-            )
-            l = math.atan(
-                (55.825 + (193.04429 * ((distance + 13.1) /(v * 0.9432538354))**2)) / (distance - 4.9)
-            )
-            angle = math.degrees(((u+l)/-2)+0.523599)
-            self.mechanism.sprocketToPosition(angle)
+                distance = self.vision.getAvgDistance()
+                #distance = self.swervometer.distanceToPose(326, 57) - 15
+            if distance != -1 and distance != 0 and distance > 0:
+                self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
+            #print(distance)
             #print('current pose', self.swervometer.getCOF())
             #print('angle', angle)
             #print('sprocket angle', self.mechanism.getSprocketAngle())
             #print('distance', distance)
-        
+
         elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
             self.mechanism.sprocketFullSpeedDown()
         if self.operator.xboxController.getPOV() == 0:
             self.mechanism.lockClimb()
         elif self.operator.xboxController.getPOV() == 180:
-            self.mechanism.reverseClimb()   
+            self.mechanism.reverseClimb()
         else:
             self.mechanism.stopClimb()
-            
-            
+
+
         """
         #print(self.mechanism.getSprocketAngle(), self.mechanism.sprocketAbsoluteEncoder.getAbsolutePosition() * 360)
         #intake motor
@@ -532,7 +577,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.mechanism.stopIntake()
             self.mechanism.stopIndexing()
-               
+
         if self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) < 0:
             self.mechanism.indexNote()
         elif self.deadzoneCorrection(self.operator.xboxController.getRightY(), self.operator.deadzone) > 0:
@@ -542,7 +587,7 @@ class MyRobot(wpilib.TimedRobot):
         else:
             if not self.operator.xboxController.getAButton():
                 self.mechanism.stopIndexing()
-            
+
         #shooter motor and sprocket
         if self.operator.xboxController.getLeftTriggerAxis() > 0.5:
             if self.mechanism.indexingBeam.beamBroken() == True:
@@ -576,8 +621,8 @@ class MyRobot(wpilib.TimedRobot):
             b = -64.5634
             y = a * math.log(distance) + b
             self.mechanism.sprocketToPosition(y)"""
-        
-        
+
+
 
     def teleopDrivetrain(self):
         if (not self.drivetrain):
@@ -609,7 +654,13 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(True)
         else:
             self.drivetrain.setWheelLock(False)
-        
+
+        if (driver.getYButton()):
+            # drive so that the center of the bot is on the center of the note, without rotating
+            self.drivetrain.alignWithNote(0, 0, None)
+            return False
+
+
         # Regular driving, not a maneuver
         if False:
             print("a")
@@ -617,9 +668,9 @@ class MyRobot(wpilib.TimedRobot):
             strafe = self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone)
             fwd = self.deadzoneCorrection(driver.getLeftY() * translational_clutch, self.driver.deadzone)
             rcw = self.deadzoneCorrection(driver.getRightX() * rotational_clutch, self.driver.deadzone)
-            
+
             fwd *= -1 # Because controller is backwards from you think
-            
+
             # Bot starts facing controller
             controller_at_180_to_bot = -1
             fwd *= controller_at_180_to_bot
@@ -647,7 +698,7 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.rotateToAngle(270)
                 self.drivetrain.execute('center')
                 return
-            
+
             if(driver.getXButton()):
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
@@ -656,18 +707,18 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.rotateToAngle(0)
                 self.drivetrain.execute('center')
                 return
-            
-            
+
+
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.
-            
+
             # If any joysticks are dictating movement.
             if fwd != 0 or strafe != 0 or rcw != 0:
                 self.drivetrain.move(fwd, strafe, rcw, self.drivetrain.getBearing())
-                
+
                 self.log("TeleopDriveTrain: POV: ", driver.getPOV())
-                if self.getPOVCorner(driver.getPOV()) == 'front_left':
+                if self.getPOVCorner(driver.getPOV()) == 'front_left' or driver.getLeftTriggerAxis() > 0.7:
                     self.drivetrain.execute('front_left')
-                elif self.getPOVCorner(driver.getPOV()) == 'front_right':
+                elif self.getPOVCorner(driver.getPOV()) == 'front_right'  or driver.getRightTriggerAxis() > 0.7:
                     self.drivetrain.execute('front_right')
                 elif self.getPOVCorner(driver.getPOV()) == 'rear_left':
                     self.drivetrain.execute('rear_left')
@@ -684,7 +735,7 @@ class MyRobot(wpilib.TimedRobot):
             else:
                 self.drivetrain.idle()
         return False
-    
+
     def getPOVCorner(self, value):
         if (value >=0 and value < 90):
             return 'front_right'
@@ -728,8 +779,9 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.drivetrain.setBearing(0)
         self.drivetrain.setRampRates(self.autonOpenLoopRampRate, self.autonClosedLoopRampRate)
+        self.drivetrain.enableVoltageCompensation()
         return
-    
+
     def autonomousPeriodic(self):
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
@@ -738,7 +790,7 @@ class MyRobot(wpilib.TimedRobot):
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()
         return
-    
+
     def deadzoneCorrection(self, val, deadzone):
         """
         Given the deadzone value x, the deadzone both eliminates all
