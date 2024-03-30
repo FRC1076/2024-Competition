@@ -11,7 +11,7 @@ import math
 
 class Autonomous:
 
-    def __init__(self, config, team_is_red, drivetrain, mechanism, swervometer, starting_angle, taskListName):
+    def __init__(self, config, team_is_red, drivetrain, mechanism, notedetector, swervometer, starting_angle, taskListName):
         self.taskList = []
         for cmd in config[taskListName]:
             if cmd[0] == 'NOTE':

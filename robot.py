@@ -759,7 +759,7 @@ class MyRobot(wpilib.TimedRobot):
             print("WARNING: Falling back to default Auton plan:", self.taskListName)
         print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
         #self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, taskListName)
-        self.auton = Autonomous(config, self.team_is_red, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, self.taskListName)
+        self.auton = Autonomous(config, self.team_is_red, self.drivetrain,self.mechanism, self.notedetector, self.swervometer, self.starting_angle, self.taskListName)
 
         if not self.auton:
             return
