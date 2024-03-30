@@ -17,31 +17,13 @@ class Elastic:
         self.startingPositions = activeStartingPositions
         self.autonConfig = autonConfig
         self.selectedTaskKey = autonConfig['B_THREE_NOTE_AMP_SIDE']
-        self.isNoteDetected = self.config["NOTE_IS_DETECTED"]
-        self.isNoteLeft = self.config["NOTE_ON_LEFT"]
-        self.isNoteRight = self.config["NOTE_ON_RIGHT"]
-        self.isNoteLoaded = self.config["NOTE_IS_LOADED"]
         self.isElasticSubmitted = False
-        self.submitButton = False
-        self.testButton = False
-        self.controllerDriverElastic = False
-        self.controllerOperatorElastic = False
+        self.controllerDriverElastic = True
+        self.controllerOperatorElastic = True
+        self.beamBreakBoolean = False
 
     def displayMainWindow(self):
         tab = "Main Window"
-        (Shuffleboard.getTab(tab)
-        .add("Submit",self.submitButton)
-        .withSize(4,4)
-        .withPosition(0,0)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry())
-
-        (Shuffleboard.getTab(tab)
-        .add("Test",self.testButton)
-        .withSize(4,4)
-        .withPosition(0,0)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry())
 
         (Shuffleboard.getTab(tab)
         .add("Driver Controller", self.controllerDriverElastic)
@@ -110,23 +92,27 @@ class Elastic:
         SmartDashboard.putNumber(key, num)
 
     def updateBeamDisplay(self, noteDetected):
-        if noteDetected:
+        if noteDetected == True:
             self.beamBreakBoolean = True
-        else: #noteDetected == False
+            print("true")
+        elif noteDetected == False:
             self.beamBreakBoolean = False
+            print("false")
+        else:
+            print("NOT WORKING")
 
-        SmartDashboard.putBoolean(self.beamBreakBoolean)
+        SmartDashboard.putBoolean("Note Detected", False) #THIS DOES NOT WORKKKK WHy?????
 
     def updateControllerConnectedDisplay(self, driverConnected, operatorConnected):
         if driverConnected:
             self.controllerDriverElastic = True
-            SmartDashboard.putBoolean(self.controllerDriverElastic)
+            SmartDashboard.putBoolean("Driver Controller", self.controllerDriverElastic)
         else:
             self.controllerDriverElastic = False
-            SmartDashboard.putBoolean(self.controllerDriverElastic)
+            SmartDashboard.putBoolean("Driver Controller", self.controllerDriverElastic)
         if operatorConnected:
             self.controllerOperatorElastic = True
-            SmartDashboard.putBoolean(self.controllerOperatorElastic)
+            SmartDashboard.putBoolean("Operator Controller", self.controllerOperatorElastic)
         else:
             self.controllerOperatorElastic = False
-            SmartDashboard.putBoolean(self.controllerOperatorElastic)
+            SmartDashboard.putBoolean("Operator Controller", self.controllerOperatorElastic)
