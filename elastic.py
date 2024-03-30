@@ -95,3 +95,9 @@ class Elastic:
     
     def getSelectedPosition(self):
         return self.positionChooser.getSelected()
+    
+    def putField(self, field):
+        SmartDashboard.putData(field)
+
+    def putNumber(self, key, num):
+        SmartDashboard.putNumber(key, num)
