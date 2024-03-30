@@ -88,7 +88,7 @@ class SwerveModule:
         self.sd.putNumber(DASH_PREFIX, 'Heading kI', self.heading_pid_controller.getI())
         self.sd.putNumber(DASH_PREFIX, 'Heading kD', self.heading_pid_controller.getD())
 
-        self.swerveModulePosition = SwerveModulePosition(0, Rotation2d(0))
+        self.swerveModulePosition = SwerveModulePosition(self.lastPosition * 1.86 * 0.0254, Rotation2d((self.get_current_angle() - 90) % 360 * math.pi / 180))#SwerveModulePosition(0, Rotation2d(0))
         
         self.driveMotor.setSmartCurrentLimit(40)
         self.driveMotor.burnFlash()
@@ -231,6 +231,18 @@ class SwerveModule:
         """
         print(self.sd_prefix, '; requested_speed: ', self._requested_speed, ' requested_angle: ', self._requested_angle)
 
+    def periodic(self):
+        self.newPosition = self.driveEncoder.getPosition() * 1.86
+        #print("FACTOR: ", self.driveEncoder.getPositionConversionFactor())
+        self.newPosition = self.driveEncoder.getPosition() * 1.86 #convert position to inches travelled by the wheel, I believe
+        #print("FACTOR: ", self.driveEncoder.getPositionConversionFactor())
+        self.positionChange = (self.newPosition - self.lastPosition) * self.positionSign
+        #print("Position Change: ", self.positionChange, " New: ", self.newPosition, " Last: ", self.lastPosition, " Sign: ", self.positionSign)
+        self.newAngle = self.get_current_angle()
+        #use wpilib's swerve module position. must add the position change because wpilib can't take into account the positionSign, so we must take it into account before we feed it in
+        self.swerveModulePosition = SwerveModulePosition((self.swerveModulePosition.distance * 39.37 + self.positionChange) * 0.0254 , Rotation2d((self.newAngle - 90) % 360 * math.pi / 180))
+        self.lastPosition = self.newPosition
+
     def execute(self):
         """
         Use the PID controller to get closer to the requested position.
@@ -268,16 +280,6 @@ class SwerveModule:
 
         #print("Angle: ", self.get_current_angle(), " Absolute Position: ", self.sd_prefix, " ", self.encoder.getAbsolutePosition(), self.encoder_zero, self.encoder.getAbsolutePosition() - self.encoder_zero)
 
-        self.newPosition = self.driveEncoder.getPosition() * 1.86
-        #print("FACTOR: ", self.driveEncoder.getPositionConversionFactor())
-        self.newPosition = self.driveEncoder.getPosition() * 1.86 #convert position to inches travelled by the wheel, I believe
-        #print("FACTOR: ", self.driveEncoder.getPositionConversionFactor())
-        self.positionChange = (self.newPosition - self.lastPosition) * self.positionSign
-        #print("Position Change: ", self.positionChange, " New: ", self.newPosition, " Last: ", self.lastPosition, " Sign: ", self.positionSign)
-        self.newAngle = self.get_current_angle()
-        #use wpilib's swerve module position. must add the position change because wpilib can't take into account the positionSign, so we must take it into account before we feed it in
-        self.swerveModulePosition = SwerveModulePosition((self.swerveModulePosition.distance * 39.37 + self.positionChange) * 0.0254 , Rotation2d((self.newAngle - 90) % 360 * math.pi / 180))
-        self.lastPosition = self.newPosition
         #print("module velocity", (self.get_current_velocity() / 60) * 1.86 * 0.0254)
         self.update_smartdash()
         if self.driveMotor.getOutputCurrent() > self.maxCurrent:
