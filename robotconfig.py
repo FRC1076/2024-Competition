@@ -274,6 +274,7 @@ robotConfig = {
     "CONTROLLERS": controllerConfig,
     "MECHANISM": mechanismConfig,
     'SWERVOMETER': swervometerConfig, # Must be BEFORE drivetrain
+    'ELASTIC': elasticConfig, 
     'VISION': visionConfig, # Must be BEFORE drivetrain
     'DRIVETRAIN': drivetrainConfig,
     'AUTON': autonConfig,

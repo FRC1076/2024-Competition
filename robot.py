@@ -64,21 +64,6 @@ class MyRobot(wpilib.TimedRobot):
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
 
-        self.ELASTIC_TEAM_COLOR = "GREEN"
-        self.ELASTIC_BOT_POSITION = "Z"
-
-        autonPlans = list(filter(lambda k: "NOTE" in k, self.config["AUTON"].keys()))
-        self.savedSwervometerConfig = self.config["SWERVOMETER"]
-        self.elastic = Elastic(autonPlans, self.savedSwervometerConfig["ALL_ACTIVE_POSITIONS"])
-
-        self.elastic.controllerDriverElastic = wpilib.DriverStation.isJoystickConnected(0)
-        self.elastic.controllerOperatorElastic = wpilib.DriverStation.isJoystickConnected(1)
-
-        self.elastic.displayMainWindow() #Booleans and other non-choosers
-        self.elastic.autonDisplay() #Displays are sendableChoosers
-        self.elastic.teamDisplay()
-        self.elastic.positionDisplay()
-
         #self.TEAM_IS_RED = True
 
         dir = ''
@@ -96,10 +81,12 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
-                #self.savedSwervometerConfig = config
+                self.savedSwervometerConfig = config
                 self.swervometer = self.initSwervometer(config)
-                print("HELLO WORLD")
-                
+            if key == "ELASTIC":
+                auton_config = self.config["AUTON"]
+                self.elastic = self.initElastic(config, auton_config)
+                self.log('Calling elasticInit')
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
             if key == 'MECHANISM':
@@ -136,7 +123,30 @@ class MyRobot(wpilib.TimedRobot):
             ctrls.append(Controller(ctrl, dz, lta, rta))
         return ctrls
     
+    def initElastic(self, config, auton_config):
+        
+        self.log("initElastic ran")
+
+        self.ELASTIC_TEAM_COLOR = "GREEN"
+        self.ELASTIC_BOT_POSITION = "Z"
+
+        autonPlans = list(filter(lambda k: "NOTE" in k, auton_config.keys()))
+        elastic = Elastic(autonPlans, self.savedSwervometerConfig["ALL_ACTIVE_POSITIONS"])
+
+        elastic.controllerDriverElastic = wpilib.DriverStation.isJoystickConnected(0)
+        elastic.controllerOperatorElastic = wpilib.DriverStation.isJoystickConnected(1)
+
+        elastic.displayMainWindow() #Booleans and other non-choosers
+        elastic.autonDisplay() #Displays are sendableChoosers
+        if self.savedSwervometerConfig['TEAM_IS_RED']:
+            elastic.teamDisplay('Red', 'RED')
+        else: #team is blue
+            elastic.teamDisplay('Blue', 'BLUE')
+        elastic.positionDisplay(self.savedSwervometerConfig['FIELD_START_POSITION'])
+        return elastic
+
     def updateTeamColor(self, isTeamRed):
+        
         if isTeamRed:
             self.team_is_red = True
             self.team_is_blu = False
@@ -151,11 +161,8 @@ class MyRobot(wpilib.TimedRobot):
         return teamGyroAdjustment, teamMoveAdjustment
 
     def updateFieldStartPosition(self, fieldStartPosition):
-
-        self.fieldStartPosition = fieldStartPosition
         
-        if (self.fieldStartPosition == 'Z'):
-            self.fieldStartPosition = self.savedSwervometerConfig['FIELD_START_POSITION']
+        self.fieldStartPosition = fieldStartPosition
 
         if (self.fieldStartPosition == 'A'):
             #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
@@ -330,6 +337,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def teleopInit(self):
         self.log("teleopInit ran")
+        print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
         self.dropArmTimer = wpilib.Timer()
@@ -366,19 +374,6 @@ class MyRobot(wpilib.TimedRobot):
                 else:
                     None
 
-            if selectedPosition == "A":
-                fieldStartPosition = selectedPosition
-            elif selectedPosition == "B":
-                fieldStartPosition = selectedPosition
-            elif selectedPosition == "C":
-                fieldStartPosition = selectedPosition
-            elif selectedPosition == "D":
-                fieldStartPosition = selectedPosition
-            elif selectedPosition == "E":
-                fieldStartPosition = selectedPosition
-            else: #position has not been selected
-                None
-
             starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition(fieldStartPosition)
             self.swervometer.updateFieldStartPosition(starting_position_x, starting_position_y, starting_angle)
             
@@ -394,8 +389,8 @@ class MyRobot(wpilib.TimedRobot):
         else:
             print("Controller not detected on elastic")
         """
-        
-        self.checkTeamColorAndFieldPosition()
+        if (self.elastic):
+            self.checkTeamColorAndFieldPosition()
 
         self.mechanism.periodic()   
         if not self.mechanism.indexBeamBroken():
@@ -703,15 +698,17 @@ class MyRobot(wpilib.TimedRobot):
             return 'center'
     
     def autonomousInit(self): 
+        print("STARTING AUTON")
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        taskListName = self.selectedAuton #Does this even work???
-        if taskListName is None:
-            taskListName = config["TASK"]
-            print("WARNING: Falling back to default Auton plan:", taskListName)
-        print("Selected Auton plan:", taskListName)
-        self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, taskListName)
+        self.taskListName = self.elastic.getSelectedAuton()
+        if self.taskListName is None:
+            self.taskListName = config["TASK"]
+            print("WARNING: Falling back to default Auton plan:", self.taskListName)
+        print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
+        #self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, taskListName)
+        self.auton = Autonomous(config, self.team_is_red, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, self.taskListName)
 
         if not self.auton:
             return

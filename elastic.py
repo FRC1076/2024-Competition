@@ -57,21 +57,27 @@ class Elastic:
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
-    def teamDisplay(self):
+    def teamDisplay(self, defaultColor, defaultLabel):
         self.teamChooser = wpilib.SendableChooser()
-        self.teamChooser.setDefaultOption("Green (Default)", "GREEN")
-        self.teamChooser.addOption("Red Alliance", "RED")
-        self.teamChooser.addOption("Blue Alliance", "BLUE")
+        color = (defaultColor + " Alliance")
+        label = defaultLabel
+        self.teamChooser.setDefaultOption(color, label)
+        if defaultColor == 'Red':
+            self.teamChooser.addOption("Blue Alliance", "BLUE")
+        else:
+            self.teamChooser.addOption("Red Alliance", "RED")
         SmartDashboard.putData(self.teamChooser)
     
-    def positionDisplay(self):
-        self.positionChooser = wpilib.SendableChooser()
-        self.positionChooser.setDefaultOption("Position Z (Default)", "Z")
-        self.positionChooser.addOption("Position A", "A")
-        self.positionChooser.addOption("Position B", "B")
-        self.positionChooser.addOption("Position C", "C")
-        self.positionChooser.addOption("Position D", "D")
-        #self.positionChooser.addOption("Position E", "E")
+    def positionDisplay(self, defaultPosition):
+        self.positionChooser = wpilib.SendableChooser() 
+        position = ("Positon " + defaultPosition)
+        defaultLabel = defaultPosition
+        self.positionChooser.setDefaultOption(position, defaultLabel)
+        for i in self.startingPositions:
+            position = ("Positon " + i)
+            label = i
+            if not(defaultLabel == label):
+                self.positionChooser.addOption(position, label)
         SmartDashboard.putData(self.positionChooser)
 
     def autonDisplay(self):
