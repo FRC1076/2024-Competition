@@ -143,8 +143,10 @@ class MyRobot(wpilib.TimedRobot):
         
         self.log("initElastic ran")
 
-        self.ELASTIC_TEAM_COLOR = "GREEN"
+        #used to check for difference in selection on elastic, this is what elasic knows initially
+        self.ELASTIC_BOT_COLOR = "GREEN"
         self.ELASTIC_BOT_POSITION = "Z"
+        self.ELASTIC_BOT_AUTON = "Z_ZERO_NOTE"
 
         autonPlans = list(filter(lambda k: "NOTE" in k, auton_config.keys()))
         elastic = Elastic(autonPlans, self.savedSwervometerConfig["ALL_ACTIVE_POSITIONS"])
@@ -364,10 +366,10 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def checkTeamColorAndFieldPosition(self):
-        #if team color has changed
+        #if the bot team color selection on elastic has changed
         selectedTeam = self.elastic.getSelectedTeam() #whatever is inputted on elastic
-        if selectedTeam != self.ELASTIC_TEAM_COLOR: #checks if selection is differnt (it isnt the default/previous)
-            self.ELASTIC_TEAM_COLOR = selectedTeam #ELASTIC_TEAM_COLOR is used to check for changes in selection
+        if selectedTeam != self.ELASTIC_BOT_COLOR: #checks if selection is different (it isnt the default/previous)
+            self.ELASTIC_BOT_COLOR = selectedTeam #ELASTIC_BOT_COLOR is used to check for changes in selection
             if selectedTeam == "RED":
                 teamColorIsRed = True      #will be passed to override/update function
             elif selectedTeam == "BLUE":
@@ -377,11 +379,12 @@ class MyRobot(wpilib.TimedRobot):
             #no overriding is necessary and the robot will use default robotconfig values
             #elastic thinks the team color is green but it doesnt matter yet since we have default hardcoded values already
                 None
-            teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(teamColorIsRed) #only passing true/false?
-            self.swervometer.updateTeam(teamGyroAdjustment, teamMoveAdjustment) #updates robotProperty values in swervometer?
+            teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(teamColorIsRed)
+            self.swervometer.updateTeam(teamGyroAdjustment, teamMoveAdjustment)
 
+        #if the bot starting position selection on elastic has changed
         selectedPosition = self.elastic.getSelectedPosition()
-        if selectedPosition != self.ELASTIC_BOT_POSITION: #checks for different selection other than the default/previous
+        if selectedPosition != self.ELASTIC_BOT_POSITION:
             self.ELASTIC_BOT_POSITION = selectedPosition
 
             positions = self.savedSwervometerConfig['ALL_ACTIVE_POSITIONS']
@@ -391,11 +394,19 @@ class MyRobot(wpilib.TimedRobot):
                 else:
                     None
 
-            starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition(fieldStartPosition)
-            self.swervometer.updateFieldStartPosition(starting_position_x, starting_position_y, starting_angle)
+            starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition(fieldStartPosition) #one letter splits into 3 values
+            self.swervometer.updateFieldStartPosition(starting_position_x, starting_position_y, starting_angle) #3 values get sent to swervometer
             
         #self.swervometer.updateTeamAndFieldStartPosition(teamGyroAdjustment, teamMoveAdjustment, starting_position_x, starting_position_y, starting_angle)
-                                                         
+
+        #if the bot auton plan selection on elastic has changed
+        selectedAuton = self.elastic.getSelectedAuton()
+        if selectedAuton != self.ELASTIC_BOT_AUTON:
+            self.ELASTIC_BOT_AUTON = selectedAuton
+            self.taskListName = selectedAuton #Auton plan is already selected in autonomousInit
+
+        #print(teamColorIsRed, fieldStartPosition, self.taskListName)
+
     def robotPeriodic(self):
 
         """
