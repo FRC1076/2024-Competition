@@ -111,7 +111,7 @@ class Autonomous:
             PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
 
             #if the speeds are minimal and minimum time has elapsed, move onto the next task
-            if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+            if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
                 self.drivetrain.set_rcw(0)
