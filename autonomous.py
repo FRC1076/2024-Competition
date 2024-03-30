@@ -96,7 +96,7 @@ class Autonomous:
                 rotation = self.swervometer.getPathPlannerPose().rotation()
                 if(self.team_is_red):
                     self.path = self.path.flipPath()
-                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(0, 0, 0), Rotation2d.fromDegrees(180))
+                self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
                 #log the path the pathplanner's telemetry
                 PPLibTelemetry.setCurrentPath(self.path)
             #get the target state of the robot (pathState) and calculate the robot's chassis speeds
