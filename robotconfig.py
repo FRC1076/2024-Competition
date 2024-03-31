@@ -150,14 +150,14 @@ visionConfig = {
     'UPDATE_POSE': False, # True if should correct position with Limelight information. Otherwise informational.
 }
 
-INTAKE: -37, #intake angle
-SHOT = -10, #B shot first note 
-ONE =  0, #D second note
-SHOT_2 = 0, #B shot after getting note 2
-SUBWOOFER = -25.9, #subwoofer angle
-FAR = 9.5, #far angle
-LONG = 8, #long angle
-SHOT_WAIT = 0.5, #seconds
+INTAKE = -37 #intake angle
+SHOT = -10 #B shot first note 
+ONE =  0 #D second note
+SHOT_2 = 0 #B shot after getting note 2
+SUBWOOFER = -25.9 #subwoofer angle
+FAR = 9.5 #far angle
+LONG = 8 #long angle
+SHOT_WAIT = 0.5 #seconds
 
 autonConfig = {
     
