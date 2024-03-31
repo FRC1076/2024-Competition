@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
@@ -205,7 +205,7 @@ autonConfig = {
     'SCORE_EXISTING': True,
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 0,
-    'TRANSLATION_KP': 2,
+    'TRANSLATION_KP': 1.75,
     'MAX_PICK_UP_DISTANCE': 70,
 }
 

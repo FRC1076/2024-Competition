@@ -103,7 +103,6 @@ class Autonomous:
             #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
-            print(self.chassisSpeeds.omega_dps)
             #log the current pose and target pose to pathplanner's telemetry
             PPLibTelemetry.setCurrentPose(self.swervometer.getPathPlannerPose())
             PPLibTelemetry.setTargetPose(self.pathState.getTargetHolonomicPose())
