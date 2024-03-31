@@ -93,7 +93,14 @@ class Vision:
             return (pose[9] * s)
         else:
             return (-1)
-
+    
+    def getTagCount(self):
+        pose = self.table.getNumberArray('botpose', None)
+        if not(pose is None) and len(pose) != 0:
+            return (pose[7])
+        else:
+            return (-1)
+        
     def getOrientation(self):
         pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
         #print("POSE IS: ", pose)

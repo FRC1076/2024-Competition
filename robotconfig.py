@@ -152,7 +152,7 @@ visionConfig = {
 
 INTAKE = -37 #intake angle
 SHOT = -10 #B shot first note 
-ONE =  0 #D second note
+DSHOT =  0 #D second note
 SHOT_2 = 0 #B shot after getting note 2
 SUBWOOFER = -25.9 #subwoofer angle
 FAR = 9.5 #far angle
@@ -172,7 +172,7 @@ autonConfig = {
                                   ['PATH', '1-SHOT[FAST]'],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE],
-                                  ['PATH', SHOT_2],
+                                  ['PATH', "SHOT-2"],
                                   ['RAISE_ARM_START', SHOT_2],
                                   ['WAIT', 0.5],
                                   ['SHOOT_NOTE'],
@@ -233,7 +233,7 @@ autonConfig = {
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE],
                           ['PATH', 'D-1'],
-                          ['PATH', DSHOT],
+                          ['PATH', '1-1SHOT'],
                           ['RAISE_ARM_START', DSHOT],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
@@ -256,7 +256,7 @@ autonConfig = {
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE],
                           ['PATH', 'D-1'],
-                          ['PATH', DSHOT],
+                          ['PATH', '1-1SHOT'],
                           ['RAISE_ARM_START', DSHOT],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
@@ -367,7 +367,7 @@ autonConfig = {
     'SCORE_EXISTING': True,
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 0,
-    'TRANSLATION_KP': 1.75,
+    'TRANSLATION_KP': 3,
     'MAX_PICK_UP_DISTANCE': 70,
 }
 
