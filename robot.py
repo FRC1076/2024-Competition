@@ -37,9 +37,6 @@ from mechanism import Mechanism
 from notedetector import NoteDetector
 from elastic import Elastic
 
-#from wpilib.shuffleboard import Shuffleboard
-#from wpilib.shuffleboard import BuiltInWidgets
-
 from leds import LEDs
 
 ARCADE = 1
@@ -65,8 +62,6 @@ class MyRobot(wpilib.TimedRobot):
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
 
-        #self.TEAM_IS_RED = True
-
         dir = ''
         if TEST_MODE:
             dir = os.getcwd() # this doesn't work on mac, will write to python dir. Fix later.
@@ -87,8 +82,7 @@ class MyRobot(wpilib.TimedRobot):
                 self.swervometer = self.initSwervometer(config)
             if key == "ELASTIC":
                 auton_config = self.config["AUTON"]
-                self.elastic = self.initElastic(config, auton_config)
-                self.log('Calling elasticInit')
+                self.elastic = self.initElastic(auton_config)
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
                 self.drivetrain.resetGyro()
@@ -139,11 +133,11 @@ class MyRobot(wpilib.TimedRobot):
             ctrls.append(Controller(ctrl, dz, lta, rta))
         return ctrls
     
-    def initElastic(self, config, auton_config):
+    def initElastic(self, auton_config):
         
         self.log("initElastic ran")
 
-        #used to check for difference in selection on elastic, this is what elasic knows initially
+        #used to check for difference in selection on elastic
         self.ELASTIC_BOT_COLOR = "GREEN"
         self.ELASTIC_BOT_POSITION = "Z"
         self.ELASTIC_BOT_AUTON = "Z_ZERO_NOTE"
@@ -151,15 +145,15 @@ class MyRobot(wpilib.TimedRobot):
         autonPlans = list(filter(lambda k: "NOTE" in k, auton_config.keys()))
         elastic = Elastic(autonPlans, self.savedSwervometerConfig["ALL_ACTIVE_POSITIONS"])
 
-        elastic.controllerDriverElastic = wpilib.DriverStation.isJoystickConnected(0)
-        elastic.controllerOperatorElastic = wpilib.DriverStation.isJoystickConnected(1)
-        
-        elastic.autonDisplay() #Displays are sendableChoosers
+        elastic.autonDisplay() # "Display" are sendableChoosers
+
         if self.savedSwervometerConfig['TEAM_IS_RED']:
             elastic.teamDisplay('Red', 'RED')
-        else: #team is blue
+        else: #hard coded team is blue
             elastic.teamDisplay('Blue', 'BLUE')
+
         elastic.positionDisplay(self.savedSwervometerConfig['FIELD_START_POSITION'])
+
         return elastic
 
     def updateTeamColor(self, isTeamRed):
@@ -182,7 +176,6 @@ class MyRobot(wpilib.TimedRobot):
         self.fieldStartPosition = fieldStartPosition
 
         if (self.fieldStartPosition == 'A'):
-            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
             if self.team_is_red:
                 starting_position_x = self.savedSwervometerConfig['FIELD_RED_A_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_RED_A_START_POSITION_Y']
@@ -192,7 +185,6 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_y = self.savedSwervometerConfig['FIELD_BLU_A_START_POSITION_Y']
                 starting_angle = self.savedSwervometerConfig['FIELD_BLU_A_START_ANGLE']
         elif (self.fieldStartPosition == 'B'):
-            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'B')
             if self.team_is_red:
                 starting_position_x = self.savedSwervometerConfig['FIELD_RED_B_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_RED_B_START_POSITION_Y']
@@ -201,8 +193,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = self.savedSwervometerConfig['FIELD_BLU_B_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_BLU_B_START_POSITION_Y']
                 starting_angle = self.savedSwervometerConfig['FIELD_BLU_B_START_ANGLE']
-        elif (self.fieldStartPosition == 'C'): # config['FIELD_START_POSITION'] == 'C'
-            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'C')
+        elif (self.fieldStartPosition == 'C'):
             if self.team_is_red:
                 starting_position_x = self.savedSwervometerConfig['FIELD_RED_C_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_RED_C_START_POSITION_Y']
@@ -211,9 +202,10 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = self.savedSwervometerConfig['FIELD_BLU_C_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_BLU_C_START_POSITION_Y']
                 starting_angle = self.savedSwervometerConfig['FIELD_BLU_C_START_ANGLE']
-        else: # config['FIELD_START_POSITION'] == 'D'
-            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'D')
+        
+        else:
             self.fieldStartPosition = 'D'
+        #elif (self.fieldStartPosition == 'D'):
             if self.team_is_red:
                 starting_position_x = self.savedSwervometerConfig['FIELD_RED_D_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_RED_D_START_POSITION_Y']
@@ -222,6 +214,9 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = self.savedSwervometerConfig['FIELD_BLU_D_START_POSITION_X']
                 starting_position_y = self.savedSwervometerConfig['FIELD_BLU_D_START_POSITION_Y']
                 starting_angle = self.savedSwervometerConfig['FIELD_BLU_D_START_ANGLE']
+
+        #else:
+        #    self.fieldStartPosition = 'E'
 
         return starting_position_x, starting_position_y, starting_angle
 
@@ -240,8 +235,6 @@ class MyRobot(wpilib.TimedRobot):
         else:
             actual_bumper_dimension_x = 0.0
             actual_bumper_dimension_y = 0.0
-
-        #self.dashboard.putBoolean(DASH_PREFIX, 'Has Bumpers Attached', bumpers_attached)
 
         field_cfg = FieldConfig(sd_prefix='Field_Module',
                                 origin_x=config['FIELD_ORIGIN_X'],
@@ -365,19 +358,16 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def checkTeamColorAndFieldPosition(self):
+
         #if the bot team color selection on elastic has changed
-        selectedTeam = self.elastic.getSelectedTeam() #whatever is inputted on elastic
-        if selectedTeam != self.ELASTIC_BOT_COLOR: #checks if selection is different (it isnt the default/previous)
-            self.ELASTIC_BOT_COLOR = selectedTeam #ELASTIC_BOT_COLOR is used to check for changes in selection
+        selectedTeam = self.elastic.getSelectedTeam()
+        if selectedTeam != self.ELASTIC_BOT_COLOR: #checks if selection is different
+            self.ELASTIC_BOT_COLOR = selectedTeam
             if selectedTeam == "RED":
                 teamColorIsRed = True      #will be passed to override/update function
             elif selectedTeam == "BLUE":
                 teamColorIsRed = False
-            else: 
-            #team has not been selected 
-            #no overriding is necessary and the robot will use default robotconfig values
-            #elastic thinks the team color is green but it doesnt matter yet since we have default hardcoded values already
-                None
+
             teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(teamColorIsRed)
             self.swervometer.updateTeam(teamGyroAdjustment, teamMoveAdjustment)
 
@@ -396,39 +386,34 @@ class MyRobot(wpilib.TimedRobot):
             starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition(fieldStartPosition) #one letter splits into 3 values
             self.swervometer.updateFieldStartPosition(starting_position_x, starting_position_y, starting_angle) #3 values get sent to swervometer
             
-        #self.swervometer.updateTeamAndFieldStartPosition(teamGyroAdjustment, teamMoveAdjustment, starting_position_x, starting_position_y, starting_angle)
-
         #if the bot auton plan selection on elastic has changed
         selectedAuton = self.elastic.getSelectedAuton()
         if selectedAuton != self.ELASTIC_BOT_AUTON:
             self.ELASTIC_BOT_AUTON = selectedAuton
             self.taskListName = selectedAuton #Auton plan is already selected in autonomousInit
 
-        #print(teamColorIsRed, fieldStartPosition, self.taskListName)
-
     def robotPeriodic(self):
         
         if (self.elastic):
             
-            #isDriverConnected = wpilib.XboxController.isConnected(0)
-            #print(str(isDriverConnected))
-            """
-            isOperatorConnected = wpilib.DriverStation.isJoystickConnected(1)
-            if isDriverConnected:
-                print("CONTROLLER 0 IS CONNECTED!!!!!!!")
-            else:
-                print("Controller not detected on elastic")
-
-            """
+            #updates the variables and displays on elastic field
             self.checkTeamColorAndFieldPosition()
             
-            #self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
-            self.elastic.updateBeamDisplay(True)
+            #indicates if a note is loaded inside the robot (beam is broken)
+            self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
 
-            isDriverConnected = True
-            isOperatorConnected = True
+            """ This does not work, isConnected() isnt a function and there is nothing on documentation
+            #the goal is to create an indicator that displays if the controllers are connected (individually)
+            isDriverConnected = False
+            isOperatorConnected = False
+            if self.driver:
+                isDriverConnected = wpilib.DriverStation.getJoystickIsXbox(0) #test this
+                if isDriverConnected:
+                    isDriverConnected = True
+            print(isDriverConnected, isOperatorConnected)
             self.elastic.updateControllerConnectedDisplay(isDriverConnected, isOperatorConnected)
-
+            """
+        
         if self.notedetector.hasTarget():
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
