@@ -37,9 +37,6 @@ from mechanism import Mechanism
 from notedetector import NoteDetector
 from elastic import Elastic
 
-from wpilib.shuffleboard import Shuffleboard
-from wpilib.shuffleboard import BuiltInWidgets
-
 from leds import LEDs
 
 ARCADE = 1
@@ -58,18 +55,12 @@ class MyRobot(wpilib.TimedRobot):
         self.operator = None
         self.auton = None
         self.vision = None
-
+    
         # Even if no drivetrain, defaults to drive phase
 
         self.config = robotConfig
 
         self.dashboard = Dashboard.getDashboard(testMode=TEST_MODE)
-        autonPlans = list(filter(lambda k: "NOTE" in k, self.config["AUTON"].keys()))
-
-        self.elastic = Elastic(autonPlans)
-        #self.elastic.displayMainWindow()
-        self.elastic.autonDisplay()
-
 
         dir = ''
         if TEST_MODE:
@@ -87,7 +78,11 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
+                self.savedSwervometerConfig = config
                 self.swervometer = self.initSwervometer(config)
+            if key == "ELASTIC":
+                auton_config = self.config["AUTON"]
+                self.elastic = self.initElastic(auton_config)
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
                 self.drivetrain.resetGyro()
@@ -137,11 +132,33 @@ class MyRobot(wpilib.TimedRobot):
             rta = ctrlConfig['RIGHT_TRIGGER_AXIS']
             ctrls.append(Controller(ctrl, dz, lta, rta))
         return ctrls
+    
+    def initElastic(self, auton_config):
+        
+        self.log("initElastic ran")
 
-    def initSwervometer(self, config):
-        self.log("initSwervometer ran")
+        #used to check for difference in selection on elastic
+        self.ELASTIC_BOT_COLOR = "GREEN"
+        self.ELASTIC_BOT_POSITION = "Z"
+        self.ELASTIC_BOT_AUTON = "Z_ZERO_NOTE"
 
-        if (config['TEAM_IS_RED']):
+        autonPlans = list(filter(lambda k: "NOTE" in k, auton_config.keys()))
+        elastic = Elastic(autonPlans, self.savedSwervometerConfig["ALL_ACTIVE_POSITIONS"])
+
+        elastic.autonDisplay() # "Display" are sendableChoosers
+
+        if self.savedSwervometerConfig['TEAM_IS_RED']:
+            elastic.teamDisplay('Red', 'RED')
+        else: #hard coded team is blue
+            elastic.teamDisplay('Blue', 'BLUE')
+
+        elastic.positionDisplay(self.savedSwervometerConfig['FIELD_START_POSITION'])
+
+        return elastic
+
+    def updateTeamColor(self, isTeamRed):
+        
+        if isTeamRed:
             self.team_is_red = True
             self.team_is_blu = False
             teamGyroAdjustment = 0 # Red Team faces 180 degrees at start.
@@ -152,55 +169,65 @@ class MyRobot(wpilib.TimedRobot):
             teamGyroAdjustment = 180 # Blue Team faces 0 degrees at start.
             teamMoveAdjustment = -1 # Blue Team start is oriented 180 degrees from field.
 
-        #self.dashboard.putBoolean(DASH_PREFIX, 'Team is Red', self.team_is_red)
+        return teamGyroAdjustment, teamMoveAdjustment
+
+    def updateFieldStartPosition(self, fieldStartPosition):
+        
+        self.fieldStartPosition = fieldStartPosition
+
+        if (self.fieldStartPosition == 'A'):
+            if self.team_is_red:
+                starting_position_x = self.savedSwervometerConfig['FIELD_RED_A_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_RED_A_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_RED_A_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = self.savedSwervometerConfig['FIELD_BLU_A_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_BLU_A_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_BLU_A_START_ANGLE']
+        elif (self.fieldStartPosition == 'B'):
+            if self.team_is_red:
+                starting_position_x = self.savedSwervometerConfig['FIELD_RED_B_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_RED_B_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_RED_B_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = self.savedSwervometerConfig['FIELD_BLU_B_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_BLU_B_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_BLU_B_START_ANGLE']
+        elif (self.fieldStartPosition == 'C'):
+            if self.team_is_red:
+                starting_position_x = self.savedSwervometerConfig['FIELD_RED_C_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_RED_C_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_RED_C_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = self.savedSwervometerConfig['FIELD_BLU_C_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_BLU_C_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_BLU_C_START_ANGLE']
+        
+        else:
+            self.fieldStartPosition = 'D'
+        #elif (self.fieldStartPosition == 'D'):
+            if self.team_is_red:
+                starting_position_x = self.savedSwervometerConfig['FIELD_RED_D_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_RED_D_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_RED_D_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = self.savedSwervometerConfig['FIELD_BLU_D_START_POSITION_X']
+                starting_position_y = self.savedSwervometerConfig['FIELD_BLU_D_START_POSITION_Y']
+                starting_angle = self.savedSwervometerConfig['FIELD_BLU_D_START_ANGLE']
+
+        #else:
+        #    self.fieldStartPosition = 'E'
+
+        return starting_position_x, starting_position_y, starting_angle
+
+    def initSwervometer(self, config):
+        self.log("initSwervometer ran")
+        
+        teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(config['TEAM_IS_RED'])
+        starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition((config['FIELD_START_POSITION']))
 
         self.log("FIELD_START_POSITION:", config['FIELD_START_POSITION'])
-
-        if (config['FIELD_START_POSITION'] == 'A'):
-            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'A')
-            self.fieldStartPosition = 'A'
-            if self.team_is_red:
-                starting_position_x = config['FIELD_RED_A_START_POSITION_X']
-                starting_position_y = config['FIELD_RED_A_START_POSITION_Y']
-                starting_angle = config['FIELD_RED_A_START_ANGLE']
-            else: # self.team_is_blu
-                starting_position_x = config['FIELD_BLU_A_START_POSITION_X']
-                starting_position_y = config['FIELD_BLU_A_START_POSITION_Y']
-                starting_angle = config['FIELD_BLU_A_START_ANGLE']
-        elif (config['FIELD_START_POSITION'] == 'B'):
-            #self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'B')
-            self.fieldStartPosition = 'B'
-            if self.team_is_red:
-                starting_position_x = config['FIELD_RED_B_START_POSITION_X']
-                starting_position_y = config['FIELD_RED_B_START_POSITION_Y']
-                starting_angle = config['FIELD_RED_B_START_ANGLE']
-            else: # self.team_is_blu
-                starting_position_x = config['FIELD_BLU_B_START_POSITION_X']
-                starting_position_y = config['FIELD_BLU_B_START_POSITION_Y']
-                starting_angle = config['FIELD_BLU_B_START_ANGLE']
-        elif (config['FIELD_START_POSITION'] == 'C'): # config['FIELD_START_POSITION'] == 'C'
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'C')
-            self.fieldStartPosition = 'C'
-            if self.team_is_red:
-                starting_position_x = config['FIELD_RED_C_START_POSITION_X']
-                starting_position_y = config['FIELD_RED_C_START_POSITION_Y']
-                starting_angle = config['FIELD_RED_C_START_ANGLE']
-            else: # self.team_is_blu
-                starting_position_x = config['FIELD_BLU_C_START_POSITION_X']
-                starting_position_y = config['FIELD_BLU_C_START_POSITION_Y']
-                starting_angle = config['FIELD_BLU_C_START_ANGLE']
-        else: # config['FIELD_START_POSITION'] == 'C'
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'D')
-            self.fieldStartPosition = 'D'
-            if self.team_is_red:
-                starting_position_x = config['FIELD_RED_D_START_POSITION_X']
-                starting_position_y = config['FIELD_RED_D_START_POSITION_Y']
-                starting_angle = config['FIELD_RED_D_START_ANGLE']
-            else: # self.team_is_blu
-                starting_position_x = config['FIELD_BLU_D_START_POSITION_X']
-                starting_position_y = config['FIELD_BLU_D_START_POSITION_Y']
-                starting_angle = config['FIELD_BLU_D_START_ANGLE']
-
+        
         bumpers_attached = config['HAS_BUMPERS_ATTACHED']
         if bumpers_attached:
             actual_bumper_dimension_x = config['ROBOT_BUMPER_DIMENSION_X']
@@ -208,8 +235,6 @@ class MyRobot(wpilib.TimedRobot):
         else:
             actual_bumper_dimension_x = 0.0
             actual_bumper_dimension_y = 0.0
-
-        #self.dashboard.putBoolean(DASH_PREFIX, 'Has Bumpers Attached', bumpers_attached)
 
         field_cfg = FieldConfig(sd_prefix='Field_Module',
                                 origin_x=config['FIELD_ORIGIN_X'],
@@ -324,6 +349,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         self.log("teleopInit ran")
+        print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
         self.dropArmTimer = wpilib.Timer()
@@ -333,7 +359,63 @@ class MyRobot(wpilib.TimedRobot):
         self.drivetrain.disableVoltageCompensation()
         return
 
+    def checkTeamColorAndFieldPosition(self):
+
+        #if the bot team color selection on elastic has changed
+        selectedTeam = self.elastic.getSelectedTeam()
+        if selectedTeam != self.ELASTIC_BOT_COLOR: #checks if selection is different
+            self.ELASTIC_BOT_COLOR = selectedTeam
+            if selectedTeam == "RED":
+                teamColorIsRed = True      #will be passed to override/update function
+            elif selectedTeam == "BLUE":
+                teamColorIsRed = False
+
+            teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(teamColorIsRed)
+            self.swervometer.updateTeam(teamGyroAdjustment, teamMoveAdjustment)
+
+        #if the bot starting position selection on elastic has changed
+        selectedPosition = self.elastic.getSelectedPosition()
+        if selectedPosition != self.ELASTIC_BOT_POSITION:
+            self.ELASTIC_BOT_POSITION = selectedPosition
+
+            positions = self.savedSwervometerConfig['ALL_ACTIVE_POSITIONS']
+            for i in positions:
+                if selectedPosition == i:
+                    fieldStartPosition = selectedPosition
+                else:
+                    None
+
+            starting_position_x, starting_position_y, starting_angle = self.updateFieldStartPosition(fieldStartPosition) #one letter splits into 3 values
+            self.swervometer.updateFieldStartPosition(starting_position_x, starting_position_y, starting_angle) #3 values get sent to swervometer
+            
+        #if the bot auton plan selection on elastic has changed
+        selectedAuton = self.elastic.getSelectedAuton()
+        if selectedAuton != self.ELASTIC_BOT_AUTON:
+            self.ELASTIC_BOT_AUTON = selectedAuton
+            self.taskListName = selectedAuton #Auton plan is already selected in autonomousInit
+
     def robotPeriodic(self):
+        
+        if (self.elastic):
+            
+            #updates the variables and displays on elastic field
+            self.checkTeamColorAndFieldPosition()
+            
+            #indicates if a note is loaded inside the robot (beam is broken)
+            self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
+
+            """ This does not work, isConnected() isnt a function and there is nothing on documentation
+            #the goal is to create an indicator that displays if the controllers are connected (individually)
+            isDriverConnected = False
+            isOperatorConnected = False
+            if self.driver:
+                isDriverConnected = wpilib.DriverStation.getJoystickIsXbox(0) #test this
+                if isDriverConnected:
+                    isDriverConnected = True
+            print(isDriverConnected, isOperatorConnected)
+            self.elastic.updateControllerConnectedDisplay(isDriverConnected, isOperatorConnected)
+            """
+        
         for key in self.drivetrain.getModules():
             self.drivetrain.getModules()[key].periodic()
             pass
@@ -345,7 +427,7 @@ class MyRobot(wpilib.TimedRobot):
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
             pass
-        self.mechanism.periodic()
+        self.mechanism.periodic()   
         if self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple-flash")
             #print('purple-flash')
@@ -382,7 +464,6 @@ class MyRobot(wpilib.TimedRobot):
     def teleopPeriodic(self):
         #print(self.mechanism.shootingMotorRPMs)
         #print(self.mechanism.indexBeamBroken())
-        self.elastic.getSelectedAuton()
         """
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
@@ -679,17 +760,19 @@ class MyRobot(wpilib.TimedRobot):
             return 'front_left'
         else:
             return 'center'
-
-    def autonomousInit(self):
+    
+    def autonomousInit(self): 
+        print("STARTING AUTON")
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']
-        taskListName = self.elastic.getSelectedAuton()
-        if taskListName is None:
-            taskListName = config["TASK"]
-            print("WARNING: Falling back to default Auton plan:", taskListName)
-        print("Selected Auton plan:", taskListName)
-        self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.notedetector, self.swervometer, self.starting_angle, taskListName)
+        self.taskListName = self.elastic.getSelectedAuton()
+        if self.taskListName is None:
+            self.taskListName = config["TASK"]
+            print("WARNING: Falling back to default Auton plan:", self.taskListName)
+        print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
+        #self.auton = Autonomous(config, self.team_is_red, self.fieldStartPosition, self.drivetrain,self.mechanism, self.swervometer, self.starting_angle, taskListName)
+        self.auton = Autonomous(config, self.team_is_red, self.drivetrain,self.mechanism, self.notedetector, self.swervometer, self.starting_angle, self.taskListName)
 
         if not self.auton:
             return

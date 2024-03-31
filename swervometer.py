@@ -28,6 +28,7 @@ RobotPropertyConfig = namedtuple('RobotPropertyConfig', ['sd_prefix',
                                                          'swerve_module_offset_x', 'swerve_module_offset_y'])
 
 class Swervometer:
+
     def __init__(self, field_cfg, robot_property_cfg):
         self.field = field_cfg
         self.robotProperty = robot_property_cfg
@@ -51,6 +52,24 @@ class Swervometer:
         #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
     
         self.calcLeverArmLengths()
+
+    """
+    def updateTeamAndFieldStartPosition(self, team_gyro_adjustment, team_move_adjustment, start_position_x, start_position_y, start_angle):
+        self.teamGyroAdjustment = team_gyro_adjustment
+        self.teamMoveAdjustment = team_move_adjustment
+        self.currentX = start_position_x
+        self.currentY = start_position_y
+        self.currentBearing = start_angle
+    """
+    
+    def updateTeam(self, team_gyro_adjustment, team_move_adjustment):
+        self.teamGyroAdjustment = team_gyro_adjustment
+        self.teamMoveAdjustment = team_move_adjustment
+
+    def updateFieldStartPosition(self, start_position_x, start_position_y, start_angle):
+        self.currentX = start_position_x
+        self.currentY = start_position_y
+        self.currentBearing = start_angle
 
     def startTimer(self):
         self.timer = wpilib.Timer()
