@@ -99,6 +99,7 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
                 #log the path the pathplanner's telemetry
                 PPLibTelemetry.setCurrentPath(self.path)
+                self.holonomicController.reset(self.swervometer.getPathPlannerPose(), ChassisSpeeds())
             #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
@@ -111,7 +112,7 @@ class Autonomous:
             PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
 
             #if the speeds are minimal and minimum time has elapsed, move onto the next task
-            if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+            if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 self.drivetrain.set_fwd(0)
                 self.drivetrain.set_strafe(0)
                 self.drivetrain.set_rcw(0)

@@ -98,9 +98,10 @@ class Swervometer:
             #return Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees(((-(self.currentBearing + 180)) % 360) - 360))
 
     def setCOF(self, x, y, bearing):
-        self.currentX = x
-        self.currentY = y
-        self.currentBearing = bearing
+        #self.currentX = x
+        #self.currentY = y
+        #self.currentBearing = bearing
+        pass
 
     def calcLeverArmLengths(self):
 
@@ -241,6 +242,21 @@ class Swervometer:
         self.poseEstimator =  SwerveDrive4PoseEstimator(self.kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180), (0.1, 0.1, 0.1), (1.8, 1.8, 1.8))
         self.vision = vision
         self.currentBearing = self.teamGyroAdjustment
+
+    """
+    Take in our coordinate system
+    """
+    def resetPoseEstimator(self, gyroAngle, x, y, modules):
+        #Pose2d(self.currentX * 0.0254 + 8.28, self.currentY * 0.0254 + 4.10, Rotation2d.fromDegrees((-(self.currentBearing + 180)) % 360))
+        #assume it starts straight for now
+        frontLeftModule = modules['front_left'].getSwerveModulePosition()
+        frontRightModule = modules['front_right'].getSwerveModulePosition()
+        rearLeftModule = modules['rear_left'].getSwerveModulePosition()
+        rearRightModule = modules['rear_right'].getSwerveModulePosition()
+        self.poseEstimator.resetPosition(Rotation2d.fromDegrees((-(gyroAngle)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule), Pose2d(x * 0.0254, y * 0.0254, self.teamGyroAdjustment * math.pi / 180))
+        self.currentX = x
+        self.currentY = y
+        self.currentBearing = gyroAngle
 
     def updatePoseEstimator(self, gyroAngle, modules, inAuton):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
