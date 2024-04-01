@@ -78,10 +78,8 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
-                #self.savedSwervometerConfig = config
                 self.swervometer = self.initSwervometer(config)
             if key == "ELASTIC":
-                #auton_config = self.config["AUTON"]
                 self.elastic = self.initElastic(self.config["AUTON"])
             if key == 'DRIVETRAIN':
                 self.drivetrain = self.initDrivetrain(config)
@@ -379,17 +377,6 @@ class MyRobot(wpilib.TimedRobot):
         if selectedPosition != self.ELASTIC_BOT_POSITION:
             self.ELASTIC_BOT_POSITION = selectedPosition
             starting_position_x, starting_position_y, starting_angle = self.updateStartPosition(selectedPosition)
-
-            """
-            positions = self.config["SWERVOMETER"]['ALL_ACTIVE_POSITIONS']
-            for i in positions:
-                if selectedPosition == i:
-                    fieldStartPosition = selectedPosition
-                else:
-                    None
-            #starting_position_x, starting_position_y, starting_angle = self.updateStartPosition(fieldStartPosition) #one letter splits into 3 values
-            """
-            
             self.swervometer.updateFieldStartPositionCoordinates(starting_position_x, starting_position_y, starting_angle) #3 values get sent to swervometer
             
         #if the bot auton plan selection on elastic has changed
@@ -399,26 +386,24 @@ class MyRobot(wpilib.TimedRobot):
             self.taskListName = selectedAuton #Auton plan is already selected in autonomousInit
 
     def robotPeriodic(self):
-        
+
         if self.elastic:
-            
             #updates the variables and displays on elastic field
             self.checkTeamColorAndFieldPosition()
-            
             #indicates if a note is loaded inside the robot (beam is broken)
             self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
 
-            """ This does not work, isConnected() isnt a function and there is nothing on documentation
+            """
+            #This does not work, isConnected() isnt a function and there is nothing on documentation
             #the goal is to create an indicator that displays if the controllers are connected (individually)
-            isDriverConnected = False
-            isOperatorConnected = False
-            if self.driver:
-                isDriverConnected = self.driver.xboxController.isConnected() #test this
-            if self.operator:
-                isOperatorConnected = self.operator.xboxController.isConnected()
+            #isDriverConnected = False
+            #isOperatorConnected = False
+            isDriverConnected = wpilib.DriverStation.getJoystickIsXbox(0) #test this
+            isOperatorConnected = wpilib.DriverStation.getJoystickIsXbox(1)
             print(isDriverConnected, isOperatorConnected)
             self.elastic.updateControllerConnectedDisplay(isDriverConnected, isOperatorConnected)
             """
+            
         
         for key in self.drivetrain.getModules():
             self.drivetrain.getModules()[key].periodic()
@@ -776,7 +761,7 @@ class MyRobot(wpilib.TimedRobot):
             print("WARNING: Falling back to default Auton plan:", self.taskListName)
         teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(self.elastic.getSelectedTeam)
         self.swervometer.updateTeamColorGyroAdjustment(teamGyroAdjustment, teamMoveAdjustment)
-        print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
+        print("Selected Auton plan:", self.taskListName,"   Team is red: ", str(self.team_is_red), "   Starting Position: ", self.fieldStartPosition)
         self.auton = Autonomous(config, self.team_is_red, self.drivetrain,self.mechanism, self.notedetector, self.swervometer, self.starting_angle, self.taskListName)
 
         if not self.auton:

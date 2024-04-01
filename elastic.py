@@ -7,8 +7,6 @@ class Elastic:
         self.autonPlans = autonPlans
         self.startingPositions = activeStartingPositions
         self.isElasticSubmitted = False
-        #self.controllerDriverElastic = False
-        #self.controllerOperatorElastic = False
         self.beamBreakBoolean = False
     
     def teamDisplay(self, defaultColor, defaultLabel):
@@ -44,34 +42,9 @@ class Elastic:
     def updateBeamDisplay(self, noteDetected):
         self.putBoolean("NOTE LOADED", noteDetected)
 
-        """
-        if noteDetected:
-            self.beamBreakBoolean = True
-        elif not(noteDetected):
-            self.beamBreakBoolean = False
-        else:
-            None
-        self.putBoolean("NOTE LOADED", self.beamBreakBoolean)
-        """
-
     def updateControllerConnectedDisplay(self, driverConnected, operatorConnected):
         self.putBoolean("Driver Connected", driverConnected)
         self.putBoolean("Operator Connected", operatorConnected)
-
-        """
-        if driverConnected:
-            self.controllerDriverElastic = True
-            self.putBoolean("Driver Connected", self.controllerDriverElastic)
-        else:
-            self.controllerDriverElastic = False
-            self.putBoolean("Driver Connected", self.controllerDriverElastic)
-        if operatorConnected:
-            self.controllerOperatorElastic = True
-            self.putBoolean("Operator Connected", self.controllerOperatorElastic)
-        else:
-            self.controllerOperatorElastic = False
-            self.putBoolean("Operator Connected", self.controllerOperatorElastic)
-        """
 
     def getSelectedAuton(self):
         return self.chooser.getSelected()
