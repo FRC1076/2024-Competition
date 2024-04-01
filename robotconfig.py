@@ -59,14 +59,6 @@ swervometerConfig = { # All positions measured in inches
     'FIELD_BLU_E_START_POSITION_Y': 0,
     'FIELD_BLU_E_START_ANGLE': 180,
 
-    #DON"T USE THESE
-    'FIELD_RED_D_START_POSITION_X': 300,
-    'FIELD_RED_D_START_POSITION_Y': 114,
-    'FIELD_RED_D_START_POSITION_ANGLE': 0,
-    'FIELD_BLU_D_START_POSITION_X': -300,
-    'FIELD_BLU_D_START_POSITION_Y': 114,
-    'FIELD_BLU_D_START_ANGLE': 0,
-
     'ROBOT_FRAME_DIMENSION_X': 30.0, # X-coordinate length of robot frame  (2023: 34.0)
     'ROBOT_FRAME_DIMENSION_Y': 30.0, # Y-coordinate length of robot frame  (2023: 26.0)
     'ROBOT_BUMPER_DIMENSION_X': 3.0, # Width of bumper (X-axis)
