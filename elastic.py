@@ -46,6 +46,9 @@ class Elastic:
         self.putBoolean("Driver Connected", driverConnected)
         self.putBoolean("Operator Connected", operatorConnected)
 
+    def updateHasTargetDisplay(self, hasTarget):
+        self.putBoolean("hasTarget", hasTarget)
+
     def getSelectedAuton(self):
         return self.chooser.getSelected()
     

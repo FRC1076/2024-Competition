@@ -398,6 +398,8 @@ class MyRobot(wpilib.TimedRobot):
             self.checkTeamColorAndFieldPosition()
             #indicates if a note is loaded inside the robot (beam is broken)
             self.elastic.updateBeamDisplay(self.mechanism.indexBeamBroken())
+            
+            #self.elastic.updateHasTargetDisplay(False) #self.hasTarget() method for true/false
 
             """
             #This does not work, isConnected() isnt a function and there is nothing on documentation
