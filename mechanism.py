@@ -79,6 +79,11 @@ class Mechanism:
         #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
+    def shootLob(self):
+        self.setLeftShooterRPM(-3000)
+        self.setRightShooterRPM(3000)
+        return
+    
     def shootReverse(self):
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_REVERSE_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_REVERSE_SPEED"])

@@ -423,6 +423,8 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopIndexing()
             if(self.mechanism.getSprocketAngle() > 70):
                 self.mechanism.shootAmp()
+            elif(self.mehcanism.getSprocketAngle() == -5 and not self.operator.xboxController.getBButton())
+                self.mechanism.shootLob()
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
@@ -463,7 +465,8 @@ class MyRobot(wpilib.TimedRobot):
             self.allowDropArm = False
         #podium
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(0)
+            self.mechansim.sprocketToPosition(-5)
+            #self.mechanism.sprocketToPosition(0)
             self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
