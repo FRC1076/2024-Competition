@@ -200,36 +200,25 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = self.config["SWERVOMETER"]['FIELD_BLU_C_START_POSITION_X']
                 starting_position_y = self.config["SWERVOMETER"]['FIELD_BLU_C_START_POSITION_Y']
                 starting_angle = self.config["SWERVOMETER"]['FIELD_BLU_C_START_ANGLE']
-        
-        else:
-            self.fieldStartPosition = 'D'
-        #elif (self.fieldStartPosition == 'D'):
+        elif (self.fieldStartPosition == 'D'):
             if self.team_is_red:
                 starting_position_x = self.config["SWERVOMETER"]['FIELD_RED_D_START_POSITION_X']
                 starting_position_y = self.config["SWERVOMETER"]['FIELD_RED_D_START_POSITION_Y']
                 starting_angle = self.config["SWERVOMETER"]['FIELD_RED_D_START_ANGLE']
             else: # self.team_is_blu
-                starting_position_x = config['FIELD_BLU_D_START_POSITION_X']
-                starting_position_y = config['FIELD_BLU_D_START_POSITION_Y']
-                starting_angle = config['FIELD_BLU_D_START_ANGLE']
-        else: # config['FIELD_START_POSITION'] == 'C'
-            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'E')
-            self.fieldStartPosition = 'E'
-            if self.team_is_red:
-                starting_position_x = config['FIELD_RED_E_START_POSITION_X']
-                starting_position_y = config['FIELD_RED_E_START_POSITION_Y']
-                starting_angle = config['FIELD_RED_E_START_ANGLE']
-            else: # self.team_is_blu
-                starting_position_x = config['FIELD_BLU_E_START_POSITION_X']
-                starting_position_y = config['FIELD_BLU_E_START_POSITION_Y']
-                starting_angle = config['FIELD_BLU_E_START_ANGLE']
-
                 starting_position_x = self.config["SWERVOMETER"]['FIELD_BLU_D_START_POSITION_X']
                 starting_position_y = self.config["SWERVOMETER"]['FIELD_BLU_D_START_POSITION_Y']
                 starting_angle = self.config["SWERVOMETER"]['FIELD_BLU_D_START_ANGLE']
-
-        #else:
-        #    self.fieldStartPosition = 'E'
+        else: # config['FIELD_START_POSITION'] == 'E'
+            self.fieldStartPosition = 'E'
+            if self.team_is_red:
+                starting_position_x = self.config["SWERVOMETER"]['FIELD_RED_E_START_POSITION_X']
+                starting_position_y = self.config["SWERVOMETER"]['FIELD_RED_E_START_POSITION_Y']
+                starting_angle = self.config["SWERVOMETER"]['FIELD_RED_E_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = self.config["SWERVOMETER"]['FIELD_BLU_E_START_POSITION_X']
+                starting_position_y = self.config["SWERVOMETER"]['FIELD_BLU_E_START_POSITION_Y']
+                starting_angle = self.config["SWERVOMETER"]['FIELD_BLU_E_START_ANGLE']
 
         return starting_position_x, starting_position_y, starting_angle
 
