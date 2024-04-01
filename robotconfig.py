@@ -23,7 +23,7 @@ controllerConfig = {
 
 swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': False, # Is the robot part of the Red Team?
-    'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
+    'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -130,10 +130,10 @@ drivetrainConfig = {
 }
 
 visionConfig = {
-    'CAMERA_HEIGHT_FROM_GROUND': 17.3,
+    'CAMERA_HEIGHT_FROM_GROUND': 18,
     'CAMERA_FORWARD_DISTANCE_FROM_COF': 12,
     'CAMERA_SIDE_DISTANCE_FROM_COF': 0.5,
-    'CAMERA_PITCH': 17,
+    'CAMERA_PITCH': 0,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
     'MIN_TARGET_ASPECT_RATIO_REFLECTIVE': 0.0,
@@ -148,7 +148,7 @@ INTAKE_ANGLE = -37 #intake angle
 SHOT_ANGLE = -10 #B shot first note 
 D_PRELOAD_ANGLE = -10
 E_PRELOAD_ANGLE = -10
-NOTE_1_ANGLE = 0 #D second note
+NOTE_1_ANGLE = 5 #D second note
 NOTE_2_ANGLE = 0 #B shot after getting note 2
 SUBWOOFER_ANGLE = -25.9 #subwoofer angle
 FAR_ANGLE = 9.5 #far angle
@@ -277,7 +277,7 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'E_THREE_NOTE':       [['START_INTAKE'],
-                          ['ROTATE', E_YAW]
+                          ['ROTATE', E_YAW],
                           ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
