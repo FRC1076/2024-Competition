@@ -68,7 +68,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.elastic = Elastic(autonPlans)
         #self.elastic.displayMainWindow()
-        self.elastic.autonDisplay()
+        self.elastic.autonDisplay(self.config["AUTON"]["TASK"])
 
 
         dir = ''
@@ -182,7 +182,7 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = config['FIELD_BLU_C_START_POSITION_X']
                 starting_position_y = config['FIELD_BLU_C_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_C_START_ANGLE']
-        else: # config['FIELD_START_POSITION'] == 'C'
+        elif (config['FIELD_START_POSITION'] == 'D'):
             self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'D')
             self.fieldStartPosition = 'D'
             if self.team_is_red:
@@ -193,6 +193,17 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_x = config['FIELD_BLU_D_START_POSITION_X']
                 starting_position_y = config['FIELD_BLU_D_START_POSITION_Y']
                 starting_angle = config['FIELD_BLU_D_START_ANGLE']
+        else: # config['FIELD_START_POSITION'] == 'C'
+            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'E')
+            self.fieldStartPosition = 'E'
+            if self.team_is_red:
+                starting_position_x = config['FIELD_RED_E_START_POSITION_X']
+                starting_position_y = config['FIELD_RED_E_START_POSITION_Y']
+                starting_angle = config['FIELD_RED_E_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = config['FIELD_BLU_E_START_POSITION_X']
+                starting_position_y = config['FIELD_BLU_E_START_POSITION_Y']
+                starting_angle = config['FIELD_BLU_E_START_ANGLE']
 
         bumpers_attached = config['HAS_BUMPERS_ATTACHED']
         if bumpers_attached:
@@ -238,7 +249,7 @@ class MyRobot(wpilib.TimedRobot):
         return swervometer
 
     def initVision(self, config):
-        vision = Vision(NetworkTables.getTable('limelight-g'),
+        vision = Vision(NetworkTables.getTable('limelight'),
                         config['APRILTAGS'],
                         config['RETROREFLECTIVE'],
                         config['MIN_TARGET_ASPECT_RATIO_REFLECTIVE'],
@@ -247,11 +258,11 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
-        NetworkTables.getTable('limelight-g').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, config['CAMERA_SIDE_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, 0, config['CAMERA_PITCH'], 0]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
-            NetworkTables.getTable('limelight-g').putNumber('priorityid', 7)
+            NetworkTables.getTable('limelight').putNumber('priorityid', 7)
         else:
-            NetworkTables.getTable('limelight-g').putNumber('priorityid', 4)
+            NetworkTables.getTable('limelight').putNumber('priorityid', 4)
         return vision
 
     def initDrivetrain(self, config):

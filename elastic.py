@@ -52,9 +52,9 @@ class Elastic:
         .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry())
 
-    def autonDisplay(self):
+    def autonDisplay(self, default):
         self.chooser = wpilib.SendableChooser()
-        self.chooser.setDefaultOption(self.autonPlans[0], self.autonPlans[0])
+        self.chooser.setDefaultOption(default, default)
 
         for plan in self.autonPlans:
             self.chooser.addOption(plan, plan)

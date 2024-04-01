@@ -23,49 +23,41 @@ controllerConfig = {
 
 swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': False, # Is the robot part of the Red Team?
-    'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
+    'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
     'FIELD_ORIGIN_Y': 0.0, # Y-Coordinate of field orgin (center of field, viewed from scoring table)
-    'FIELD_RED_A_START_POSITION_X': 300, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
-    'FIELD_RED_A_START_POSITION_Y': 101, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
-    'FIELD_RED_A_START_ANGLE': 60, # Heading angle of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_X': 308, #values of 2024 on left #248.625, #159.0, # X-Coordinate of starting position A when on red team
+    'FIELD_RED_A_START_POSITION_Y': 114, #values of 2024 on left #16.75, #40.15, #54.25, # Y-Coordinate of starting postion A when on red team
+    'FIELD_RED_A_START_ANGLE': 0, # Heading angle of starting position A when on red team
     'FIELD_RED_B_START_POSITION_X': 275, # X-Coordinate of starting position B when on red team
     'FIELD_RED_B_START_POSITION_Y': 57, #-28.25, # Y-Coordinate of starting postion B when on red team
     'FIELD_RED_B_START_ANGLE': 0, # Heading angle of starting position B when on red team
-    'FIELD_RED_C_START_POSITION_X': 300, # X-Coordinate of starting position C when on red team
-    'FIELD_RED_C_START_POSITION_Y': 13, #-137.90, # Y-Coordinate of starting postion C when on red team
-    'FIELD_RED_C_START_ANGLE': 360-60, # Heading angle of starting position C when on red team
-    'FIELD_RED_D_START_POSITION_X': 342.32283,
-    'FIELD_RED_D_START_POSITION_Y': 57,
+    'FIELD_RED_C_START_POSITION_X': 308, # X-Coordinate of starting position C when on red team
+    'FIELD_RED_C_START_POSITION_Y': 0, #-137.90, # Y-Coordinate of starting postion C when on red team
+    'FIELD_RED_C_START_ANGLE': 0, # Heading angle of starting position C when on red team
+    'FIELD_RED_D_START_POSITION_X': 275,
+    'FIELD_RED_D_START_POSITION_Y': 124,
     'FIELD_RED_D_START_ANGLE': 0.0,
-    'FIELD_RED_E_START_POSITION_X': 218,
-    'FIELD_RED_E_START_POSITION_Y': 57,
+    'FIELD_RED_E_START_POSITION_X': 275,
+    'FIELD_RED_E_START_POSITION_Y': 0,
     'FIELD_RED_E_START_ANGLE': 0.0,
-    'FIELD_BLU_A_START_POSITION_X': -300, # X-Coordinate of starting position A when on blue team
-    'FIELD_BLU_A_START_POSITION_Y': 101, # 40.15, # Y-Coordinate of starting postion A when on blue team
-    'FIELD_BLU_A_START_ANGLE': 180 - 60, # Heading angle of starting position A when on blue team
+    'FIELD_BLU_A_START_POSITION_X': -308, # X-Coordinate of starting position A when on blue team
+    'FIELD_BLU_A_START_POSITION_Y': 114, # 40.15, # Y-Coordinate of starting postion A when on blue team
+    'FIELD_BLU_A_START_ANGLE': 180, # Heading angle of starting position A when on blue team
     'FIELD_BLU_B_START_POSITION_X': -275, # X-Coordinate of starting position B when on blue team
     'FIELD_BLU_B_START_POSITION_Y': 57, #-28.25, # Y-Coordinate of starting postion B when on blue team
     'FIELD_BLU_B_START_ANGLE': 180.0, # Heading angle of starting position B when on blue team
-    'FIELD_BLU_C_START_POSITION_X': -300, # X-Coordinate of starting position C when on blue team
-    'FIELD_BLU_C_START_POSITION_Y': 13, # -137.90, # Y-Coordinate of starting postion C when on blue team
-    'FIELD_BLU_C_START_ANGLE': 180.0 + 60, # Heading angle of starting position C when on blue team
-    'FIELD_BLU_D_START_POSITION_X': -342.32283,
-    'FIELD_BLU_D_START_POSITION_Y': 57,
+    'FIELD_BLU_C_START_POSITION_X': -308, # X-Coordinate of starting position C when on blue team
+    'FIELD_BLU_C_START_POSITION_Y': 0, # -137.90, # Y-Coordinate of starting postion C when on blue team
+    'FIELD_BLU_C_START_ANGLE': 180.0, # Heading angle of starting position C when on blue team
+    'FIELD_BLU_D_START_POSITION_X': -275,
+    'FIELD_BLU_D_START_POSITION_Y': 124,
     'FIELD_BLU_D_START_ANGLE': 180,
-    'FIELD_BLU_E_START_POSITION_X': -218,
-    'FIELD_BLU_E_START_POSITION_Y': 57,
+    'FIELD_BLU_E_START_POSITION_X': -275,
+    'FIELD_BLU_E_START_POSITION_Y': 0,
     'FIELD_BLU_E_START_ANGLE': 180,
-
-    #DON"T USE THESE
-    'FIELD_RED_D_START_POSITION_X': 300,
-    'FIELD_RED_D_START_POSITION_Y': 114,
-    'FIELD_RED_D_START_POSITION_ANGLE': 0,
-    'FIELD_BLU_D_START_POSITION_X': -300,
-    'FIELD_BLU_D_START_POSITION_Y': 114,
-    'FIELD_BLU_D_START_ANGLE': 0,
 
     'ROBOT_FRAME_DIMENSION_X': 30.0, # X-coordinate length of robot frame  (2023: 34.0)
     'ROBOT_FRAME_DIMENSION_Y': 30.0, # Y-coordinate length of robot frame  (2023: 26.0)
@@ -139,7 +131,8 @@ drivetrainConfig = {
 
 visionConfig = {
     'CAMERA_HEIGHT_FROM_GROUND': 18,
-    'CAMERA_DISTANCE_FROM_COF': 12,
+    'CAMERA_FORWARD_DISTANCE_FROM_COF': 12,
+    'CAMERA_SIDE_DISTANCE_FROM_COF': 0.5,
     'CAMERA_PITCH': 0,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
@@ -150,160 +143,174 @@ visionConfig = {
     'UPDATE_POSE': False, # True if should correct position with Limelight information. Otherwise informational.
 }
 
-INTAKE = -37 #intake angle
-SHOT = -10 #B shot first note 
-DSHOT =  0 #D second note
-SHOT_2 = 0 #B shot after getting note 2
-SUBWOOFER = -25.9 #subwoofer angle
-FAR = 9.5 #far angle
-LONG = 8 #long angle
+#Angles of the arm at preset locations
+INTAKE_ANGLE = -37 #intake angle
+SHOT_ANGLE = -10 #B shot first note 
+D_PRELOAD_ANGLE = -10
+E_PRELOAD_ANGLE = -10
+NOTE_1_ANGLE = 5 #D second note
+NOTE_2_ANGLE = 0 #B shot after getting note 2
+SUBWOOFER_ANGLE = -25.9 #subwoofer angle
+FAR_ANGLE = 9.5 #far angle
+LONG_ANGLE = 8 #long angle
+
+#Yaw angle the robot needs to turn in place
+D_YAW = 50
+E_YAW = -50
+NOTE_1_YAW = 25
+
+#Wait times for specific shots
+SUBWOOFER_WAIT = 0.5
 SHOT_WAIT = 0.5 #seconds
 
 autonConfig = {
-    
     'TASK': 'TEST_NOTE',
+
     'B_FAST_FOUR_NOTE_SUBWOOFER': [['START_INTAKE'],
-                                  ['RAISE_ARM_START', SUBWOOFER],
-                                  ['WAIT', SHOT_WAIT],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                                  ['WAIT', SUBWOOFER_WAIT],
                                   ['SHOOT_NOTE'],
-                                  ['LOWER_ARM_START', INTAKE],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
                                   ['PATH', 'B-1[FAST]', -1],
-                                  ['RAISE_ARM_START', SHOT],
+                                  ['RAISE_ARM_START', SHOT_ANGLE],
                                   ['PATH', '1-SHOT[FAST]', -1],
                                   ['SHOOT_NOTE'],
-                                  ['LOWER_ARM_START', INTAKE],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
                                   ['PATH', "SHOT-2", -1],
-                                  ['RAISE_ARM_START', SHOT_2],
+                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
                                   ['WAIT', 0.5],
                                   ['SHOOT_NOTE'],
-                                  ['LOWER_ARM_START', INTAKE],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
                                   ['PATH', '2-3[FAST]', -1],
-                                  ['RAISE_ARM_START', SUBWOOFER],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
                                   ['PATH', '3-B', -1],
                                   ['SHOOT_NOTE'],
-                                  ['LOWER_ARM_START', INTAKE]],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE]],
 
 
     'B_FAR_FOUR_NOTE_TEST': [['START_INTAKE'],
-                            ['RAISE_ARM_START', SUBWOOFER],
-                            ['WAIT', SHOT_WAIT],
+                            ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                            ['WAIT', SUBWOOFER_WAIT],
                             ['SHOOT_NOTE'],
-                            ['LOWER_ARM_START', INTAKE],
+                            ['LOWER_ARM_START', INTAKE_ANGLE],
                             ['PATH', 'B-2', -1],
-                            ['RAISE_ARM_START', SHOT_2],
+                            ['RAISE_ARM_START', NOTE_2_ANGLE],
                             ['WAIT', SHOT_WAIT],
                             ['SHOOT_NOTE'],
-                            ['LOWER_ARM_START', INTAKE],
+                            ['LOWER_ARM_START', INTAKE_ANGLE],
                             ['PATH', '2-4', 3],
-                            ['RAISE_ARM_START', FAR],
+                            ['RAISE_ARM_START', FAR_ANGLE],
                             ['PATH', '4-FAR', -1],
                             ['SHOOT_NOTE'],
-                            ['LOWER_ARM_START', INTAKE],
+                            ['LOWER_ARM_START', INTAKE_ANGLE],
                             ['PATH', 'FAR-5', 2],
-                            ['RAISE_ARM_START', FAR],
+                            ['RAISE_ARM_START', FAR_ANGLE],
                             ['PATH', '5-FAR', -1],
                             ['SHOOT_NOTE'],
-                            ['LOWER_ARM_START', INTAKE]],
+                            ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'B_CENTER_FOUR_NOTE': [['START_INTAKE'],
-                          ['RAISE_ARM_START', SUBWOOFER],
+                          ['RAISE_ARM_START', SUBWOOFER_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'B-2', -1],
-                          ['RAISE_ARM_START', SHOT_2],
+                          ['RAISE_ARM_START', NOTE_2_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', '2-6', 3],
-                          ['RAISE_ARM_START', FAR],
+                          ['RAISE_ARM_START', FAR_ANGLE],
                           ['PATH', '6-FAR', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'FAR-5', 2],
-                          ['RAISE_ARM_START', FAR],
+                          ['RAISE_ARM_START', FAR_ANGLE],
                           ['PATH', '5-FAR', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE]],
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'D_CENTER_FOUR_NOTE': [['START_INTAKE'],
-                          ['ROTATE', -35.56],
-                          ['RAISE_ARM_START', -25.9],
+                          ['RAISE_ARM_START', D_PRELOAD_ANGLE],
+                          ['ROTATE', D_YAW],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'D-1', -1],
-                          ['PATH', '1-1SHOT', -1],
-                          ['RAISE_ARM_START', DSHOT],
+                          ['ROTATE', NOTE_1_YAW],
+                          ['RAISE_ARM_START', NOTE_1_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', '1-4', 2],
-                          ['RAISE_ARM_START', FAR],
+                          ['RAISE_ARM_START', FAR_ANGLE],
                           ['PATH', '4-FAR', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'FAR-6', 2],
-                          ['RAISE_ARM_START', FAR],
+                          ['RAISE_ARM_START', FAR_ANGLE],
                           ['PATH', '6-FAR', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE]],
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'D_CENTER5_FOUR_NOTE': [['START_INTAKE'],
-                          ['ROTATE', -35.56],
-                          ['RAISE_ARM_START', -25.9],
+                          ['RAISE_ARM_START', D_PRELOAD_ANGLE],
+                          ['ROTATE', D_YAW],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'D-1', -1],
-                          ['PATH', '1-1SHOT', -1],
-                          ['RAISE_ARM_START', DSHOT],
+                          ['ROTATE', NOTE_1_YAW],
+                          ['RAISE_ARM_START', NOTE_1_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', '1-5', 2],
-                          ['RAISE_ARM_START', FAR],
+                          ['RAISE_ARM_START', FAR_ANGLE],
                           ['PATH', '5-FAR', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'FAR-6', 2],
-                          ['RAISE_ARM_START', FAR],
+                          ['RAISE_ARM_START', FAR_ANGLE],
                           ['PATH', '6-FAR', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE]],
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'E_THREE_NOTE':       [['START_INTAKE'],
-                          ['RAISE_ARM_START', -25.9],
+                          ['ROTATE', E_YAW],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'E-8', 3],
-                          ['RAISE_ARM_START', LONG],
+                          ['RAISE_ARM_START', LONG_ANGLE],
                           ['PATH', '8-LONG', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'LONG-7', 1],
-                          ['RAISE_ARM_START', LONG],
+                          ['RAISE_ARM_START', LONG_ANGLE],
                           ['PATH', '7-LONG', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE]],
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
+
    'E_CENTER_THREE_NOTE': [['START_INTAKE'],
-                          ['ROTATE', 75],
-                          ['RAISE_ARM_START', -25.9],
+                          ['ROTATE', E_YAW],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'E-7', 3],
-                          ['RAISE_ARM_START', LONG],
+                          ['RAISE_ARM_START', LONG_ANGLE],
                           ['PATH', '7-LONG', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'LONG-8', 1],
-                          ['RAISE_ARM_START', LONG],
+                          ['RAISE_ARM_START', LONG_ANGLE],
                           ['PATH', '8-LONG', -1],
                           ['SHOOT_NOTE'],
-                          ['LOWER_ARM_START', INTAKE]],
-                          
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
+
+    'TEST_NOTE': [['PATH', 'TEST', 0]],
 
     #'B_FOUR_NOTE_GRAB': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', 'B-1', 0.5], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', SHOT_2, 0.3], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-3', 0.3], ['RAISE_ARM_START', 0], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     #'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', -(275 - 64), 57, 180, 0], ['RAISE_ARM_START', 0]],
