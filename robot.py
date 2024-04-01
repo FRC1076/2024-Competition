@@ -148,9 +148,9 @@ class MyRobot(wpilib.TimedRobot):
         elastic.autonDisplay() # "Display" are sendableChoosers
 
         if self.config["SWERVOMETER"]['TEAM_IS_RED']:
-            elastic.teamDisplay('Red', 'RED')
+            elastic.teamDisplay('Red', True)
         else: #hard coded team is blue
-            elastic.teamDisplay('Blue', 'BLUE')
+            elastic.teamDisplay('Blue', False)
 
         elastic.positionDisplay(self.config["SWERVOMETER"]['FIELD_START_POSITION'])
 
@@ -360,6 +360,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def checkTeamColorAndFieldPosition(self):
 
+        """
         #if the bot team color selection on elastic has changed
         selectedTeam = self.elastic.getSelectedTeam()
         if selectedTeam != self.ELASTIC_BOT_COLOR: #checks if selection is different
@@ -371,6 +372,7 @@ class MyRobot(wpilib.TimedRobot):
 
             teamGyroAdjustment, teamMoveAdjustment = self.updateTeamColor(teamColorIsRed)
             self.swervometer.updateTeamColorGyroAdjustment(teamGyroAdjustment, teamMoveAdjustment)
+        """
 
         #if the bot starting position selection on elastic has changed
         selectedPosition = self.elastic.getSelectedPosition()
@@ -772,6 +774,7 @@ class MyRobot(wpilib.TimedRobot):
         if self.taskListName is None:
             self.taskListName = config["TASK"]
             print("WARNING: Falling back to default Auton plan:", self.taskListName)
+        self.updateTeamColor(self.elastic.getSelectedTeam)
         print("Selected Auton plan:", self.taskListName,"/n Team is red: ", str(self.team_is_red), "/n Starting Position: ", self.fieldStartPosition)
         self.auton = Autonomous(config, self.team_is_red, self.drivetrain,self.mechanism, self.notedetector, self.swervometer, self.starting_angle, self.taskListName)
 

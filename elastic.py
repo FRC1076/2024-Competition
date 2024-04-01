@@ -17,9 +17,9 @@ class Elastic:
         label = defaultLabel
         self.teamChooser.setDefaultOption(color, label)
         if defaultColor == 'Red':
-            self.teamChooser.addOption("Blue Alliance", "BLUE")
+            self.teamChooser.addOption("Blue Alliance", False)
         else:
-            self.teamChooser.addOption("Red Alliance", "RED")
+            self.teamChooser.addOption("Red Alliance", True)
         SmartDashboard.putData(self.teamChooser)
     
     def positionDisplay(self, defaultPosition):
