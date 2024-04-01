@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B-1"
+            "pathName": "B-1[FAST]"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1-SHOT"
+            "pathName": "1-SHOT[FAST]"
           }
         },
         {
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2-3"
+            "pathName": "2-3[FAST]"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3-2"
+            "pathName": "3-B"
           }
         }
       ]
