@@ -276,9 +276,8 @@ autonConfig = {
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
-    #Incomplete
-    """
     'E_THREE_NOTE':       [['START_INTAKE'],
+                          ['ROTATE', E_YAW]
                           ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
@@ -293,7 +292,6 @@ autonConfig = {
                           ['PATH', '7-LONG'],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
-    """
 
    'E_CENTER_THREE_NOTE': [['START_INTAKE'],
                           ['ROTATE', E_YAW],
