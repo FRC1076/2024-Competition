@@ -397,6 +397,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
+        self.lobbing = False
         #print('RPM', self.mechanism.getShooterRPM())
         #print('ANGLE', self.mechanism.getSprocketAngle())
         #passive functions
@@ -423,7 +424,7 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopIndexing()
             if(self.mechanism.getSprocketAngle() > 70):
                 self.mechanism.shootAmp()
-            elif(self.mehcanism.getSprocketAngle() == -5 and not self.operator.xboxController.getBButton())
+            elif(self.lobbing)
                 self.mechanism.shootLob()
             else:
                 self.mechanism.shootNote()
@@ -448,10 +449,12 @@ class MyRobot(wpilib.TimedRobot):
         if self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) > 0:
             self.mechanism.sprocketDown()
             self.allowDropArm = False
+            self.lobbing = False
         #rotate sprocket up
         elif self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) < 0:
             self.mechanism.sprocketUp()
             self.allowDropArm = False
+            self.lobbing = False
         else:
             if not self.inADropDownThisCycle:
                 self.mechanism.stopSprocket()
@@ -459,21 +462,27 @@ class MyRobot(wpilib.TimedRobot):
         if(self.operator.xboxController.getLeftTriggerAxis() > 0.5):
             self.mechanism.sprocketToPosition(-37)
             self.allowDropArm = False
+            self.lobbing = False
         #subwoofer
         elif self.operator.xboxController.getAButton():
             self.mechanism.sprocketToPosition(-23)
             self.allowDropArm = False
+            self.lobbing = False
         #podium
         elif self.operator.xboxController.getXButton():
+            #Mateo equation here:
             self.mechansim.sprocketToPosition(-5)
             #self.mechanism.sprocketToPosition(0)
             self.allowDropArm = False
+            self.lobbing = True
         #amp
         elif self.operator.xboxController.getYButton():
             self.mechanism.sprocketToPosition(80) 
             self.allowDropArm = False
+            self.lobbing = False
         #auto aim
         elif self.operator.xboxController.getBButton():
+            self.lobbing = False
             distance = -1
             if self.team_is_blu:
                 #distance = self.vision.getAvgDistance()
