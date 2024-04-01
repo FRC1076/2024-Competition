@@ -161,8 +161,8 @@ LONG = 8 #long angle
 SHOT_WAIT = 0.5 #seconds
 
 autonConfig = {
-    
     'TASK': 'TEST_NOTE',
+
     'B_FAST_FOUR_NOTE_SUBWOOFER': [['START_INTAKE'],
                                   ['RAISE_ARM_START', SUBWOOFER],
                                   ['WAIT', SHOT_WAIT],

@@ -68,7 +68,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.elastic = Elastic(autonPlans)
         #self.elastic.displayMainWindow()
-        self.elastic.autonDisplay()
+        self.elastic.autonDisplay(config["TASK"])
 
 
         dir = ''
