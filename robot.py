@@ -582,7 +582,7 @@ class MyRobot(wpilib.TimedRobot):
 
         if (driver.getYButton()):
             self.drivetrain.alignWithNote(None, None, 0)
-            self.drivetrain.driveStraight(self.deadzoneCorrection(driver.getLeftY() * translational_clutch, self.driver.deadzone))
+            self.drivetrain.driveStraight(math.max(self.deadzoneCorrection(driver.getLeftY() * translational_clutch, 0), self.driver.deadzone))
             # self.drivetrain.alignWithNote(0, 0, None)
             return
 
