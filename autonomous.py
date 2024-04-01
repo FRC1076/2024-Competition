@@ -99,6 +99,7 @@ class Autonomous:
                 self.pathTrajectory = self.path.getTrajectory(ChassisSpeeds(), rotation)
                 #log the path the pathplanner's telemetry
                 PPLibTelemetry.setCurrentPath(self.path)
+                self.holonomicController.reset(self.swervometer.getPathPlannerPose(), ChassisSpeeds())
             #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
@@ -112,10 +113,16 @@ class Autonomous:
 
             #if the speeds are minimal and minimum time has elapsed, move onto the next task
             if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
-                self.drivetrain.set_fwd(0)
-                self.drivetrain.set_strafe(0)
-                self.drivetrain.set_rcw(0)
-                self.drivetrain.execute('center')
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(0, 0, 0))
+                self.modules = self.drivetrain.getModules()
+                self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)
+                self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                self.modules['front_left'].execute()
+                self.modules['front_right'].execute()
+                self.modules['rear_left'].execute()
+                self.modules['rear_right'].execute()
                 self.lastTime = -1
                 self.taskListCounter += 1
             else:
@@ -216,7 +223,9 @@ class Autonomous:
                 self.lastTime = self.autonTimer.get()
                 self.mechanism.setShootState(True)
                 self.mechanism.indexNote()
+                self.swervometer.enableVision()
             if(self.autonTimer.get() - self.lastTime > 0.25):
+                self.swervometer.disableVision()
                 #self.mechanism.sprocketToPosition(-37)
                 self.mechanism.setShootState(False)
                 self.mechanism.stopIndexing()
@@ -314,6 +323,14 @@ class Autonomous:
                 self.drivetrain.set_rcw(0)
                 self.drivetrain.execute('center')
                 self.taskListCounter += 1
+        
+        elif self.autonTask[0] == "ENABLE_VISION":
+            self.swervometer.enableVision()
+            self.taskListCounter += 1
+
+        elif self.autonTask[0] == "DISABLE_VISION":
+            self.swervometer.disableVision()
+            self.taskListCounter += 1
             
         return False
     

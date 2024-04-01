@@ -15,7 +15,7 @@ class Elastic:
         self.config = elasticConfig
         self.autonPlans = autonPlans
         self.autonConfig = autonConfig
-        self.selectedTaskKey = autonConfig['B_THREE_NOTE_AMP_SIDE']
+        self.selectedTaskKey = autonConfig['B_FAST_FOUR_NOTE_SUBWOOFER']
         self.isNoteDetected = self.config["NOTE_IS_DETECTED"]
         self.isNoteLeft = self.config["NOTE_ON_LEFT"]
         self.isNoteRight = self.config["NOTE_ON_RIGHT"]

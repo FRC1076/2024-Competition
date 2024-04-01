@@ -309,13 +309,15 @@ class MyRobot(wpilib.TimedRobot):
         self.teleopSteerStraight = config['TELEOP_STEER_STRAIGHT']
 
         #gyro = AHRS.create_spi()
-        gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
+        #AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50)
+        gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 66) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
 
         swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 
         return swerve
 
     def teleopInit(self):
+        self.swervometer.enableVision()
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
@@ -327,12 +329,12 @@ class MyRobot(wpilib.TimedRobot):
         return
 
     def robotPeriodic(self):
-        gyroAngle = self.drivetrain.getGyroAngle()
-        modules = self.drivetrain.getModules()
-        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
         for key in self.drivetrain.getModules():
             self.drivetrain.getModules()[key].periodic()
             pass
+        gyroAngle = self.drivetrain.getGyroAngle()
+        modules = self.drivetrain.getModules()
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
         if self.notedetector.hasTarget():
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
@@ -464,11 +466,11 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getBButton():
             distance = -1
             if self.team_is_blu:
-                distance = self.vision.getAvgDistance()
-                #distance = self.swervometer.distanceToPose(-326, 57) - 15 #should be -15 but we are calibrated to be at COF as opposed to front of robot which is used in the auto aim calculations
+                #distance = self.vision.getAvgDistance()
+                distance = self.swervometer.distanceToPose(-326, 57) - 15 #should be -15 but we are calibrated to be at COF as opposed to front of robot which is used in the auto aim calculations
             else:
-                distance = self.vision.getAvgDistance()
-                #distance = self.swervometer.distanceToPose(326, 57) - 15
+                #distance = self.vision.getAvgDistance()
+                distance = self.swervometer.distanceToPose(326, 57) - 15
             if distance != -1 and distance != 0 and distance > 0:
                 self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
             #print(distance)
@@ -609,9 +611,11 @@ class MyRobot(wpilib.TimedRobot):
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
-                    self.drivetrain.pointToPriorityTag()
+                    #self.drivetrain.pointToPriorityTag()
+                    self.drivetrain.pointToPose(-326, 57)
                 else:
-                    self.drivetrain.pointToPriorityTag()
+                    #self.drivetrain.pointToPriorityTag()
+                    self.drivetrain.pointToPose(-326, 57)
                 self.drivetrain.execute('center')
                 return
 
@@ -673,6 +677,7 @@ class MyRobot(wpilib.TimedRobot):
             return 'center'
 
     def autonomousInit(self):
+        self.swervometer.disableVision()
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']

@@ -10,7 +10,8 @@ from dashboard import Dashboard
 from networktables import NetworkTables
 from networktables.util import ntproperty
 from collections import namedtuple
-from wpimath.controller import PIDController
+from wpimath.controller import PIDController, ProfiledPIDController
+from wpimath.trajectory import TrapezoidProfileRadians
 import wpimath.geometry
 from swervometer import Swervometer
 from logger import Logger
@@ -162,6 +163,9 @@ class SwerveDrive:
         self.bearing_kI = self.bearing_config.bearing_kI
         self.bearing_kD = self.bearing_config.bearing_kD
         self.bearing_pid_controller = PIDController(self.bearing_kP, self.bearing_kI, self.bearing_kD)
+        self.pointToPosePIDController = PIDController(0.022, 0, 0.0001)
+        self.pointToPosePIDController.enableContinuousInput(0, 360)
+        #self.pointToPosePIDController = ProfiledPIDController(0.02, 0, 0, TrapezoidProfileRadians.Constraints(6.28, 3.14), 0.02)#PIDController(0.02, 0, 0)
         self.bearing_pid_controller.setTolerance(1, 1)
         
         self.bearing = self.getGyroAngle()
@@ -1178,6 +1182,7 @@ class SwerveDrive:
         currentX, currentY, currentR = self.swervometer.getCOF()
         #use a try-except in case of atan dividing by 0. May not be an issue but just in case
         try:
+            """
             desiredAngle = (180 - math.atan2((currentY - y), (currentX - x)) * 180/math.pi) % 360
             #if we desire angle 359, it will overshoot and go to 0 which will then pid all the way back to 359 but overshoot again and keep spinning in circles
             #to fix this, find the complementary angle and move in the direction of the fastest path
@@ -1187,7 +1192,10 @@ class SwerveDrive:
                 angleMove = -self.bearing_pid_controller.calculate(complementaryAngle)
             else:
                 angleMove = self.bearing_pid_controller.calculate(directAngle)
-            self.set_rcw(-clamp(angleMove))
+            self.set_rcw(-clamp(angleMove))"""
+            desiredAngle = (180 - math.atan2((currentY - y), (currentX - x)) * 180/math.pi) % 360
+            angleMove = self.pointToPosePIDController.calculate(self.getGyroAngle(), desiredAngle)
+            self.set_rcw(clamp(angleMove))
         except:
             pass
         return
