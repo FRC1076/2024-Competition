@@ -209,6 +209,21 @@ class MyRobot(wpilib.TimedRobot):
                 starting_position_y = self.config["SWERVOMETER"]['FIELD_RED_D_START_POSITION_Y']
                 starting_angle = self.config["SWERVOMETER"]['FIELD_RED_D_START_ANGLE']
             else: # self.team_is_blu
+                starting_position_x = config['FIELD_BLU_D_START_POSITION_X']
+                starting_position_y = config['FIELD_BLU_D_START_POSITION_Y']
+                starting_angle = config['FIELD_BLU_D_START_ANGLE']
+        else: # config['FIELD_START_POSITION'] == 'C'
+            self.dashboard.putString(DASH_PREFIX, 'Field Start Position', 'E')
+            self.fieldStartPosition = 'E'
+            if self.team_is_red:
+                starting_position_x = config['FIELD_RED_E_START_POSITION_X']
+                starting_position_y = config['FIELD_RED_E_START_POSITION_Y']
+                starting_angle = config['FIELD_RED_E_START_ANGLE']
+            else: # self.team_is_blu
+                starting_position_x = config['FIELD_BLU_E_START_POSITION_X']
+                starting_position_y = config['FIELD_BLU_E_START_POSITION_Y']
+                starting_angle = config['FIELD_BLU_E_START_ANGLE']
+
                 starting_position_x = self.config["SWERVOMETER"]['FIELD_BLU_D_START_POSITION_X']
                 starting_position_y = self.config["SWERVOMETER"]['FIELD_BLU_D_START_POSITION_Y']
                 starting_angle = self.config["SWERVOMETER"]['FIELD_BLU_D_START_ANGLE']
@@ -277,7 +292,7 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
-        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_DISTANCE_FROM_COF'] * 0.0254, 0, 0, 0]) #0.3, -0.327, 0.45, 0, 0, 0
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, config['CAMERA_SIDE_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, 0, config['CAMERA_PITCH'], 0]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
             NetworkTables.getTable('limelight').putNumber('priorityid', 7)
         else:
@@ -339,13 +354,15 @@ class MyRobot(wpilib.TimedRobot):
         self.teleopSteerStraight = config['TELEOP_STEER_STRAIGHT']
 
         #gyro = AHRS.create_spi()
-        gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
+        #AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50)
+        gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 66) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
 
         swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 
         return swerve
 
     def teleopInit(self):
+        self.swervometer.enableVision()
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
@@ -541,11 +558,11 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getBButton():
             distance = -1
             if self.team_is_blu:
-                distance = self.vision.getAvgDistance()
-                #distance = self.swervometer.distanceToPose(-326, 57) - 15 #should be -15 but we are calibrated to be at COF as opposed to front of robot which is used in the auto aim calculations
+                #distance = self.vision.getAvgDistance()
+                distance = self.swervometer.distanceToPose(-326, 57) - 15 #should be -15 but we are calibrated to be at COF as opposed to front of robot which is used in the auto aim calculations
             else:
-                distance = self.vision.getAvgDistance()
-                #distance = self.swervometer.distanceToPose(326, 57) - 15
+                #distance = self.vision.getAvgDistance()
+                distance = self.swervometer.distanceToPose(326, 57) - 15
             if distance != -1 and distance != 0 and distance > 0:
                 self.mechanism.sprocketToPosition(self.mechanism.getAutoAimAngle(distance, 0))
             #print(distance)
@@ -686,9 +703,11 @@ class MyRobot(wpilib.TimedRobot):
             if driver.getBButton():
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
-                    self.drivetrain.pointToPriorityTag()
+                    #self.drivetrain.pointToPriorityTag()
+                    self.drivetrain.pointToPose(-326, 57)
                 else:
-                    self.drivetrain.pointToPriorityTag()
+                    #self.drivetrain.pointToPriorityTag()
+                    self.drivetrain.pointToPose(-326, 57)
                 self.drivetrain.execute('center')
                 return
 
@@ -752,6 +771,7 @@ class MyRobot(wpilib.TimedRobot):
     
     def autonomousInit(self): 
         print("STARTING AUTON")
+        self.swervometer.disableVision()
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']

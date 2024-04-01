@@ -32,7 +32,7 @@ class Elastic:
                 self.positionChooser.addOption(position, label)
         SmartDashboard.putData(self.positionChooser)
 
-    def autonDisplay(self):
+    def autonDisplay(self, default):
         self.chooser = wpilib.SendableChooser()
         self.chooser.setDefaultOption(self.autonPlans[0], self.autonPlans[0])
         for plan in self.autonPlans:

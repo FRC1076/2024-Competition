@@ -50,6 +50,7 @@ class Swervometer:
         self.com_offset_y = self.robotProperty.com_offset_y
         self.starting_angle = self.field.start_angle
         #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
+        self.useVision = False
     
         self.calcLeverArmLengths()
 
@@ -217,6 +218,12 @@ class Swervometer:
 
     def getKinematics(self):
         return self.kinematics
+    
+    def enableVision(self):
+        self.useVision = True
+
+    def disableVision(self):
+        self.useVision = False
 
     def initPoseEstimator(self, modules, vision):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
@@ -259,11 +266,12 @@ class Swervometer:
         #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         
-        #if(self.vision.hasTargets() and not inAuton):
-        #    try:
-        #        self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, gyroAngle * math.pi / 180), self.getTimer() - self.vision.getTotalLatency() / 1000)
-        #    except:
-        #        pass
+        if(self.vision.hasTargets() and self.vision.getAvgDistance() < 250 and self.vision.getTagCount() == 2 and self.useVision):
+            try:
+                print("POSE UPDATING AHHHHHHHHHHH")
+                self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
+            except:
+                pass
         
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37

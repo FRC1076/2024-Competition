@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.35,
+      "y": 5.54
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2-6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6-FAR"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FAR-5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5-FAR"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

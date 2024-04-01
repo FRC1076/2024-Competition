@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E-7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "7-LONG"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LONG-8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "8-LONG"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
