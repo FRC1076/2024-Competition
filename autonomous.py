@@ -87,6 +87,8 @@ class Autonomous:
             return True
         
         elif self.autonTask[0] == 'PATH':
+            #set waitTime to -1 if you don't want to use note detection
+            waitTime = self.autonTask[2]
             #when this command is first called
             if self.lastTime == -1:
                 #update the time
@@ -111,8 +113,21 @@ class Autonomous:
             inaccuracyDistance = math.sqrt(pow(relativePose.X(), 2) + pow(relativePose.Y(), 2))
             PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
 
-            #if the speeds are minimal and minimum time has elapsed, move onto the next task
-            if(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+            #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
+            if(self.notedetector.hasTarget() and waitTime >= 0 and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime):
+                # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.notedetector.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()), self.chassisSpeeds[2]))
+                self.modules = self.drivetrain.getModules()
+                self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)
+                self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                self.modules['front_left'].execute()
+                self.modules['front_right'].execute()
+                self.modules['rear_left'].execute()
+                self.modules['rear_right'].execute()
+            elif(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
+                #if the speeds are minimal and minimum time has elapsed, move onto the next task
                 self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(0, 0, 0))
                 self.modules = self.drivetrain.getModules()
                 self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
@@ -137,8 +152,9 @@ class Autonomous:
                 self.modules['front_right'].execute()
                 self.modules['rear_left'].execute()
                 self.modules['rear_right'].execute()
-            
 
+
+        """ PATH_TO_NOTE with x and y adjustment, task jumping        
         elif self.autonTask[0] == 'PATH_TO_NOTE':
             waitTime = self.autonTask[2]
             #when this command is first called
@@ -190,6 +206,7 @@ class Autonomous:
                 self.modules['front_right'].execute()
                 self.modules['rear_left'].execute()
                 self.modules['rear_right'].execute()
+        """
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)
