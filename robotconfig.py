@@ -145,14 +145,14 @@ visionConfig = {
 
 #Angles of the arm at preset locations
 INTAKE_ANGLE = -37 #intake angle
-SHOT_ANGLE = -10 #B shot first note 
-D_PRELOAD_ANGLE = -10
-E_PRELOAD_ANGLE = -10
-NOTE_1_ANGLE = 5 #D second note
-NOTE_2_ANGLE = 0 #B shot after getting note 2
+SHOT_ANGLE = -10 #angle at the shot location
+D_PRELOAD_ANGLE = -10 #angle for the D preload
+E_PRELOAD_ANGLE = -10 #angle for the E preload
+NOTE_1_ANGLE = 5 #angle for shots at note 1
+NOTE_2_ANGLE = 0 #angle for shots at note 2
 SUBWOOFER_ANGLE = -25.9 #subwoofer angle
 FAR_ANGLE = 9.5 #far angle
-LONG_ANGLE = 8 #long angle
+LONG_ANGLE = 9.9 #long angle
 
 #Yaw angle the robot needs to turn in place
 D_YAW = 50
