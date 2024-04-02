@@ -130,10 +130,10 @@ drivetrainConfig = {
 }
 
 visionConfig = {
-    'CAMERA_HEIGHT_FROM_GROUND': 18,
+    'CAMERA_HEIGHT_FROM_GROUND': 17.3,
     'CAMERA_FORWARD_DISTANCE_FROM_COF': 12,
     'CAMERA_SIDE_DISTANCE_FROM_COF': 0.5,
-    'CAMERA_PITCH': 0,
+    'CAMERA_PITCH': 16.5,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
     'MIN_TARGET_ASPECT_RATIO_REFLECTIVE': 0.0,
@@ -176,12 +176,13 @@ autonConfig = {
                                   ['PATH', '1-SHOT[FAST]', -1],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
-                                  ['PATH', "SHOT-2", -1],
-                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
+                                  ['PATH', 'SHOT-2', -1],
+                                  ['RAISE_ARM_START', SHOT_ANGLE],
+                                  ['PATH', '2-SHOT'],
                                   ['WAIT', 0.5],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
-                                  ['PATH', '2-3[FAST]', -1],
+                                  ['PATH', 'SHOT-3[FAST]', -1],
                                   ['RAISE_ARM_START', SUBWOOFER_ANGLE],
                                   ['PATH', '3-B', -1],
                                   ['SHOOT_NOTE'],
@@ -376,7 +377,7 @@ autonConfig = {
     'SCORE_EXISTING': True,
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 0,
-    'TRANSLATION_KP': 3,
+    'TRANSLATION_KP': 2,
     'MAX_PICK_UP_DISTANCE': 100,
 }
 
