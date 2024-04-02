@@ -23,7 +23,7 @@ class Autonomous:
         self.taskListCounter = 0
 
         self.maxSpeed = config["MAX_SPEED_M/S"]
-        self.counterSeven = 0
+        self.noteDriveCounter = 0
         self.autonTimer = wpilib.Timer()
         self.autonHasStarted = False
         self.drivetrain = drivetrain
@@ -113,7 +113,7 @@ class Autonomous:
             inaccuracyDistance = math.sqrt(pow(relativePose.X(), 2) + pow(relativePose.Y(), 2))
             PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
 
-            self.counterSeven += 1
+            self.noteDriveCounter += 1
 
             #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
             if(self.notedetector.hasTarget() and waitTime >= 0 and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime):
@@ -129,7 +129,7 @@ class Autonomous:
                 # self.modules['rear_left'].execute()
                 # self.modules['rear_right'].execute()
 
-                if(self.counterSeven % 2 == 0):
+                if(self.noteDriveCounter % 2 == 0):
                     # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
                     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3 * 10, self.chassisSpeeds[2]))
                     self.modules = self.drivetrain.getModules()
