@@ -48,7 +48,4 @@ class NoteDetector:
 
         self.lastHeartbeat = self.getHeartbeat()
 
-        if self.sameCounter > 10:
-            return False
-        else:
-            return True
+        return self.sameCounter < 11
