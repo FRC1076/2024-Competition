@@ -255,7 +255,7 @@ class Swervometer:
         self.currentBearing = gyroAngle
         #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
-        
+        print(self.useVision)
         if(self.vision.hasTargets() and self.vision.getAvgDistance() < 250 and self.vision.getTagCount() == 2 and self.useVision):
             try:
                 print("POSE UPDATING AHHHHHHHHHHH")

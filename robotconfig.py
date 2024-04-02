@@ -22,8 +22,8 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
-    'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -176,12 +176,13 @@ autonConfig = {
                                   ['PATH', '1-SHOT[FAST]'],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
-                                  ['PATH', "SHOT-2"],
-                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
+                                  ['PATH', 'SHOT-2'],
+                                  ['RAISE_ARM_START', SHOT_ANGLE],
+                                  ['PATH', '2-SHOT'],
                                   ['WAIT', 0.5],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
-                                  ['PATH', '2-3[FAST]'],
+                                  ['PATH', 'SHOT-3[FAST]'],
                                   ['RAISE_ARM_START', SUBWOOFER_ANGLE],
                                   ['PATH', '3-B'],
                                   ['SHOOT_NOTE'],
@@ -374,7 +375,7 @@ autonConfig = {
     'SCORE_EXISTING': True,
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 0,
-    'TRANSLATION_KP': 3,
+    'TRANSLATION_KP': 2,
     'MAX_PICK_UP_DISTANCE': 70,
 }
 
