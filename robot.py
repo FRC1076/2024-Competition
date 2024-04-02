@@ -350,6 +350,7 @@ class MyRobot(wpilib.TimedRobot):
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
+            #print('no target')
             pass
         self.mechanism.periodic()
         if self.mechanism.indexBeamBroken():

@@ -23,7 +23,7 @@ class Autonomous:
         self.taskListCounter = 0
 
         self.maxSpeed = config["MAX_SPEED_M/S"]
-
+        self.counterSeven = 0
         self.autonTimer = wpilib.Timer()
         self.autonHasStarted = False
         self.drivetrain = drivetrain
@@ -113,19 +113,46 @@ class Autonomous:
             inaccuracyDistance = math.sqrt(pow(relativePose.X(), 2) + pow(relativePose.Y(), 2))
             PPLibTelemetry.setPathInaccuracy(inaccuracyDistance)
 
+            self.counterSeven += 1
+
             #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
             if(self.notedetector.hasTarget() and waitTime >= 0 and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime):
                 # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
-                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.notedetector.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()), self.chassisSpeeds[2]))
-                self.modules = self.drivetrain.getModules()
-                self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
-                self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
-                self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)
-                self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
-                self.modules['front_left'].execute()
-                self.modules['front_right'].execute()
-                self.modules['rear_left'].execute()
-                self.modules['rear_right'].execute()
+                # self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/5, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3/5, self.chassisSpeeds[2])/5)
+                # self.modules = self.drivetrain.getModules()
+                # self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                # self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                # self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)   
+                # self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                # self.modules['front_left'].execute()
+                # self.modules['front_right'].execute()
+                # self.modules['rear_left'].execute()
+                # self.modules['rear_right'].execute()
+
+                if(self.counterSeven % 2 == 0):
+                    # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
+                    self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3 * 10, self.chassisSpeeds[2]))
+                    self.modules = self.drivetrain.getModules()
+                    self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                    self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                    self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)
+                    self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                    self.modules['front_left'].execute()
+                    self.modules['front_right'].execute()
+                    self.modules['rear_left'].execute()
+                    self.modules['rear_right'].execute()
+                else:
+                    self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
+                    self.modules = self.drivetrain.getModules()
+                    self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
+                    self.modules['front_right'].move(self.moduleStates[1].speed / (self.maxSpeed), (self.moduleStates[1].angle.degrees() + 270) % 360)
+                    self.modules['rear_left'].move(self.moduleStates[2].speed / (self.maxSpeed), (self.moduleStates[2].angle.degrees() + 270) % 360)
+                    self.modules['rear_right'].move(self.moduleStates[3].speed / (self.maxSpeed), (self.moduleStates[3].angle.degrees() + 270) % 360)
+                    self.modules['front_left'].execute()
+                    self.modules['front_right'].execute()
+                    self.modules['rear_left'].execute()
+                    self.modules['rear_right'].execute()
+                    pass
             elif(abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()):
                 #if the speeds are minimal and minimum time has elapsed, move onto the next task
                 self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(0, 0, 0))
