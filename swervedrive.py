@@ -1105,7 +1105,7 @@ class SwerveDrive:
             self.updateBearing = False
 
     def driveStraight(self, speed):
-        self.set_strafe(clamp(speed))
+        self.set_strafe(-clamp(speed))
         self.set_fwd(0)
         # self.execute('center') is not needed because it is called with alignWithNote
 
