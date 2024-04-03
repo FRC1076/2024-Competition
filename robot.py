@@ -654,6 +654,7 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.pointToPose(-326, 114)
                 else:
                     self.drivetrain.pointToPose(326, 114)
+                self.drivetrain.execute('center')
                 return
 
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.
