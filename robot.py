@@ -428,6 +428,11 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopIndexing()
             if(self.mechanism.getSprocketAngle() > 70):
                 self.mechanism.shootAmp()
+            elif(self.operator.xboxController.getXButton()):
+                if self.team_is_blu:
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) - 500)
+                else:
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) - 500)
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
@@ -468,7 +473,11 @@ class MyRobot(wpilib.TimedRobot):
             self.allowDropArm = False
         #podium
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(0)
+            #self.mechanism.sprocketToPosition(0)
+            if self.team_is_blu:
+                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(-326, 114)))
+            else:
+                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(326, 114)))
             self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
@@ -626,7 +635,7 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.pointToPose(-326, 57)
                 else:
                     #self.drivetrain.pointToPriorityTag()
-                    self.drivetrain.pointToPose(-326, 57)
+                    self.drivetrain.pointToPose(326, 57)
                 self.drivetrain.execute('center')
                 return
 
@@ -642,10 +651,9 @@ class MyRobot(wpilib.TimedRobot):
             if(driver.getXButton()):
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
-                    self.drivetrain.rotateToAngle(180)
+                    self.drivetrain.pointToPose(-326, 114)
                 else:
-                    self.drivetrain.rotateToAngle(0)
-                self.drivetrain.execute('center')
+                    self.drivetrain.pointToPose(326, 114)
                 return
 
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.

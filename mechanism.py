@@ -79,6 +79,10 @@ class Mechanism:
         #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
+    def lobNote(self, rpm):
+        self.setLeftShooterRPM(-rpm)
+        self.setRightShooterRPM(rpm)
+    
     def shootReverse(self):
         self.leftShootingMotor.set(self.config["SHOOTER_LEFT_REVERSE_SPEED"])
         self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_REVERSE_SPEED"])
@@ -226,3 +230,11 @@ class Mechanism:
         angle = math.degrees(((u+l)/-2)+0.523599)
 
         return(angle)
+    
+    def lobShotAngle(self, distance): #distance to amp    
+        angle = -19+(0.008*distance)
+        return angle
+    
+    def lobShotRPM(self, distance):
+        rpm = (1000/123)*(distance-316.5)+3000
+        return rpm

@@ -256,10 +256,11 @@ class Swervometer:
         #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         #print(self.useVision)
-        if(self.vision.hasTargets() and self.vision.getAvgDistance() < 250 and self.vision.getTagCount() == 2 and self.useVision):
+        if(self.vision.hasTargets() and ((self.vision.getAvgDistance() < 250 and self.vision.getTagCount() == 2) or  (self.vision.getAvgDistance() < 200 and self.vision.getTagCount() == 1))and self.useVision):
             try:
-                #print("POSE UPDATING AHHHHHHHHHHH")
-                self.poseEstimator.addVisionMeasurement(Pose2d(self.vision.getPose()[0] * 0.0254, self.vision.getPose()[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
+                print("POSE UPDATING AHHHHHHHHHHH")
+                pose = self.vision.getPose()
+                self.poseEstimator.addVisionMeasurement(Pose2d(pose[0] * 0.0254, pose[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
             except:
                 pass
         
