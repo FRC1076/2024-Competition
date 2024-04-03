@@ -329,6 +329,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         self.swervometer.enableVision()
+        self.swervometer.enableLooseVision()
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
@@ -698,6 +699,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def autonomousInit(self):
         self.swervometer.disableVision()
+        self.swervometer.disableLooseVision()
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']

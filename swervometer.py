@@ -50,6 +50,7 @@ class Swervometer:
         self.starting_angle = self.field.start_angle
         #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
         self.useVision = False
+        self.looseVision = False
 
         self.chassisSpeeds = ChassisSpeeds()
         self.lastDistancesX = []
@@ -218,6 +219,12 @@ class Swervometer:
 
     def disableVision(self):
         self.useVision = False
+    
+    def enableLooseVision(self):
+        self.looseVision = True
+    
+    def disableLooseVision(self):
+        self.looseVision = False
 
     def initPoseEstimator(self, modules, vision):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
@@ -260,7 +267,12 @@ class Swervometer:
         #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         #print(self.useVision)
-        if(self.vision.hasTargets() and ((self.vision.getAvgDistance() < 250 and self.vision.getTagCount() == 2) or  (self.vision.getAvgDistance() < 200 and self.vision.getTagCount() == 1))and self.useVision):
+
+        if(self.vision.hasTargets() 
+           and self.useVision #strict vision must be enabled for loose vision to take place
+           and ((self.vision.getAvgDistance() < 250 and self.vision.getTagCount() >= 2) #strict vision condition
+           or (self.vision.getAvgDistance() < 200 and self.vision.getTagCount() == 1 and self.looseVision) #loose vision condition
+           or (self.vision.getAvgDistance() < 326 and self.vision.getTagCount() >= 2 and self.looseVision))): #loose vision condition
             try:
                 print("POSE UPDATING AHHHHHHHHHHH")
                 pose = self.vision.getPose()

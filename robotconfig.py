@@ -510,7 +510,7 @@ robotConfig = {
     "CONTROLLERS": controllerConfig,
     "MECHANISM": mechanismConfig,
     'SWERVOMETER': swervometerConfig, # Must be BEFORE drivetrain
-    "NOTEDETECTOR": noteDetectorConfig,
+    "NOTEDETECTOR": noteDetectorConfig, #must be AFTER swervometerConfig and BEFORE drivetrain config
     'VISION': visionConfig, # Must be BEFORE drivetrain
     'DRIVETRAIN': drivetrainConfig,
     'AUTON': autonConfig,
