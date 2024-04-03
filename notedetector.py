@@ -41,10 +41,10 @@ class NoteDetector:
         return self.sameCounter < 11
 
     def getTargetErrorX(self, limelight_latency=0):
-        return self.getTargetErrorY() * math.tan(math.radians(self.getTargetAngleX())) + self.config['CAMERA_OFFSET_X'] + self.swervometer.getDistanceTraveledX(limelight_latency + self.sameCounter)
+        return self.getTargetErrorY() * math.tan(math.radians(self.getTargetAngleX())) + self.config['CAMERA_OFFSET_X'] - self.swervometer.getDistanceTraveledX(limelight_latency + self.sameCounter)
 
     def getTargetErrorY(self, limelight_latency=0):
-        return ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.getTargetAngleZ())))*(-1) + self.config['CAMERA_OFFSET_Y'] + self.swervometer.getDistanceTravledY(limelight_latency + self.sameCounter)
+        return ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.getTargetAngleZ())))*(-1) + self.config['CAMERA_OFFSET_Y'] - self.swervometer.getDistanceTraveledY(limelight_latency + self.sameCounter)
 
     def getTargetErrorAngle(self):
         # angle to the note, in degrees

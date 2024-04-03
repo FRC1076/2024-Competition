@@ -118,11 +118,12 @@ class Autonomous:
             #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
             if(self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken()):
                 #move every other robot cycle
-                if(self.noteDriveCounter % 2 == 0):
-                    # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
-                    self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3 * 10, self.chassisSpeeds[2]))
-                else:
-                    self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
+                # if(self.noteDriveCounter % 2 == 0):
+                #     # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
+                #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3 * 10, self.chassisSpeeds[2]))
+                # else:
+                #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds[2]))
 
                 self.modules = self.drivetrain.getModules()
                 self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)

@@ -272,7 +272,7 @@ class Swervometer:
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37
 
-        self.chassisSpeeds = self.kinematics.toChassisSpeeds(modules['front_left'].getSwerveModuleState(), modules['front_right'].getSwerveModuleState(), modules['rear_left'].getSwerveModuleState(), modules['rear_right'].getSwerveModuleState())
+        self.chassisSpeeds = self.kinematics.toChassisSpeeds((modules['front_left'].getSwerveModuleState(), modules['front_right'].getSwerveModuleState(), modules['rear_left'].getSwerveModuleState(), modules['rear_right'].getSwerveModuleState()))
         self.lastDistancesX.append(-self.chassisSpeeds.vy * 39.37 * 0.02)
         self.lastDistancesY.append(self.chassisSpeeds.vx * 39.37 * 0.02)
 
@@ -284,10 +284,10 @@ class Swervometer:
     def getChassisSpeeds(self):
         return self.chassisSpeeds
     
-    def getDistanceTraveledX(botCycles):
+    def getDistanceTraveledX(self, botCycles):
         return sum(self.lastDistancesX[max(0, len(self.lastDistancesX) - 1 - botCycles):]) 
     
-    def getDistanceTraveledY(botCycles):
+    def getDistanceTraveledY(self, botCycles):
         return sum(self.lastDistancesY[max(0, len(self.lastDistancesY) - 1 - botCycles):])
         #print("CURRENT POSE", self.currentX, self.currentY)
         

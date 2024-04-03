@@ -23,7 +23,7 @@ controllerConfig = {
 
 swervometerConfig = { # All positions measured in inches
     'TEAM_IS_RED': False, # Is the robot part of the Red Team?
-    'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
+    'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -509,8 +509,8 @@ elasticConfig = {
 robotConfig = {
     "CONTROLLERS": controllerConfig,
     "MECHANISM": mechanismConfig,
-    "NOTEDETECTOR": noteDetectorConfig,
     'SWERVOMETER': swervometerConfig, # Must be BEFORE drivetrain
+    "NOTEDETECTOR": noteDetectorConfig,
     'VISION': visionConfig, # Must be BEFORE drivetrain
     'DRIVETRAIN': drivetrainConfig,
     'AUTON': autonConfig,
