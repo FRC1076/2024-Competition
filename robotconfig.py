@@ -89,6 +89,7 @@ drivetrainConfig = {
     'FRONTRIGHT_ENCODER': 22,
     'REARRIGHT_ENCODER': 23,
     'REARLEFT_ENCODER': 24,
+    'PIGEON_ID': 9,
     'DRIVETYPE': SWERVE,
     'HEADING_KP': 0.007, #0.005 - reverted to this
     'HEADING_KI': 0.00001, #0.00001 - reverted to this

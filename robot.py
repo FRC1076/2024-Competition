@@ -9,7 +9,7 @@ import wpilib.drive
 import wpimath.controller
 from wpilib import interfaces
 import rev
-from phoenix5.sensors import CANCoder
+from phoenix5.sensors import CANCoder, WPI_Pigeon2
 from navx import AHRS
 from networktables import NetworkTables
 
@@ -321,7 +321,8 @@ class MyRobot(wpilib.TimedRobot):
 
         #gyro = AHRS.create_spi()
         #AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50)
-        gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 66) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
+        #gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 66) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
+        gyro = WPI_Pigeon2(config['PIGEON_ID'])
 
         swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 

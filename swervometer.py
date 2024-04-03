@@ -274,7 +274,7 @@ class Swervometer:
            or (self.vision.getAvgDistance() < 200 and self.vision.getTagCount() == 1 and self.looseVision) #loose vision condition
            or (self.vision.getAvgDistance() < 326 and self.vision.getTagCount() >= 2 and self.looseVision))): #loose vision condition
             try:
-                print("POSE UPDATING AHHHHHHHHHHH")
+                #print("POSE UPDATING AHHHHHHHHHHH")
                 pose = self.vision.getPose()
                 self.poseEstimator.addVisionMeasurement(Pose2d(pose[0] * 0.0254, pose[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
             except:
