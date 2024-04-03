@@ -6,10 +6,11 @@ Make sure noteDrive_r PID is tuned
 """
 
 class NoteDetector:
-    def __init__ (self, config):
+    def __init__ (self, config, swervometer):
         #IP of the coral
         #10.10.76.16
         self.config = config
+        self.swervometer = swervometer
         self.limelight = NetworkTables.getTable('limelight-note')
         self.lastHeartbeat = 0
         self.sameCounter = 0
@@ -29,17 +30,6 @@ class NoteDetector:
     def getHeartbeat(self):
         return self.limelight.getNumber('hb', 0)
 
-    def getTargetErrorX(self):
-        return self.getTargetErrorY() * math.tan(math.radians(self.getTargetAngleX())) + self.config['CAMERA_OFFSET_X']
-
-    def getTargetErrorY(self):
-        return ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.getTargetAngleZ())))*(-1) + self.config['CAMERA_OFFSET_Y']
-
-    def getTargetErrorAngle(self):
-        # angle to the note, in degrees
-        # positive angle is to the right
-        return math.degrees(math.atan(self.getTargetErrorX()/self.getTargetErrorY()))
-
     def trustLimelight(self):
         if self.lastHeartbeat == self.getHeartbeat():
             self.sameCounter += 1
@@ -49,3 +39,16 @@ class NoteDetector:
         self.lastHeartbeat = self.getHeartbeat()
 
         return self.sameCounter < 11
+
+    def getTargetErrorX(self, limelight_latency=0):
+        return self.getTargetErrorY() * math.tan(math.radians(self.getTargetAngleX())) + self.config['CAMERA_OFFSET_X'] + self.swervometer.getDistanceTraveledX(limelight_latency + self.sameCounter)
+
+    def getTargetErrorY(self, limelight_latency=0):
+        return ((self.config['CAMERA_HEIGHT'] - self.config['NOTE_HEIGHT'])/math.tan(math.radians(self.getTargetAngleZ())))*(-1) + self.config['CAMERA_OFFSET_Y'] + self.swervometer.getDistanceTravledY(limelight_latency + self.sameCounter)
+
+    def getTargetErrorAngle(self):
+        # angle to the note, in degrees
+        # positive angle is to the right
+        return math.degrees(math.atan(self.getTargetErrorX()/self.getTargetErrorY()))
+
+    

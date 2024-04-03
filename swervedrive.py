@@ -1159,12 +1159,12 @@ class SwerveDrive:
 
         if(self.notedetector.hasTarget()):
             if offsetX is not None:
-                targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
+                targetErrorX = (self.notedetector.getTargetErrorX(4) - offsetX)
                 xMove = self.noteDrive_x_pid_controller.calculate(targetErrorX)
                 self.set_fwd(clamp(xMove))
 
             if offsetY is not None:
-                targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
+                targetErrorY = (self.notedetector.getTargetErrorY(4) - offsetY)
                 yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
                 self.set_strafe(clamp(yMove))
 

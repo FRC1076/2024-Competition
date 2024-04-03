@@ -1,7 +1,7 @@
 import math
 import wpilib
 from wpimath.estimator import SwerveDrive4PoseEstimator
-from wpimath.kinematics import SwerveDrive4Kinematics
+from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds
 from wpimath.geometry import Translation2d
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModulePosition
@@ -50,7 +50,11 @@ class Swervometer:
         self.starting_angle = self.field.start_angle
         #print("init current X: ", self.currentX, " init current y: ", self.currentY, " init current bearing: ", self.currentBearing)
         self.useVision = False
-    
+
+        self.chassisSpeeds = ChassisSpeeds()
+        self.lastDistancesX = []
+        self.lastDistancesY = []
+
         self.calcLeverArmLengths()
 
     def startTimer(self):
@@ -267,6 +271,24 @@ class Swervometer:
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37
+
+        self.chassisSpeeds = self.kinematics.toChassisSpeeds(modules['front_left'].getSwerveModuleState(), modules['front_right'].getSwerveModuleState(), modules['rear_left'].getSwerveModuleState(), modules['rear_right'].getSwerveModuleState())
+        self.lastDistancesX.append(-self.chassisSpeeds.vy * 39.37 * 0.02)
+        self.lastDistancesY.append(self.chassisSpeeds.vx * 39.37 * 0.02)
+
+        if len(self.lastDistancesX) > 20:
+            self.lastDistancesX.pop(0)
+        if len(self.lastDistancesY) > 20:
+            self.lastDistancesY.pop(0)
+
+    def getChassisSpeeds(self):
+        return self.chassisSpeeds
+    
+    def getDistanceTraveledX(botCycles):
+        return sum(self.lastDistancesX[max(0, len(self.lastDistancesX) - 1 - botCycles):]) 
+    
+    def getDistanceTraveledY(botCycles):
+        return sum(self.lastDistancesY[max(0, len(self.lastDistancesY) - 1 - botCycles):])
         #print("CURRENT POSE", self.currentX, self.currentY)
         
     def distanceToPose(self, x, y):

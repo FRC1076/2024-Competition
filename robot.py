@@ -94,7 +94,7 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'MECHANISM':
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
             if key == 'NOTEDETECTOR':
-                self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
+                self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"], self.swervometer)
         
             
 
