@@ -190,7 +190,7 @@ autonConfig = {
                                   ['LOWER_ARM_START', INTAKE_ANGLE]],
 
 
-    'B_FAR_FOUR_NOTE_TEST': [['START_INTAKE'],
+    'B_FAR_FOUR_NOTE': [['START_INTAKE'],
                             ['RAISE_ARM_START', SUBWOOFER_ANGLE],
                             ['WAIT', SUBWOOFER_WAIT],
                             ['SHOOT_NOTE'],
@@ -231,6 +231,28 @@ autonConfig = {
                           ['PATH', '5-FAR', None],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
+
+    'B_CENTER_PODIUM_FOUR_NOTE': [['START_INTAKE'],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                                  ['WAIT', SHOT_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', 'B-2', None],
+                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
+                                  ['WAIT', SHOT_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE]
+                                  ['PATH', '2-6', 2.2],
+                                  ['PATH', '6-2', None],
+                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
+                                  ['WAIT', SHOT_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', '2-3[FAST]', None],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                                  ['PATH', '3-B', None]
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'D_FOUR_NOTE': [['START_INTAKE'],
                     ['RAISE_ARM_START', D_PRELOAD_ANGLE],

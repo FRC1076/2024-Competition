@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2-6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2-3[FAST]"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3-B"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
