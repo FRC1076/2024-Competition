@@ -9,7 +9,7 @@ import wpilib.drive
 import wpimath.controller
 from wpilib import interfaces
 import rev
-from phoenix5.sensors import CANCoder
+from phoenix5.sensors import CANCoder, WPI_Pigeon2
 from navx import AHRS
 from networktables import NetworkTables
 
@@ -94,20 +94,13 @@ class MyRobot(wpilib.TimedRobot):
             if key == 'MECHANISM':
                 self.mechanism = Mechanism(robotConfig["MECHANISM"])
             if key == 'NOTEDETECTOR':
-                self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"])
+                self.notedetector = NoteDetector(robotConfig["NOTEDETECTOR"], self.swervometer)
         
             
 
         self.swervometer.startTimer()
         self.swervometer.initPoseEstimator(self.drivetrain.getModules(), self.vision)
         self.ledOn = True
-
-        if self.notedetector:
-            if self.notedetector.isAlive():
-                print("Coral Dev Board connected")
-            else:
-                print("Coral Dev Board not connected")
-
         self.field = wpilib.Field2d()
         self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.elastic.putField(self.field)
@@ -328,7 +321,8 @@ class MyRobot(wpilib.TimedRobot):
 
         #gyro = AHRS.create_spi()
         #AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 50)
-        gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 66) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
+        #gyro = AHRS.create_spi(wpilib._wpilib.SPI.Port.kMXP, 500000, 66) # https://www.chiefdelphi.com/t/navx2-disconnecting-reconnecting-intermittently-not-browning-out/425487/36
+        gyro = WPI_Pigeon2(config['PIGEON_ID'])
 
         swerve = SwerveDrive(frontLeftModule, frontRightModule, rearLeftModule, rearRightModule, self.swervometer, self.vision, gyro, balance_cfg, target_cfg, bearing_cfg, vision_cfg, self.autonSteerStraight, self.teleopSteerStraight, self.notedetector)
 
@@ -336,6 +330,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         self.swervometer.enableVision()
+        self.swervometer.enableLooseVision()
         self.log("teleopInit ran")
         self.drivetrain.setRampRates(self.teleopOpenLoopRampRate, self.teleopClosedLoopRampRate)
         self.drivetrain.setInAuton(False)
@@ -357,6 +352,7 @@ class MyRobot(wpilib.TimedRobot):
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
         else:
+            #print('no target')
             pass
         self.mechanism.periodic()
         if self.mechanism.indexBeamBroken():
@@ -434,6 +430,11 @@ class MyRobot(wpilib.TimedRobot):
             self.mechanism.stopIndexing()
             if(self.mechanism.getSprocketAngle() > 70):
                 self.mechanism.shootAmp()
+            elif(self.operator.xboxController.getXButton()):
+                if self.team_is_blu:
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) - 500)
+                else:
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) - 500)
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
@@ -474,7 +475,11 @@ class MyRobot(wpilib.TimedRobot):
             self.allowDropArm = False
         #podium
         elif self.operator.xboxController.getXButton():
-            self.mechanism.sprocketToPosition(0)
+            #self.mechanism.sprocketToPosition(0)
+            if self.team_is_blu:
+                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(-326, 114)))
+            else:
+                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(326, 114)))
             self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
@@ -601,10 +606,9 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(False)
 
         if (driver.getYButton()):
-            # drive so that the center of the bot is on the center of the note, without rotating
-            self.drivetrain.alignWithNote(0, 0, None)
-            return False
-
+            self.drivetrain.driveStraight(max(self.deadzoneCorrection(-driver.getLeftY() * translational_clutch, 0), self.driver.deadzone))
+            self.drivetrain.alignWithNote(None, None, 0)
+            return
 
         # Regular driving, not a maneuver
         if False:
@@ -633,7 +637,7 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.pointToPose(-326, 57)
                 else:
                     #self.drivetrain.pointToPriorityTag()
-                    self.drivetrain.pointToPose(-326, 57)
+                    self.drivetrain.pointToPose(326, 57)
                 self.drivetrain.execute('center')
                 return
 
@@ -649,12 +653,11 @@ class MyRobot(wpilib.TimedRobot):
             if(driver.getXButton()):
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
-                    self.drivetrain.rotateToAngle(180)
+                    self.drivetrain.pointToPose(-326, 114)
                 else:
-                    self.drivetrain.rotateToAngle(0)
+                    self.drivetrain.pointToPose(326, 114)
                 self.drivetrain.execute('center')
                 return
-
 
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.
 
@@ -697,6 +700,7 @@ class MyRobot(wpilib.TimedRobot):
 
     def autonomousInit(self):
         self.swervometer.disableVision()
+        self.swervometer.disableLooseVision()
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']
         self.autonClosedLoopRampRate = config['AUTON_CLOSED_LOOP_RAMP_RATE']

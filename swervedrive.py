@@ -163,8 +163,9 @@ class SwerveDrive:
         self.bearing_kI = self.bearing_config.bearing_kI
         self.bearing_kD = self.bearing_config.bearing_kD
         self.bearing_pid_controller = PIDController(self.bearing_kP, self.bearing_kI, self.bearing_kD)
-        self.pointToPosePIDController = PIDController(0.022, 0, 0.0001)
+        self.pointToPosePIDController = PIDController(0.025, 0, 0.0001)
         self.pointToPosePIDController.enableContinuousInput(0, 360)
+        self.pointToPosePIDController.setTolerance(0, 0)
         #self.pointToPosePIDController = ProfiledPIDController(0.02, 0, 0, TrapezoidProfileRadians.Constraints(6.28, 3.14), 0.02)#PIDController(0.02, 0, 0)
         self.bearing_pid_controller.setTolerance(1, 1)
         
@@ -180,7 +181,7 @@ class SwerveDrive:
         self.noteDrive_y_pid_controller = PIDController(0.003, 0 ,0)
         self.noteDrive_y_pid_controller.setTolerance(0.5, 0.5)
         self.noteDrive_y_pid_controller.setSetpoint(0)
-        self.noteDrive_r_pid_controller = PIDController(0.015, 0 ,0.00)
+        self.noteDrive_r_pid_controller = PIDController(0.003, 0 ,0.00001)
         self.noteDrive_r_pid_controller.setTolerance(0.5, 0.5)
         self.noteDrive_r_pid_controller.setSetpoint(0)
 
@@ -306,7 +307,8 @@ class SwerveDrive:
 
     #angle off of gyro zero
     def getGyroAngle(self):
-        angle = (self.gyro.getAngle() - self.gyro_angle_zero + self.swervometer.getTeamGyroAdjustment()) % 360
+        #angle = (self.gyro.getAngle() % 360 - self.gyro_angle_zero + self.swervometer.getTeamGyroAdjustment()) % 360
+        angle = ((-self.gyro.getYaw()) % 360 - self.gyro_angle_zero + self.swervometer.getTeamGyroAdjustment()) % 360
         #print ("Gyro Adjustment", self.swervometer.getTeamGyroAdjustment())
         return angle
         
@@ -1103,6 +1105,11 @@ class SwerveDrive:
             self.log("New Bearing: ", self.bearing)
             self.updateBearing = False
 
+    def driveStraight(self, speed):
+        self.set_strafe(-clamp(speed))
+        self.set_fwd(0)
+        # self.execute('center') is not needed because it is called with alignWithNote
+
     def alignWithApril(self, offsetX, offsetY, offsetAngle):
         x, y, r = self.swervometer.getCOF()
         #targetErrorX = self.vision.getPose()[0]
@@ -1153,24 +1160,25 @@ class SwerveDrive:
 
         if(self.notedetector.hasTarget()):
             if offsetX is not None:
-                targetErrorX = (self.notedetector.getTargetErrorX() - offsetX)
+                targetErrorX = (self.notedetector.getTargetErrorX(4) - offsetX)
                 xMove = self.noteDrive_x_pid_controller.calculate(targetErrorX)
                 self.set_fwd(clamp(xMove))
 
             if offsetY is not None:
-                targetErrorY = (self.notedetector.getTargetErrorY() - offsetY)
+                targetErrorY = (self.notedetector.getTargetErrorY(4) - offsetY)
                 yMove = self.noteDrive_y_pid_controller.calculate(targetErrorY)
                 self.set_strafe(clamp(yMove))
 
             if offsetAngle is not None:
                 targetErrorAngle = -(self.notedetector.getTargetErrorAngle() - offsetAngle)
                 angleMove = self.noteDrive_r_pid_controller.calculate(targetErrorAngle)
-                self.set_rcw(-clamp(angleMove))
+                self.set_rcw(clamp(angleMove))
             self.execute('center')
         else:
-            self.set_rcw(0)
-            self.set_strafe(-0.2)
-            self.execute('center')
+            if offsetX is not None:
+                self.set_rcw(0)
+                self.set_strafe(-0.2)
+                self.execute('center')
     
     def pointToPose(self, x, y):
         currentX, currentY, currentR = self.swervometer.getCOF()

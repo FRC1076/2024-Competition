@@ -13,7 +13,7 @@ from collections import namedtuple
 from dashboard import Dashboard
 from robotconfig import MODULE_NAMES
 
-from wpimath.kinematics import SwerveModulePosition
+from wpimath.kinematics import SwerveModulePosition, SwerveModuleState
 from wpimath.geometry import Rotation2d
 
 # Create the structure of the config: SmartDashboard prefix, Encoder's zero point, Drive motor inverted, Allow reverse
@@ -276,7 +276,7 @@ class SwerveModule:
         #SparkMax PID controller will take care of actually running the motors with PID values you instantiate it with
 
         # Set the requested speed as the driveMotor's voltage
-        self.driveMotor.set(self._requested_speed)
+        self.driveMotor.set(clamp(self._requested_speed))
 
         #print("Angle: ", self.get_current_angle(), " Absolute Position: ", self.sd_prefix, " ", self.encoder.getAbsolutePosition(), self.encoder_zero, self.encoder.getAbsolutePosition() - self.encoder_zero)
 
@@ -310,6 +310,10 @@ class SwerveModule:
     def disableVoltageCompensation(self):
         self.driveMotor.disableVoltageCompensation()
         #self.isVoltageCompensation = False
+
+    def getSwerveModuleState(self):
+        return SwerveModuleState(self.driveEncoder.getVelocity() * 1.86 * 0.0254 / 60, Rotation2d((self.get_current_angle() + 90) % 360))
+
 
     def update_smartdash(self):
         """
