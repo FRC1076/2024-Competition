@@ -268,7 +268,7 @@ class Swervometer:
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         #print(self.useVision)
         #set the robot orientation for the limelight
-        self.vision.setYawOrientation((-(gyroAngle) + 180) % 360, (-gyroRate) % 360)
+        self.vision.setYawOrientation((-(gyroAngle) + 180) % 360, 0)#(-gyroRate) % 360)
         if(self.vision.hasTargets() and self.useVision):
             try:
                 #print("POSE UPDATING AHHHHHHHHHHH")
