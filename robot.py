@@ -606,7 +606,7 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.setWheelLock(False)
 
         if (driver.getYButton()):
-            self.drivetrain.driveStraight(max(self.deadzoneCorrection(driver.getLeftY() * translational_clutch, 0), self.driver.deadzone))
+            self.drivetrain.driveStraight(max(self.deadzoneCorrection(-driver.getLeftY() * translational_clutch, 0), self.driver.deadzone))
             self.drivetrain.alignWithNote(None, None, 0)
             return
 
