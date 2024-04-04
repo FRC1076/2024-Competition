@@ -258,7 +258,7 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
-        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, config['CAMERA_SIDE_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, 0, config['CAMERA_PITCH'], 0]) #0.3, -0.327, 0.45, 0, 0, 0
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [-config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_SIDE_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_PITCH'], 180]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
             NetworkTables.getTable('limelight').putNumber('priorityid', 7)
         else:
