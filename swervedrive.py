@@ -311,7 +311,12 @@ class SwerveDrive:
         angle = ((-self.gyro.getYaw()) % 360 - self.gyro_angle_zero + self.swervometer.getTeamGyroAdjustment()) % 360
         #print ("Gyro Adjustment", self.swervometer.getTeamGyroAdjustment())
         return angle
-        
+
+    def getGyroAngleRate(self):
+        #for the pigeon 2.0
+        #clockwise positive
+        angle = self.gyro.getRate()
+        return angle
     # def getGyroBalance(self):
     #     balance = (self.gyro.getPitch() - self.gyro_balance_zero)
 

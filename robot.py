@@ -346,8 +346,9 @@ class MyRobot(wpilib.TimedRobot):
             self.drivetrain.getModules()[key].periodic()
             pass
         gyroAngle = self.drivetrain.getGyroAngle()
+        gyroRate = self.drivetrain.getGyroAngleRate()
         modules = self.drivetrain.getModules()
-        self.swervometer.updatePoseEstimator(gyroAngle, modules, True)
+        self.swervometer.updatePoseEstimator(gyroAngle, modules, gyroRate)
         if self.notedetector.hasTarget():
             pass
             #print('target at ({}, {}) at {} degrees'.format(self.notedetector.getTargetErrorX(), self.notedetector.getTargetErrorY(), self.notedetector.getTargetErrorAngle()))
