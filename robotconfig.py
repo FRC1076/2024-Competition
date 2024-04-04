@@ -241,7 +241,7 @@ autonConfig = {
                                   ['RAISE_ARM_START', NOTE_2_ANGLE],
                                   ['WAIT', SHOT_WAIT],
                                   ['SHOOT_NOTE'],
-                                  ['LOWER_ARM_START', INTAKE_ANGLE]
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
                                   ['PATH', '2-6', 2.2],
                                   ['PATH', '6-2', None],
                                   ['RAISE_ARM_START', NOTE_2_ANGLE],
@@ -250,7 +250,7 @@ autonConfig = {
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
                                   ['PATH', '2-3[FAST]', None],
                                   ['RAISE_ARM_START', SUBWOOFER_ANGLE],
-                                  ['PATH', '3-B', None]
+                                  ['PATH', '3-B', None],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE]],
 
