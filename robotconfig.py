@@ -324,8 +324,8 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'E_THREE_NOTE':       [['START_INTAKE'],
+                            ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['ROTATE', E_YAW],
-                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE],
@@ -341,8 +341,8 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
    'E_CENTER_THREE_NOTE': [['START_INTAKE'],
+                           ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['ROTATE', E_YAW],
-                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE],
@@ -358,8 +358,8 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'E_TWO_NOTE': [['START_INTAKE'],
-                          ['ROTATE', E_YAW],
                           ['RAISE_ARM_START', E_PRELOAD_ANGLE],
+                          ['ROTATE', E_YAW],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE],
