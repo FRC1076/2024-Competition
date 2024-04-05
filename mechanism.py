@@ -213,7 +213,7 @@ class Mechanism:
 
     def getAutoAimAngle(self, distance, yaw):
         v = 675
-        r = 1.2
+        r = 1.15
         radyaw = math.radians(yaw)
         l = math.atan(
             (49 + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12)      

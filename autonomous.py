@@ -197,7 +197,7 @@ class Autonomous:
                 self.mechanism.indexNote()
                 self.swervometer.enableVision()
             if(self.autonTimer.get() - self.lastTime > 0.25):
-                self.swervometer.disableVision()
+                #self.swervometer.disableVision()
                 #self.mechanism.sprocketToPosition(-37)
                 self.mechanism.setShootState(False)
                 self.mechanism.stopIndexing()

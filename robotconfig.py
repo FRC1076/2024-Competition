@@ -165,7 +165,7 @@ SUBWOOFER_WAIT = 0.5
 SHOT_WAIT = 0.5 #seconds
 
 autonConfig = {
-    'TASK': 'TEST_NOTE',
+    'TASK': 'E_TWO_NOTE',
 
     'B_FAST_FOUR_NOTE_SUBWOOFER': [['START_INTAKE'],
                                   ['RAISE_ARM_START', SUBWOOFER_ANGLE],
@@ -354,6 +354,18 @@ autonConfig = {
                           ['PATH', 'LONG-8', 1.5],
                           ['RAISE_ARM_START', LONG_ANGLE],
                           ['PATH', '8-LONG', None],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
+
+    'E_TWO_NOTE': [['START_INTAKE'],
+                          ['ROTATE', E_YAW],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
+                          ['WAIT', SHOT_WAIT],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'E-7', 2.5],
+                          ['RAISE_ARM_START', SUBWOOFER_ANGLE + 5],
+                          ['PATH', '7-C', None],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
