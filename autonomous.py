@@ -226,7 +226,7 @@ class Autonomous:
         elif self.autonTask[0] == 'RAISE_ARM_START':
             if self.lastTime == -1:
                 self.lastTime = self.autonTimer.get()
-            if(self.autonTimer.get() - self.lastTime > 1.5):
+            if(self.autonTimer.get() - self.lastTime > 1):
                 self.mechanism.stopIndexing()
                 self.mechanism.setAutonSprocketPosition(self.autonTask[1])
                 self.lastTime = -1
