@@ -8,19 +8,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "E-8"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "8-E"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "E-7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "7-E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E-8"
           }
         }
       ]
