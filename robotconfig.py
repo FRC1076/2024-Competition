@@ -574,6 +574,7 @@ noteDetectorConfig = {
     "DEFAULT_BBOX": -1000,
     "INTAKE_RIGHT_ERROR_MARGIN": 6,
     "INTAKE_LEFT_ERROR_MARGIN": -6,
+    "LIMELIGHT_LATENCY": 4,
 }
 
 elasticConfig = {
