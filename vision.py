@@ -86,6 +86,18 @@ class Vision:
         else:
             return (-1, -1, -1)
     
+    def getMegatag2Pose(self):
+        """
+        Returns the robot's calculated field position (x, y, z) in inches relative to the center of the field.
+        """
+        s = 39.37 # scalar to convert meters to inches
+        pose = self.table.getNumberArray('botpose_orb', None) # returns [x, y, z, roll, pitch, yaw]
+        #print("POSE IS: ", pose)
+        if not(pose is None) and len(pose) != 0:
+            return (pose[0] * s, pose[1] * s, pose[2] * s)
+        else:
+            return (-1, -1, -1)
+    
     def getAvgDistance(self):
         s = 39.37 # scalar to convert meters to inches
         pose = self.table.getNumberArray('botpose', None) # returns [x, y, z, roll, pitch, yaw]
@@ -181,3 +193,6 @@ class Vision:
     
     def getTotalLatency(self):
         return self.table.getNumber('tl', 0) + self.table.getNumber('cl', 0)
+
+    def setYawOrientation(self, yawAngle, yawRate):
+        self.table.putNumberArray("robot_orientation_set", [yawAngle, yawRate, 0, 0, 0, 0])

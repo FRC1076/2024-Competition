@@ -257,7 +257,7 @@ class Swervometer:
         self.currentY = y
         self.currentBearing = gyroAngle
 
-    def updatePoseEstimator(self, gyroAngle, modules, inAuton):
+    def updatePoseEstimator(self, gyroAngle, modules, gyroRate = 0):
         frontLeftModule = modules['front_left'].getSwerveModulePosition()
         frontRightModule = modules['front_right'].getSwerveModulePosition()
         rearLeftModule = modules['rear_left'].getSwerveModulePosition()
@@ -267,15 +267,12 @@ class Swervometer:
         #self.currentPose = self.poseEstimator.updateWithTime(self.getTimer(), Rotation2d(gyroAngle * math.pi / 180), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         self.currentPose = self.poseEstimator.update(Rotation2d.fromDegrees((-(self.currentBearing)) % 360), (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule))
         #print(self.useVision)
-
-        if(self.vision.hasTargets() 
-           and self.useVision #strict vision must be enabled for loose vision to take place
-           and ((self.vision.getAvgDistance() < 250 and self.vision.getTagCount() >= 2) #strict vision condition
-           or (self.vision.getAvgDistance() < 200 and self.vision.getTagCount() == 1 and self.looseVision) #loose vision condition
-           or (self.vision.getAvgDistance() < 326 and self.vision.getTagCount() >= 2 and self.looseVision))): #loose vision condition
+        #set the robot orientation for the limelight
+        self.vision.setYawOrientation((-(gyroAngle) + 180) % 360, 0)#(-gyroRate) % 360)
+        if(self.vision.hasTargets() and self.useVision and abs(gyroRate) < 720):
             try:
                 #print("POSE UPDATING AHHHHHHHHHHH")
-                pose = self.vision.getPose()
+                pose = self.vision.getMegatag2Pose()
                 self.poseEstimator.addVisionMeasurement(Pose2d(pose[0] * 0.0254, pose[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
             except:
                 pass

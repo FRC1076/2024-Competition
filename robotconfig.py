@@ -165,7 +165,12 @@ SUBWOOFER_WAIT = 0.5
 SHOT_WAIT = 0.5 #seconds
 
 autonConfig = {
-    'TASK': 'TEST_NOTE',
+    'TASK': 'B_FAST_FOUR_NOTE_SUBWOOFER',
+
+    'SHOOT_NOTE_AUTON': [['START_INTAKE'],
+                        ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                        ['WAIT', SUBWOOFER_WAIT],
+                        ['SHOOT_NOTE']],
 
     'B_FAST_FOUR_NOTE_SUBWOOFER': [['START_INTAKE'],
                                   ['RAISE_ARM_START', SUBWOOFER_ANGLE],
@@ -179,7 +184,7 @@ autonConfig = {
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
                                   ['PATH', 'SHOT-2', None],
                                   ['RAISE_ARM_START', SHOT_ANGLE],
-                                  ['PATH', '2-SHOT'],
+                                  ['PATH', '2-SHOT', None],
                                   ['WAIT', 0.5],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE],
@@ -190,7 +195,7 @@ autonConfig = {
                                   ['LOWER_ARM_START', INTAKE_ANGLE]],
 
 
-    'B_FAR_FOUR_NOTE_TEST': [['START_INTAKE'],
+    'B_FAR_FOUR_NOTE': [['START_INTAKE'],
                             ['RAISE_ARM_START', SUBWOOFER_ANGLE],
                             ['WAIT', SUBWOOFER_WAIT],
                             ['SHOOT_NOTE'],
@@ -200,7 +205,7 @@ autonConfig = {
                             ['WAIT', SHOT_WAIT],
                             ['SHOOT_NOTE'],
                             ['LOWER_ARM_START', INTAKE_ANGLE],
-                            ['PATH', '2-4', 1.7],
+                            ['PATH', '2-4', 1.1], #1.7 
                             ['RAISE_ARM_START', FAR_ANGLE],
                             ['PATH', '4-FAR', None],
                             ['SHOOT_NOTE'],
@@ -231,6 +236,28 @@ autonConfig = {
                           ['PATH', '5-FAR', None],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
+
+    'B_CENTER_PODIUM_FOUR_NOTE': [['START_INTAKE'],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                                  ['WAIT', SHOT_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', 'B-2', None],
+                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
+                                  ['WAIT', SHOT_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', '2-6', 2.2],
+                                  ['PATH', '6-2', None],
+                                  ['RAISE_ARM_START', NOTE_2_ANGLE],
+                                  ['WAIT', SHOT_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', '2-3[FAST]', None],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                                  ['PATH', '3-B', None],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'D_FOUR_NOTE': [['START_INTAKE'],
                     ['RAISE_ARM_START', D_PRELOAD_ANGLE],
@@ -278,6 +305,29 @@ autonConfig = {
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
+    'D_STRIKEZONE_NOTE': [['START_INTAKE'],
+                          ['RAISE_ARM_START', D_PRELOAD_ANGLE],
+                          ['ROTATE', D_YAW],
+                          ['WAIT', SHOT_WAIT],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'D-1', None],
+                          ['ROTATE', NOTE_1_YAW],
+                          ['RAISE_ARM_START', NOTE_1_ANGLE],
+                          ['WAIT', SHOT_WAIT],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', '1-5', 1.5],
+                          ['RAISE_ARM_START', FAR_ANGLE],
+                          ['PATH', '5-FAR', None],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'FAR-4', 1.4],
+                          ['RAISE_ARM_START', FAR_ANGLE],
+                          ['PATH', '4-FAR', None],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE]],
+
     'D_CENTER5_FOUR_NOTE': [['START_INTAKE'],
                           ['RAISE_ARM_START', D_PRELOAD_ANGLE],
                           ['ROTATE', D_YAW],
@@ -302,8 +352,8 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'E_THREE_NOTE':       [['START_INTAKE'],
+                            ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['ROTATE', E_YAW],
-                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE],
@@ -319,8 +369,8 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
 
    'E_CENTER_THREE_NOTE': [['START_INTAKE'],
+                           ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['ROTATE', E_YAW],
-                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
                           ['WAIT', SHOT_WAIT],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE],
@@ -334,6 +384,34 @@ autonConfig = {
                           ['PATH', '8-LONG', None],
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE]],
+
+    #effectively a 2.5 note
+    'E_CENTER_TWO_NOTE': [['START_INTAKE'],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
+                          ['ROTATE', E_YAW],
+                          ['WAIT', SHOT_WAIT],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'E-7', 2.5],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
+                          ['PATH', '7-E', None],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'E-8', 2.2]],
+    
+    #same thing here...effectively a 2.5 note
+    'E_TWO_NOTE': [['START_INTAKE'],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
+                          ['ROTATE', E_YAW],
+                          ['WAIT', SHOT_WAIT],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'E-8', 2.2],
+                          ['RAISE_ARM_START', E_PRELOAD_ANGLE],
+                          ['PATH', '8-E', None],
+                          ['SHOOT_NOTE'],
+                          ['LOWER_ARM_START', INTAKE_ANGLE],
+                          ['PATH', 'E-7', 2.5]],
 
     'TEST_NOTE': [['START_INTAKE'], 
                   ['PATH', 'TEST', 0]],
@@ -496,6 +574,7 @@ noteDetectorConfig = {
     "DEFAULT_BBOX": -1000,
     "INTAKE_RIGHT_ERROR_MARGIN": 6,
     "INTAKE_LEFT_ERROR_MARGIN": -6,
+    "LIMELIGHT_LATENCY": 4,
 }
 
 elasticConfig = {
