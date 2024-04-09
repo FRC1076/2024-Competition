@@ -8,7 +8,7 @@ from pathplannerlib.config import PIDConstants
 from pathplannerlib.controller import PPHolonomicDriveController
 from pathplannerlib.telemetry import PPLibTelemetry
 import math
-import leds
+from leds import LEDs
 
 class Autonomous:
 
@@ -124,9 +124,9 @@ class Autonomous:
                 #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3 * 10, self.chassisSpeeds[2]))
                 # else:
                 #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
-                rainbowLED("purple")
+                LEDs.rainbowLED("orange-flash")
 
-                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0], self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds[2]))
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0] * 0.5, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds[2]))
 
                 self.modules = self.drivetrain.getModules()
                 self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
@@ -165,7 +165,7 @@ class Autonomous:
                 self.modules['front_right'].execute()
                 self.modules['rear_left'].execute()
                 self.modules['rear_right'].execute()
-                rainbowLED("off")
+                LEDs.rainbowLED("off")
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)

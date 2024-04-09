@@ -205,7 +205,7 @@ autonConfig = {
                             ['WAIT', SHOT_WAIT],
                             ['SHOOT_NOTE'],
                             ['LOWER_ARM_START', INTAKE_ANGLE],
-                            ['PATH', '2-4', 1.7],
+                            ['PATH', '2-4', 1.1], #1.7 
                             ['RAISE_ARM_START', FAR_ANGLE],
                             ['PATH', '4-FAR', None],
                             ['SHOOT_NOTE'],
