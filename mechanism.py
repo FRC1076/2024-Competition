@@ -3,7 +3,7 @@ import wpilib
 import wpilib.drive
 import wpimath.controller
 from wpimath.controller import PIDController
-from wpimath.controller import ArmFeedforward
+from wpimath.controller import ArmFeedforward, SimpleMotorFeedforwardMeters
 import rev
 from wpilib import DoubleSolenoid
 import rev
@@ -45,6 +45,11 @@ class Mechanism:
         self.autonSprocketPosition = -38
         self.shooting = False
         self.climbMotor = rev.CANSparkMax(config["CLIMB_MOTOR_ID"], motor_type_brushless)
+
+        #trap stuff
+        self.leftTrapMotor = self.intakeMotor = rev.CANSparkMax(config["TRAPCLIMB_LEFT_MOTOR_ID"], motor_type_brushless)
+        self.rightTrapMotor = self.intakeMotor = rev.CANSparkMax(config["TRAPCLIMB_RIGHT_MOTOR_ID"], motor_type_brushless)
+        self.trapClimbFeedForward = SimpleMotorFeedforwardMeters(config["TRAPCLIMB_FEEDFORWARD_KS"],config["TRAPCLIMB_FEEDFORWARD_KV"],config["TRAPCLIMB_FEEDFORWARD_KA"])
         return
 
     #action is intake or eject, L1 is intake, B is eject
@@ -237,4 +242,12 @@ class Mechanism:
     
     def lobShotRPM(self, distance):
         rpm = (1000/123)*(distance-316.5)+3000
-        return rpm
+        return 
+    
+    def trapClimbUp(self):
+        self.leftTrapMotor.set(self.config(['TRAPCLIMB_LEFT_MOTOR_SPEED']))
+        self.rightTrapMotor.set(self.config(['TRAPCLIMB_RIGHT_MOTOR_SPEED']))
+
+    def trapClimbDown(self):
+        self.leftTrapMotor.set(-self.config(['TRAPCLIMB_LEFT_MOTOR_SPEED']))
+        self.rightTrapMotor.set(-self.config(['TRAPCLIMB_RIGHT_MOTOR_SPEED']))
