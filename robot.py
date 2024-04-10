@@ -433,9 +433,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.shootAmp()
             elif(self.operator.xboxController.getXButton()):
                 if self.team_is_blu:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) - 500)
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) * 0.65)
                 else:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) - 500)
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) * 0.65)
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
@@ -700,7 +700,7 @@ class MyRobot(wpilib.TimedRobot):
             return 'center'
 
     def autonomousInit(self):
-        self.swervometer.disableVision()
+        self.swervometer.enableVision()
         self.swervometer.disableLooseVision()
         config = self.config["AUTON"]
         self.autonOpenLoopRampRate = config['AUTON_OPEN_LOOP_RAMP_RATE']

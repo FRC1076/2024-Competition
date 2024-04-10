@@ -39,7 +39,7 @@ class NoteDetector:
         self.lastHeartbeat = self.getHeartbeat()
 
         return self.sameCounter < 11
-
+    #4,8,
     def getTargetErrorX(self, limelight_latency=8):
         return self.getTargetErrorY() * math.tan(math.radians(self.getTargetAngleX())) + self.config['CAMERA_OFFSET_X'] - self.swervometer.getDistanceTraveledX(limelight_latency + self.sameCounter)
 

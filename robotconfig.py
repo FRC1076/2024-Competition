@@ -22,8 +22,8 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
-    'FIELD_START_POSITION': 'B', # Which of three starting positions is selected?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'FIELD_START_POSITION': 'E', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -150,7 +150,7 @@ SHOT_ANGLE = -10 #angle at the shot location
 D_PRELOAD_ANGLE = -10 #angle for the D preload
 E_PRELOAD_ANGLE = -10 #angle for the E preload
 NOTE_1_ANGLE = 5 #angle for shots at note 1
-NOTE_2_ANGLE = 0 #angle for shots at note 2
+NOTE_2_ANGLE = 3 #angle for shots at note 2 #0
 SUBWOOFER_ANGLE = -25.9 #subwoofer angle
 FAR_ANGLE = 9.5 #far angle
 LONG_ANGLE = 9.9 #long angle
@@ -205,12 +205,12 @@ autonConfig = {
                             ['WAIT', SHOT_WAIT],
                             ['SHOOT_NOTE'],
                             ['LOWER_ARM_START', INTAKE_ANGLE],
-                            ['PATH', '2-4', 1.1], #1.7 
+                            ['PATH', '2-4', 0.8], #1.7, 1.1,
                             ['RAISE_ARM_START', FAR_ANGLE],
                             ['PATH', '4-FAR', None],
                             ['SHOOT_NOTE'],
                             ['LOWER_ARM_START', INTAKE_ANGLE],
-                            ['PATH', 'FAR-5', 0.5],
+                            ['PATH', 'FAR-5', 0.5], #0.5
                             ['RAISE_ARM_START', FAR_ANGLE],
                             ['PATH', '5-FAR', None],
                             ['SHOOT_NOTE'],
@@ -480,7 +480,7 @@ autonConfig = {
     'TRANSLATION_KD': 0,
     'TRANSLATION_KI': 0,
     'TRANSLATION_KP': 2,
-    'MAX_PICK_UP_DISTANCE': 100,
+    'MAX_PICK_UP_DISTANCE': 120, #100
 }
 
 
