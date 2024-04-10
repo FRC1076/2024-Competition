@@ -103,15 +103,12 @@ class Autonomous:
                 #log the path the pathplanner's telemetry
                 PPLibTelemetry.setCurrentPath(self.path)
                 self.holonomicController.reset(self.swervometer.getPathPlannerPose(), ChassisSpeeds())
-<<<<<<< Updated upstream
-=======
 
                 #slew rate limiter for controlling the decceleration of the robot when it sees a note
                 #self.noteRateLimiter = SlewRateLimiter(2.5) #limit acceleration to 2.5 m/s
                 #assume the slew rate limiter is called when the robot is full speed and sees a note
                 #self.noteRateLimiter.reset(self.maxSpeed)
 
->>>>>>> Stashed changes
             #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
             self.chassisSpeeds = self.holonomicController.calculateRobotRelativeSpeeds(self.swervometer.getPathPlannerPose(), self.pathState)
@@ -134,13 +131,8 @@ class Autonomous:
                 # else:
                 #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
                 LEDs.rainbowLED("orange-flash")
-<<<<<<< Updated upstream
 
                 self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0] * 0.5, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds[2]))
-=======
-                #self.limitedChassisSpeed = self.noteRateLimiter.calculate(self.chassisSpeeds.vx * 0.5)
-                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds.vx * 0.5, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds.omega))
->>>>>>> Stashed changes
 
                 self.modules = self.drivetrain.getModules()
                 self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
