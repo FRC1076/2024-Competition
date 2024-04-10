@@ -251,3 +251,7 @@ class Mechanism:
     def trapClimbDown(self):
         self.leftTrapMotor.set(-self.config(['TRAPCLIMB_LEFT_MOTOR_SPEED']))
         self.rightTrapMotor.set(-self.config(['TRAPCLIMB_RIGHT_MOTOR_SPEED']))
+
+    def stopTrapClimb(self):
+        self.leftTrapMotor.set(-self.config(['TRAPCLIMB_LEFT_MOTOR_STOP_SPEED']))
+        self.rightTrapMotor.set(-self.config(['TRAPCLIMB_RIGHT_MOTOR_STOP_SPEED']))
