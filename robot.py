@@ -505,9 +505,9 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getLeftBumper() and self.operator.xboxController.getRightBumper() and self.deadzoneCorrection(self.operator.xboxController.getLeftY(), self.operator.deadzone) == 0:
             self.mechanism.sprocketFullSpeedDown()
         if self.operator.xboxController.getPOV() == 0:
-            self.mechanism.lockClimb()
+            self.mechanism.trapClimbUp()
         elif self.operator.xboxController.getPOV() == 180:
-            self.mechanism.reverseClimb()
+            self.mechanism.trapClimbDown()
         else:
             self.mechanism.stopClimb()
 
