@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.35,
+      "y": 4.09
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E-3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3-SHOT[FAST]"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHOT-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2-1SHOT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1-6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6-FAR"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
