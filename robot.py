@@ -509,7 +509,7 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getPOV() == 180:
             self.mechanism.trapClimbDown()
         else:
-            self.mechanism.stopClimb()
+            self.mechanism.stopTrapClimb()
 
 
         """
