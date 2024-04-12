@@ -433,9 +433,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.shootAmp()
             elif(self.operator.xboxController.getXButton()):
                 if self.team_is_blu:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) * 0.65)
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) * 0.7)
                 else:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) * 0.65)
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) * 0.7)
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
