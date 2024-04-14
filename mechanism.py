@@ -80,7 +80,7 @@ class Mechanism:
         return
     
     def lobNote(self, rpm):
-        self.setLeftShooterRPM(-rpm)
+        self.setLeftShooterRPM(-rpm * 1.2)
         self.setRightShooterRPM(rpm)
     
     def shootReverse(self):
@@ -214,20 +214,23 @@ class Mechanism:
     def getAutoAimAngle(self, distance, yaw):
         v = 675
         r = 1.15
-        radyaw = math.radians(yaw)
-        l = math.atan(
-            (49 + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12)      
-        )
-        if (yaw <= 48.974) or ((yaw >= 131.026) and (yaw <= 228.974)) or (yaw >= 311.026):
-            u = math.atan(
-            (53.875 + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12 - (18 / math.cos(radyaw)))
-            ) 
-        else:
-            u = math.atan(
-            (53.875 - (4.875 - (0.2708333 * (20.6875 / math.tan(radyaw)))) + (193.04429 * r * ((distance + 12) /(v * 0.948323655)   )**2)) / (distance + 12 - (20.6875 / math.sin(radyaw)))
+        h = 29
+        a = 18
+        d = 12
+        angleWing = 12.9
+
+        if distance < 176:
+            l = math.atan(
+                (78 - h + (193.04429 *  r * ((distance + d) /(v * math.cos(math.radians(a))))**2)) / (distance + d)      
             )
+
+            u = math.atan(
+                (82.875 - h + (193.04429 * r * ((distance + d) /(v * math.cos(math.radians(a))))**2)) / (distance + d - (18))
+            ) 
         
-        angle = math.degrees(((u+l)/-2)+0.523599)
+            angle = math.degrees(((u+l)/-2))+30
+        else:
+             angle = ((angleWing-9.9)/(231.5-176))*(distance-176)+9.9
 
         return(angle)
     

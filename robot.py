@@ -258,7 +258,9 @@ class MyRobot(wpilib.TimedRobot):
                         config['MAX_TARGET_ASPECT_RATIO_APRILTAG'],
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
-        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [-config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_SIDE_DISTANCE_FROM_COF'] * 0.0254, config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_PITCH'], 180]) #0.3, -0.327, 0.45, 0, 0, 0
+        if self.team_is_red:
+            sideDistance = -config['CAMERA_SIDE_DISTANCE_FROM_COF']
+        NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [-config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, sideDistance * 0.0254, config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_PITCH'], 180]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
             NetworkTables.getTable('limelight').putNumber('priorityid', 7)
         else:
@@ -390,6 +392,7 @@ class MyRobot(wpilib.TimedRobot):
         return True
 
     def teleopPeriodic(self):
+        self.swervometer.enableVision()
         #print(self.mechanism.shootingMotorRPMs)
         #print(self.mechanism.indexBeamBroken())
         self.elastic.getSelectedAuton()
@@ -406,7 +409,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
         #print('RPM', self.mechanism.getShooterRPM())
-        #print('ANGLE', self.mechanism.getSprocketAngle())
+        print('ANGLE', self.mechanism.getSprocketAngle())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
@@ -659,6 +662,13 @@ class MyRobot(wpilib.TimedRobot):
                     self.drivetrain.pointToPose(326, 114)
                 self.drivetrain.execute('center')
                 return
+            
+            if(driver.getRightTriggerAxis() > 0.7):
+                self.drivetrain.set_fwd(strafe * self.swervometer.getTeamMoveAdjustment())
+                self.drivetrain.set_strafe(fwd * self.swervometer.getTeamMoveAdjustment())
+                self.drivetrain.set_rcw(rcw)
+                self.drivetrain.execute('center')
+                return
 
             # No need to correct RCW, as clockwise is clockwise whether you are facing with or against bot.
 
@@ -667,9 +677,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.drivetrain.move(fwd, strafe, rcw, self.drivetrain.getBearing())
 
                 self.log("TeleopDriveTrain: POV: ", driver.getPOV())
-                if self.getPOVCorner(driver.getPOV()) == 'front_left' or driver.getLeftTriggerAxis() > 0.7:
+                if self.getPOVCorner(driver.getPOV()) == 'front_left':
                     self.drivetrain.execute('front_left')
-                elif self.getPOVCorner(driver.getPOV()) == 'front_right'  or driver.getRightTriggerAxis() > 0.7:
+                elif self.getPOVCorner(driver.getPOV()) == 'front_right':
                     self.drivetrain.execute('front_right')
                 elif self.getPOVCorner(driver.getPOV()) == 'rear_left':
                     self.drivetrain.execute('rear_left')

@@ -163,7 +163,7 @@ class SwerveDrive:
         self.bearing_kI = self.bearing_config.bearing_kI
         self.bearing_kD = self.bearing_config.bearing_kD
         self.bearing_pid_controller = PIDController(self.bearing_kP, self.bearing_kI, self.bearing_kD)
-        self.pointToPosePIDController = PIDController(0.025, 0, 0.0001)
+        self.pointToPosePIDController = PIDController(0.02, 0, 0.0001)
         self.pointToPosePIDController.enableContinuousInput(0, 360)
         self.pointToPosePIDController.setTolerance(0, 0)
         #self.pointToPosePIDController = ProfiledPIDController(0.02, 0, 0, TrapezoidProfileRadians.Constraints(6.28, 3.14), 0.02)#PIDController(0.02, 0, 0)
