@@ -202,13 +202,13 @@ class Mechanism:
             self.indexNote()
     
     def lockClimb(self):
-        self.climbMotor.set(-0.2)
+        self.climbMotor.set(-0.4)
     
     def stopClimb(self):
         self.climbMotor.set(0)
 
     def reverseClimb(self):
-        self.climbMotor.set(0.2)
+        self.climbMotor.set(0.4)
 
 
     def getAutoAimAngle(self, distance, yaw):

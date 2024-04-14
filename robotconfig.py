@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
@@ -412,8 +412,7 @@ autonConfig = {
                           ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'E-7', 2.5]],
 
-    'TEST_NOTE': [['START_INTAKE'], 
-                  ['PATH', 'D-FAR', 0]],
+    'TEST_NOTE': [['PATH', 'TEST', None]],
 
     #'B_FOUR_NOTE_GRAB': [['START_INTAKE'], ['RAISE_ARM_START', -25.9], ['WAIT', 1], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', 'B-1', 0.5], ['RAISE_ARM_START', -10], ['PATH', '1-SHOT'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', SHOT_2, 0.3], ['RAISE_ARM_START', 0], ['WAIT', 0.5], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37], ['PATH_TO_NOTE', '2-3', 0.3], ['RAISE_ARM_START', 0], ['PATH', '3-2'], ['SHOOT_NOTE'], ['LOWER_ARM_START', -37]],
     #'NOTE_GRAB_TEST': [['START_INTAKE'], ['MOVE_TO_NOTE', -(275 - 64), 57, 180, 0], ['RAISE_ARM_START', 0]],
