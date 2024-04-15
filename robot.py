@@ -590,7 +590,7 @@ class MyRobot(wpilib.TimedRobot):
         # Implement clutch on driving and rotating.
         translational_clutch = 1.0
         rotational_clutch = 1.0
-        if (driver.getRightBumper() or self.mechanism.getSprocketAngle() > 30):
+        if (driver.getRightBumper()):
             translational_clutch = 0.5
             rotational_clutch = 0.5
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.

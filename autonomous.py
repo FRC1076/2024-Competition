@@ -7,6 +7,7 @@ from wpimath.geometry import Rotation2d
 from pathplannerlib.config import PIDConstants
 from pathplannerlib.controller import PPHolonomicDriveController
 from pathplannerlib.telemetry import PPLibTelemetry
+from wpimath.filter import SlewRateLimiter
 import math
 from leds import LEDs
 
@@ -131,8 +132,8 @@ class Autonomous:
                 # else:
                 #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
                 LEDs.rainbowLED("orange-flash")
-
-                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0] * 0.5, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds[2]))
+                self.limitedChassisSpeed = self.noteRateLimiter.calculate(self.chassisSpeeds.vx * 0.5)
+                self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds.vx, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds.omega))
 
                 self.modules = self.drivetrain.getModules()
                 self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
