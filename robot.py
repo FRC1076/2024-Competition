@@ -610,11 +610,6 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.drivetrain.setWheelLock(False)
 
-        if (driver.getYButton()):
-            self.drivetrain.driveStraight(max(self.deadzoneCorrection(-driver.getLeftY() * translational_clutch, 0), self.driver.deadzone))
-            self.drivetrain.alignWithNote(None, None, 0)
-            return
-
         # Regular driving, not a maneuver
         if False:
             print("a")
@@ -655,12 +650,21 @@ class MyRobot(wpilib.TimedRobot):
                 self.drivetrain.execute('center')
                 return
 
-            if(driver.getXButton()):
+            if(driver.getYButton()):
                 self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
                 if self.team_is_blu:
                     self.drivetrain.pointToPose(-326, 114)
                 else:
                     self.drivetrain.pointToPose(326, 114)
+                self.drivetrain.execute('center')
+                return
+            
+            if(driver.getXButton()):
+                self.drivetrain.move(fwd, strafe, 0 , self.drivetrain.getBearing())
+                if self.team_is_blu:
+                    self.drivetrain.rotateToAngle(180)
+                else:
+                    self.drivetrain.rotateToAngle(0)
                 self.drivetrain.execute('center')
                 return
             

@@ -22,8 +22,8 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
-    'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
+    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'FIELD_START_POSITION': 'A', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
     'FIELD_ORIGIN_X': 0.0, # X-Coordinate of field orgin (center of field, viewed from scoring table)
@@ -133,7 +133,7 @@ drivetrainConfig = {
 visionConfig = {
     'CAMERA_HEIGHT_FROM_GROUND': 17.3,
     'CAMERA_FORWARD_DISTANCE_FROM_COF': 12, #20, #12,
-    'CAMERA_SIDE_DISTANCE_FROM_COF': -1.5, #-0.5
+    'CAMERA_SIDE_DISTANCE_FROM_COF': -0.5,#-1.5, #-0.5
     'CAMERA_PITCH': 16.5,
     'APRILTAGS': 0,
     'RETROREFLECTIVE': 1,
@@ -280,6 +280,22 @@ autonConfig = {
                     ['PATH', '5-FAR', None],
                     ['SHOOT_NOTE'],
                     ['LOWER_ARM_START', INTAKE_ANGLE]],
+    
+    'D_SKIP_THREE_NOTE': [['START_INTAKE'],
+                    ['RAISE_ARM_START', FAR_ANGLE],
+                    ['PATH', 'D-FAR', None],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', INTAKE_ANGLE],
+                    ['PATH', 'FAR-4', 1.5],
+                    ['RAISE_ARM_START', FAR_ANGLE],
+                    ['PATH', '4-FAR', None],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', INTAKE_ANGLE],
+                    ['PATH', 'FAR-5', 1.4],
+                    ['RAISE_ARM_START', FAR_ANGLE],
+                    ['PATH', '5-FAR', None],
+                    ['SHOOT_NOTE'],
+                    ['LOWER_ARM_START', INTAKE_ANGLE]],
 
     'D_CENTER_FOUR_NOTE': [['START_INTAKE'],
                           ['RAISE_ARM_START', D_PRELOAD_ANGLE],
@@ -411,6 +427,13 @@ autonConfig = {
                           ['SHOOT_NOTE'],
                           ['LOWER_ARM_START', INTAKE_ANGLE],
                           ['PATH', 'E-7', 2.5]],
+    
+    'A_ONE_NOTE': [['START_INTAKE'],
+                   ['RAISE_ARM_START', NOTE_1_ANGLE],
+                   ['WAIT', 8],
+                   ['PATH', 'A-1', None],
+                   ['ROTATE', NOTE_1_YAW],
+                   ['SHOOT_NOTE']],
 
     'TEST_NOTE': [['PATH', 'TEST', None]],
 
