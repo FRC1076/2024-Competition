@@ -410,7 +410,7 @@ class MyRobot(wpilib.TimedRobot):
     def teleopMechanism(self):
         self.inADropDownThisCycle = False
         #print('RPM', self.mechanism.getShooterRPM())
-        print('ANGLE', self.mechanism.getSprocketAngle())
+        #print('ANGLE', self.mechanism.getSprocketAngle())
         #passive functions
         #no note inside
         if not self.mechanism.indexBeamBroken():
