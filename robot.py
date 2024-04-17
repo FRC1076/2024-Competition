@@ -259,8 +259,8 @@ class MyRobot(wpilib.TimedRobot):
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
         sideDistance = config['CAMERA_SIDE_DISTANCE_FROM_COF']
-        if self.team_is_red:
-            sideDistance = -config['CAMERA_SIDE_DISTANCE_FROM_COF']
+        #if self.team_is_red:
+            #sideDistance = -config['CAMERA_SIDE_DISTANCE_FROM_COF']
         NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [-config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, sideDistance * 0.0254, config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_PITCH'], 180]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
             NetworkTables.getTable('limelight').putNumber('priorityid', 7)
@@ -488,7 +488,7 @@ class MyRobot(wpilib.TimedRobot):
             self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
-            self.mechanism.sprocketToPosition(80) 
+            self.mechanism.sprocketToPosition(80)
             self.allowDropArm = False
         #auto aim
         elif self.operator.xboxController.getBButton():
