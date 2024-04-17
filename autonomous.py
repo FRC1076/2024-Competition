@@ -106,9 +106,9 @@ class Autonomous:
                 self.holonomicController.reset(self.swervometer.getPathPlannerPose(), ChassisSpeeds())
 
                 #slew rate limiter for controlling the decceleration of the robot when it sees a note
-                self.noteRateLimiter = SlewRateLimiter(2.5) #limit acceleration to 2.5 m/s
+                #self.noteRateLimiter = SlewRateLimiter(2.5) #limit acceleration to 2.5 m/s
                 #assume the slew rate limiter is called when the robot is full speed and sees a note
-                self.noteRateLimiter.reset(self.maxSpeed)
+                #self.noteRateLimiter.reset(self.maxSpeed)
 
             #get the target state of the robot (pathState) and calculate the robot's chassis speeds
             self.pathState = self.pathTrajectory.sample(self.autonTimer.get() - self.lastTime)
@@ -124,7 +124,7 @@ class Autonomous:
             self.noteDriveCounter += 1
 
             #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
-            if(self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken()):
+            if(False and self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken()):
                 #move every other robot cycle
                 # if(self.noteDriveCounter % 2 == 0):
                 #     # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
@@ -146,7 +146,7 @@ class Autonomous:
                 self.modules['rear_right'].execute()
             
             #if the speeds are minimal and minimum time has elapsed, move onto the next task
-            elif((abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 5 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()) or (self.mechanism.indexBeamBroken() and waitTime is not None)):
+            elif((abs(self.chassisSpeeds.vx/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.vy/self.maxSpeed) < 0.1 and abs(self.chassisSpeeds.omega_dps) < 3 and self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds()) or (self.mechanism.indexBeamBroken() and waitTime is not None) or self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds() * 2):
                 self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(0, 0, 0))
                 self.modules = self.drivetrain.getModules()
                 self.modules['front_left'].move(self.moduleStates[0].speed / (self.maxSpeed), (self.moduleStates[0].angle.degrees() + 270) % 360)
@@ -207,7 +207,7 @@ class Autonomous:
                 self.mechanism.setShootState(True)
                 self.mechanism.indexNote()
                 self.swervometer.enableVision()
-            if(self.autonTimer.get() - self.lastTime > 0.25):
+            if(self.autonTimer.get() - self.lastTime > 0.4):
                 #self.swervometer.disableVision()
                 #self.mechanism.sprocketToPosition(-37)
                 self.mechanism.setShootState(False)

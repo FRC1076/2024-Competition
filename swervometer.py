@@ -238,7 +238,7 @@ class Swervometer:
                                              Translation2d(-self.swerveModuleOffsetX * 0.0254, -self.swerveModuleOffsetY * 0.0254))
         gyroAngle = Rotation2d().fromDegrees(self.teamGyroAdjustment)
         swerveModules = (frontLeftModule, frontRightModule, rearLeftModule, rearRightModule)
-        self.poseEstimator =  SwerveDrive4PoseEstimator(self.kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180), (0.1, 0.1, 0.1), (1.8, 1.8, 1.8))
+        self.poseEstimator =  SwerveDrive4PoseEstimator(self.kinematics, gyroAngle, swerveModules, Pose2d(self.currentX * 0.0254, self.currentY * 0.0254, self.teamGyroAdjustment * math.pi / 180), (0.1, 0.1, 0.1), (0.7, 0.7, 9999)) #(1.8, 1.8, 9999))
         self.vision = vision
         self.currentBearing = self.teamGyroAdjustment
 
@@ -274,6 +274,7 @@ class Swervometer:
                 #print("POSE UPDATING AHHHHHHHHHHH")
                 pose = self.vision.getMegatag2Pose()
                 self.poseEstimator.addVisionMeasurement(Pose2d(pose[0] * 0.0254, pose[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
+                #print(self.vision.getTotalLatency() / 1000)
             except:
                 pass
         
