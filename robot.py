@@ -420,6 +420,7 @@ class MyRobot(wpilib.TimedRobot):
             if self.previousBeamIsBrokenState:
                 self.dropArmTimer.reset()
                 self.allowDropArm = True
+                #print(self.mechanism.getShooterRPM())
             if (self.dropArmTimer.get() > 0.5
                 and not self.operator.xboxController.getAButton()
                 and not self.operator.xboxController.getBButton()

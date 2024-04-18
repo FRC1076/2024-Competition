@@ -192,7 +192,10 @@ class Vision:
             and aspectRatio < self.maxTargetAspectRatioAprilTag
     
     def getTotalLatency(self):
-        return self.table.getNumber('tl', 0) + self.table.getNumber('cl', 0)
+        try:
+            return int(self.table.getNumberArray('botpose_orb', [])[6])
+        except:
+            return 0
 
     def setYawOrientation(self, yawAngle, yawRate):
         self.table.putNumberArray("robot_orientation_set", [yawAngle, yawRate, 0, 0, 0, 0])

@@ -269,15 +269,18 @@ class Swervometer:
         #print(self.useVision)
         #set the robot orientation for the limelight
         self.vision.setYawOrientation((-(gyroAngle) + 180) % 360, 0)#(-gyroRate) % 360)
-        if(self.vision.hasTargets() and self.useVision and abs(gyroRate) < 720):
+        if(self.vision.hasTargets()): #and self.useVision and abs(gyroRate) < 720):
             try:
                 #print("POSE UPDATING AHHHHHHHHHHH")
                 pose = self.vision.getMegatag2Pose()
                 self.poseEstimator.addVisionMeasurement(Pose2d(pose[0] * 0.0254, pose[1] * 0.0254, Rotation2d.fromDegrees((-(gyroAngle)) % 360)), wpilib.Timer.getFPGATimestamp() - self.vision.getTotalLatency() / 1000)
                 #print(self.vision.getTotalLatency() / 1000)
+                #print("updating pose")
             except:
+                #print("not updating (failed try statement)")
                 pass
-        
+        else:
+            #print("not updating (no targets)")
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37
         self.currentY = self.currentPose.Y() * 39.37
