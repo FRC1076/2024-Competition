@@ -22,7 +22,7 @@ controllerConfig = {
 }
 
 swervometerConfig = { # All positions measured in inches
-    'TEAM_IS_RED': True, # Is the robot part of the Red Team?
+    'TEAM_IS_RED': False, # Is the robot part of the Red Team?
     'FIELD_START_POSITION': 'D', # Which of three starting positions is selected?
     'HAS_BUMPERS_ATTACHED': True, # Does the robot currently have bumpers attached?
     'USE_COM_ADJUSTMENT': False, # Should robot compensate for CoM lever arms?
@@ -165,7 +165,7 @@ SUBWOOFER_WAIT = 0.5
 SHOT_WAIT = 0.5 #seconds
 
 autonConfig = {
-    'TASK': 'D_SKIP_TWO_NOTE',
+    'TASK': 'D_SKIP_THREE_NOTE',
 
     'SHOOT_NOTE_AUTON': [['START_INTAKE'],
                         ['RAISE_ARM_START', SUBWOOFER_ANGLE],
@@ -190,6 +190,27 @@ autonConfig = {
                                   ['PATH', 'SHOT-3[FAST]', None],
                                   ['RAISE_ARM_START', SHOT_ANGLE],
                                   ['PATH', '3-SHOT', None],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE]],
+    
+    'B_FAST_FOUR_NOTE_SUBWOOFER_REVERSE': [['START_INTAKE'],
+                                  ['RAISE_ARM_START', SUBWOOFER_ANGLE],
+                                  ['WAIT', SUBWOOFER_WAIT],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', 'B-3', None],
+                                  ['RAISE_ARM_START', SHOT_ANGLE],
+                                  ['PATH', '3-SHOT', None],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', 'SHOT-2', None],
+                                  ['RAISE_ARM_START', SHOT_ANGLE],
+                                  ['PATH', '2-SHOT', None],
+                                  ['SHOOT_NOTE'],
+                                  ['LOWER_ARM_START', INTAKE_ANGLE],
+                                  ['PATH', 'SHOT-1', None],
+                                  ['RAISE_ARM_START', SHOT_ANGLE],
+                                  ['PATH', '1-SHOT', None],
                                   ['SHOOT_NOTE'],
                                   ['LOWER_ARM_START', INTAKE_ANGLE]],
 

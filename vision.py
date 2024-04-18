@@ -40,7 +40,7 @@ class Vision:
         #print("Vision: ", self.table.getNumber('tv', 0))
         #print("Bot Pose: ", self.table.getNumberArray('botpose', None))
         try:
-            return bool(self.table.getNumberArray('botpose', [])[7])
+            return bool(self.table.getNumberArray('botpose_orb', [])[7])
         except:
             return False
     

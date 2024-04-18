@@ -259,8 +259,8 @@ class MyRobot(wpilib.TimedRobot):
                         config['UPDATE_POSE'])
         vision.setToAprilTagPipeline()
         sideDistance = config['CAMERA_SIDE_DISTANCE_FROM_COF']
-        #if self.team_is_red:
-            #sideDistance = -config['CAMERA_SIDE_DISTANCE_FROM_COF']
+        if self.team_is_red:
+            sideDistance = -config['CAMERA_SIDE_DISTANCE_FROM_COF']
         NetworkTables.getTable('limelight').putNumberArray('camerapose_robotspace_set', [-config['CAMERA_FORWARD_DISTANCE_FROM_COF'] * 0.0254, sideDistance * 0.0254, config['CAMERA_HEIGHT_FROM_GROUND'] * 0.0254, 0, config['CAMERA_PITCH'], 180]) #0.3, -0.327, 0.45, 0, 0, 0
         if self.team_is_blu:
             NetworkTables.getTable('limelight').putNumber('priorityid', 7)
@@ -342,6 +342,7 @@ class MyRobot(wpilib.TimedRobot):
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
         self.allowDropArm = True
         self.drivetrain.disableVoltageCompensation()
+        self.inAuton = False
         return
 
     def robotPeriodic(self):
@@ -359,11 +360,15 @@ class MyRobot(wpilib.TimedRobot):
             #print('no target')
             pass
         self.mechanism.periodic()
-        if self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple-flash")
-            #print('purple-flash')
+        #make led logic in autonomousPeriodic
+        if self.inAuton:
+            pass
         else:
-            LEDs.rainbowLED("purple")
+            if self.mechanism.indexBeamBroken():
+                LEDs.rainbowLED("purple-flash")
+                #print('purple-flash')
+            else:
+                LEDs.rainbowLED("purple")
         """
         elif self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"] and self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
@@ -438,9 +443,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.shootAmp()
             elif(self.operator.xboxController.getXButton()):
                 if self.team_is_blu:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) * 0.7)
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) * 0.65)
                 else:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) * 0.7)
+                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) * 0.65)
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
@@ -483,9 +488,9 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getXButton():
             #self.mechanism.sprocketToPosition(0)
             if self.team_is_blu:
-                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(-326, 114)))
+                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(-326, 114)) - 5)
             else:
-                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(326, 114)))
+                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(326, 114)) - 5)
             self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
@@ -749,6 +754,7 @@ class MyRobot(wpilib.TimedRobot):
         self.drivetrain.enableVoltageCompensation()
 
         self.swervometer.resetPoseEstimator(self.drivetrain.getGyroAngle(), self.starting_x, self.starting_y, self.drivetrain.getModules())
+        self.inAuton = True
         return
 
     def autonomousPeriodic(self):
@@ -756,6 +762,13 @@ class MyRobot(wpilib.TimedRobot):
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, True)"""
+        if self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple-flash")
+            #print('purple-flash')
+        else:
+            LEDs.rainbowLED("purple")
+        if not self.vision.hasTargets():
+            LEDs.rainbowLED("green-flash")
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()

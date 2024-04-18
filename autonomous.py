@@ -124,7 +124,7 @@ class Autonomous:
             self.noteDriveCounter += 1
 
             #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
-            if(False and self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken()):
+            if(self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken() and not self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds() * 2):
                 #move every other robot cycle
                 # if(self.noteDriveCounter % 2 == 0):
                 #     # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
@@ -132,7 +132,7 @@ class Autonomous:
                 # else:
                 #     self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds[0]/2, 0, 0))
                 LEDs.rainbowLED("orange-flash")
-                self.limitedChassisSpeed = self.noteRateLimiter.calculate(self.chassisSpeeds.vx * 0.5)
+                self.limitedChassisSpeed = self.noteRateLimiter.calculate(self.chassisSpeeds.vx * 0.35)
                 self.moduleStates = self.swervometer.getKinematics().toSwerveModuleStates(ChassisSpeeds(self.chassisSpeeds.vx, self.drivetrain.noteDrive_x_pid_controller.calculate(self.notedetector.getTargetErrorX()) * 4.3, self.chassisSpeeds.omega))
 
                 self.modules = self.drivetrain.getModules()
