@@ -172,7 +172,6 @@ class Autonomous:
                 self.modules['front_right'].execute()
                 self.modules['rear_left'].execute()
                 self.modules['rear_right'].execute()
-                LEDs.rainbowLED("off")
         
         elif self.autonTask[0] == 'WHEEL_LOCK':           
             self.drivetrain.setWheelLock(True)

@@ -762,13 +762,15 @@ class MyRobot(wpilib.TimedRobot):
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, True)"""
-        if self.mechanism.indexBeamBroken():
+        if self.notedetector.hasTarget():
+            LEDs.rainbowLED("off")
+        elif not self.vision.hasTargets():
+            LEDs.rainbowLED("green-flash")
+        elif self.mechanism.indexBeamBroken():
             LEDs.rainbowLED("purple-flash")
             #print('purple-flash')
         else:
             LEDs.rainbowLED("purple")
-        if not self.vision.hasTargets():
-            LEDs.rainbowLED("green-flash")
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()
