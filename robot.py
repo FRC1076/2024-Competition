@@ -104,6 +104,7 @@ class MyRobot(wpilib.TimedRobot):
         self.field = wpilib.Field2d()
         self.field.setRobotPose(self.swervometer.getPathPlannerPose())
         self.elastic.putField(self.field)
+        self.inAuton = False
         return
 
     def disabledExit(self):
