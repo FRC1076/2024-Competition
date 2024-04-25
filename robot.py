@@ -437,9 +437,9 @@ class MyRobot(wpilib.TimedRobot):
                 self.mechanism.shootAmp()
             elif(self.operator.xboxController.getXButton()):
                 if self.team_is_blu:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(-326, 114)) * 0.7)
+                    self.mechanism.lobNote(2000)
                 else:
-                    self.mechanism.lobNote(self.mechanism.lobShotRPM(self.swervometer.distanceToPose(326, 114)) * 0.7)
+                    self.mechanism.lobNote(2000)
             else:
                 self.mechanism.shootNote()
         self.previousBeamIsBrokenState = self.mechanism.indexBeamBroken()
@@ -482,9 +482,9 @@ class MyRobot(wpilib.TimedRobot):
         elif self.operator.xboxController.getXButton():
             #self.mechanism.sprocketToPosition(0)
             if self.team_is_blu:
-                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(-326, 114)))
+                self.mechanism.sprocketToPosition(-25.9)
             else:
-                self.mechanism.sprocketToPosition(self.mechanism.lobShotAngle(self.swervometer.distanceToPose(326, 114)))
+                self.mechanism.sprocketToPosition(-25.9)
             self.allowDropArm = False
         #amp
         elif self.operator.xboxController.getYButton():
