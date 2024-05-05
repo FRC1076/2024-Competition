@@ -595,11 +595,11 @@ class MyRobot(wpilib.TimedRobot):
         driver = self.driver.xboxController
 
         # Implement clutch on driving and rotating.
-        translational_clutch = 1.0
-        rotational_clutch = 1.0
+        translational_clutch = 0.5#1.0
+        rotational_clutch = 0.5#1.0
         if (driver.getRightBumper()):
-            translational_clutch = 0.5
-            rotational_clutch = 0.5
+            translational_clutch = 1#0.5
+            rotational_clutch = 1#0.5
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.
             translational_clutch = 0.3
             rotational_clutch = 0.35 #0.2 was a little too slow for rotation, but perfect for translation #out of data comment
