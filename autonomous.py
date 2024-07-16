@@ -124,7 +124,7 @@ class Autonomous:
             self.noteDriveCounter += 1
 
             #if there is a note, it is within range, waitTime isn't negative, and the waitTime has passed, then use note detection
-            if(self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken() and not self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds() * 2):
+            if(False and self.notedetector.hasTarget() and waitTime is not None and self.notedetector.getTargetErrorY() < self.maxPickUpDistance and self.autonTimer.get() - self.lastTime > waitTime and not self.mechanism.indexBeamBroken() and not self.autonTimer.get() - self.lastTime > self.pathTrajectory.getTotalTimeSeconds() * 2):
                 #move every other robot cycle
                 # if(self.noteDriveCounter % 2 == 0):
                 #     # Use chassisSpeeds for forwards and rotational movement, but use notedetector for lateral movement
