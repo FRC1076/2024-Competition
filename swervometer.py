@@ -281,7 +281,6 @@ class Swervometer:
                 pass
         else:
             pass
-            #pass
             #print("not updating (no targets)")
         self.currentPose = self.poseEstimator.getEstimatedPosition()
         self.currentX = self.currentPose.X() * 39.37

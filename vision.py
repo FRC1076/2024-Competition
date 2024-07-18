@@ -37,11 +37,13 @@ class Vision:
             print('Invalid pipeline input: ' + pl)
 
     def hasTargets(self):
-        #print("Vision: ", self.table.getNumber('tv', 0))
-        #print("Bot Pose: ", self.table.getNumberArray('botpose', None))
-        try:
-            return bool(self.table.getNumberArray('botpose_orb', [])[7])
-        except:
+        pose = self.table.getNumberArray('botpose_orb', None)
+        #print(pose)
+        if not(pose is None) and len(pose) != 0:
+            #print('number of targets', pose[7])
+            return bool(pose[7])
+        else:
+            #print('no pose')
             return False
     
     def hasPriorityTargets(self):
@@ -190,8 +192,7 @@ class Vision:
         targetHeight = self.table.getNumber('tvert', 100.0)
         targetWidth = self.table.getNumber('thor', 1.0)
         aspectRatio = targetWidth / targetHeight
-        return aspectRatio > self.minTargetAspectRatioAprilTag \
-            and aspectRatio < self.maxTargetAspectRatioAprilTag
+        return aspectRatio > self.minTargetAspectRatioAprilTag and aspectRatio < self.maxTargetAspectRatioAprilTag
     
     def getTotalLatency(self):
         try:
