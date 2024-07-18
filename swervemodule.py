@@ -47,6 +47,7 @@ class SwerveModule:
         self.rotateMotor = _rotateMotor
         self.rotateEncoder = _rotateEncoder
         CANConfig = CanCoderConfiguration()
+        CANConfig.sensorCoefficient = 360/4096
         CANConfig.unitString = "deg" #I didn't change any other settings because we do those elsewhere
         self.rotateEncoder.configAllSettings(CANConfig) #If this doesn't work we can try doing the math manually to convert units
 
