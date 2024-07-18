@@ -16,6 +16,8 @@ from robotconfig import MODULE_NAMES
 from wpimath.kinematics import SwerveModulePosition, SwerveModuleState
 from wpimath.geometry import Rotation2d
 
+from phoenix5.sensors import CANCoderConfiguration
+
 # Create the structure of the config: SmartDashboard prefix, Encoder's zero point, Drive motor inverted, Allow reverse
 ModuleConfig = namedtuple('ModuleConfig', ['sd_prefix', 'zero', 'inverted', 'allow_reverse', 'position_conversion', 'heading_kP', 'heading_kI', 'heading_kD'])
 
@@ -44,6 +46,10 @@ class SwerveModule:
 
         self.rotateMotor = _rotateMotor
         self.rotateEncoder = _rotateEncoder
+        CANConfig = CanCoderConfiguration()
+        CANConfig.sensorCoefficient = 360/4096
+        CANConfig.unitString = "deg" #I didn't change any other settings because we do those elsewhere
+        self.rotateEncoder.configAllSettings(CANConfig) #If this doesn't work we can try doing the math manually to convert units
 
         self.driveMotor = _driveMotor
         self.driveEncoder = _driveEncoder
