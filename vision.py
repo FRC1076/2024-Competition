@@ -59,20 +59,22 @@ class Vision:
         if self.hasTargets():
             return self.table.getNumber('tx', 0)
         else:
-            print('No vision target.')
+            #print('No vision target.')
             return 0
 
     def gettargetErrorY(self):
         if self.hasTargets():
             return self.table.getNumber('ty', 0)
         else:
-            print('No vision target.')
+            pass
+            #print('No vision target.')
 
     def getTargetArea(self):
         if self.hasTargets():
             return self.table.getNumber('ta', 0)
         else:
-            print('No vision target.')
+            pass
+            #print('No vision target.')
     
     def getPose(self):
         """
