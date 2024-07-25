@@ -362,14 +362,11 @@ class MyRobot(wpilib.TimedRobot):
             pass
         self.mechanism.periodic()
         #make led logic in autonomousPeriodic
-        if self.inAuton:
-            pass
+        if self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple-flash")
+            #print('purple-flash')
         else:
-            if self.mechanism.indexBeamBroken():
-                LEDs.rainbowLED("purple-flash")
-                #print('purple-flash')
-            else:
-                LEDs.rainbowLED("purple")
+            LEDs.rainbowLED("purple")
         """
         elif self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"] and self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
@@ -762,15 +759,11 @@ class MyRobot(wpilib.TimedRobot):
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, True)"""
-        if self.notedetector.hasTarget():
-            LEDs.rainbowLED("off")
-        elif not self.vision.hasTargets():
-            LEDs.rainbowLED("green-flash")
-        elif self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple-flash")
+        #if self.mechanism.indexBeamBroken():
+            #LEDs.rainbowLED("purple-flash")
             #print('purple-flash')
-        else:
-            LEDs.rainbowLED("purple")
+        #else:
+            #LEDs.rainbowLED("purple")
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()
