@@ -592,16 +592,16 @@ class MyRobot(wpilib.TimedRobot):
         driver = self.driver.xboxController
 
         # Implement clutch on driving and rotating.
-        translational_clutch = 1#1.0
-        rotational_clutch = 1#1.0
+        translational_clutch = 0.357#1.0
+        rotational_clutch = 0.5#1.0 
         if (driver.getRightBumper()):
-            translational_clutch = 0.5#0.5
+            translational_clutch *= 0.5#0.5
             rotational_clutch = 0.5#0.5
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.
-            translational_clutch = 0.3
+            translational_clutch *= 0.3
             rotational_clutch = 0.35 #0.2 was a little too slow for rotation, but perfect for translation #out of data comment
         if (driver.getLeftTriggerAxis() > 0.7):
-            rotational_clutch = 0.5
+            rotational_clutch *= 0.5
 
         # Reset the gyro in the direction bot is facing.
         # Note this is a bad idea in competition, since it's reset automatically in robotInit.
