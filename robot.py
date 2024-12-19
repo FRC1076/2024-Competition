@@ -284,10 +284,10 @@ class MyRobot(wpilib.TimedRobot):
             target_offsetX_april=config['APRIL_TARGET_OFFSET_X'], target_target_size_april=config['APRIL_TARGET_TARGET_SIZE'],
             max_target_offset_x=config['MAX_TARGET_OFFSET_X'], min_target_size=config['MIN_TARGET_SIZE'])
 
-        flModule_cfg = ModuleConfig(sd_prefix='FrontLeft_Module', zero= -119.92 + 180 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        frModule_cfg = ModuleConfig(sd_prefix='FrontRight_Module', zero= -108.75 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        rlModule_cfg = ModuleConfig(sd_prefix='RearLeft_Module', zero= -273.24 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
-        rrModule_cfg = ModuleConfig(sd_prefix='RearRight_Module', zero= -304.18 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        flModule_cfg = ModuleConfig(sd_prefix='FrontLeft_Module', zero= 119.92 + 180 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        frModule_cfg = ModuleConfig(sd_prefix='FrontRight_Module', zero= 108.75 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        rlModule_cfg = ModuleConfig(sd_prefix='RearLeft_Module', zero= 273.24 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
+        rrModule_cfg = ModuleConfig(sd_prefix='RearRight_Module', zero= 304.18 + 90, inverted=False, allow_reverse=True, position_conversion=config['ROBOT_INCHES_PER_ROTATION'], heading_kP=config['HEADING_KP'], heading_kI=config['HEADING_KI'], heading_kD=config['HEADING_KD'])
 
         motor_type = rev.CANSparkLowLevel.MotorType.kBrushless
 
@@ -362,14 +362,11 @@ class MyRobot(wpilib.TimedRobot):
             pass
         self.mechanism.periodic()
         #make led logic in autonomousPeriodic
-        if self.inAuton:
-            pass
+        if self.mechanism.indexBeamBroken():
+            LEDs.rainbowLED("purple-flash")
+            #print('purple-flash')
         else:
-            if self.mechanism.indexBeamBroken():
-                LEDs.rainbowLED("purple-flash")
-                #print('purple-flash')
-            else:
-                LEDs.rainbowLED("purple")
+            LEDs.rainbowLED("purple")
         """
         elif self.notedetector.hasTarget():
             if self.notedetector.getTargetErrorX() < self.notedetector.config["INTAKE_RIGHT_ERROR_MARGIN"] and self.notedetector.getTargetErrorX() > self.notedetector.config["INTAKE_LEFT_ERROR_MARGIN"]:
@@ -595,16 +592,16 @@ class MyRobot(wpilib.TimedRobot):
         driver = self.driver.xboxController
 
         # Implement clutch on driving and rotating.
-        translational_clutch = 0.5#1.0
-        rotational_clutch = 0.5#1.0
+        translational_clutch = 0.357#1.0
+        rotational_clutch = 0.5#1.0 
         if (driver.getRightBumper()):
-            translational_clutch = 1#0.5
-            rotational_clutch = 1#0.5
+            translational_clutch *= 0.5#0.5
+            rotational_clutch = 0.5#0.5
         if (driver.getLeftBumper()): # This is deliberately an "if", not an "elif", to aid in driver transition.
-            translational_clutch = 0.3
+            translational_clutch *= 0.3
             rotational_clutch = 0.35 #0.2 was a little too slow for rotation, but perfect for translation #out of data comment
         if (driver.getLeftTriggerAxis() > 0.7):
-            rotational_clutch = 0.5
+            rotational_clutch *= 0.5
 
         # Reset the gyro in the direction bot is facing.
         # Note this is a bad idea in competition, since it's reset automatically in robotInit.
@@ -762,15 +759,11 @@ class MyRobot(wpilib.TimedRobot):
         gyroAngle = self.drivetrain.getGyroAngle()
         modules = self.drivetrain.getModules()
         self.swervometer.updatePoseEstimator(gyroAngle, modules, True)"""
-        if self.notedetector.hasTarget():
-            LEDs.rainbowLED("off")
-        elif not self.vision.hasTargets():
-            LEDs.rainbowLED("green-flash")
-        elif self.mechanism.indexBeamBroken():
-            LEDs.rainbowLED("purple-flash")
+        #if self.mechanism.indexBeamBroken():
+            #LEDs.rainbowLED("purple-flash")
             #print('purple-flash')
-        else:
-            LEDs.rainbowLED("purple")
+        #else:
+            #LEDs.rainbowLED("purple")
         self.auton.executeAuton()
         self.drivetrain.visionPeriodic()
         self.mechanism.autonPeriodic()

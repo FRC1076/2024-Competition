@@ -31,6 +31,7 @@ class LEDs:
             digitalPin8.set(False)
             digitalPin9.set(True)
         elif color == "green-flash":
+            print("flashing green!!")
             digitalPin7.set(False)
             digitalPin8.set(True)
             digitalPin9.set(True)
