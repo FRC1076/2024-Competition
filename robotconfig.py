@@ -633,7 +633,7 @@ mechanismConfig = {
     #Shift encoder values to avoid wrap around of encoder
     "SPROCKET_ENCODER_SHIFT": 20,
     #Value of sprocket encoder at 0 (in deg) (at horizontal)
-    "SPROCKET_ENCODER_ZERO": 49.1, #47.9
+    "SPROCKET_ENCODER_ZERO": 49.1 + 80.2 + 36.4, #47.9
     #Tune values for the Sprocket Motor's PID
     "SPROCKET_PID_KP": 0.03, #0.006 #0.05
     "SPROCKET_PID_KI": 0,
