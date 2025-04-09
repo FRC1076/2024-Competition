@@ -67,9 +67,12 @@ class Mechanism:
     #do the sequence that shoots the note
     #r1 shoots the note
     def shootNote(self):
+        factor = 0.5 # out of one
         #self.leftShootingMotor.set(self.config["SHOOTER_LEFT_SPEED"])
-        self.setLeftShooterRPM(-4500)
-        self.setRightShooterRPM(5500)
+
+        self.setLeftShooterRPM(-4500 * factor)
+        self.setRightShooterRPM(5500 * factor)
+
         #self.rightShootingMotor.set(self.config["SHOOTER_RIGHT_SPEED"])
         return
     
@@ -183,11 +186,13 @@ class Mechanism:
         return self.leftShootingEncoder.getVelocity(), self.rightShootingEncoder.getVelocity()
 
     def setLeftShooterRPM(self, rpm):
-        self.leftShootingMotor.set(rpm / 5100 + self.leftShooterPID.calculate(self.leftShootingEncoder.getVelocity(), rpm))
+        # self.leftShootingMotor.set(rpm / 5100 + self.leftShooterPID.calculate(self.leftShootingEncoder.getVelocity(), rpm))
+        self.leftShootingMotor.set(rpm / 5100)
 
     def setRightShooterRPM(self, rpm):
-        self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+        # self.rightShootingMotor.set(rpm / 5100 + self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
         #print(self.rightShooterPID.calculate(self.rightShootingEncoder.getVelocity(), rpm))
+        self.rightShootingMotor.set(rpm / 5100)
 
     def setAutonSprocketPosition(self, position):
         self.autonSprocketPosition = position

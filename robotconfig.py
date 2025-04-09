@@ -18,6 +18,12 @@ controllerConfig = {
         "DEADZONE": DEADZONE,
         "LEFT_TRIGGER_AXIS": 2,
         "RIGHT_TRIGGER_AXIS": 3,
+    },
+    "COMBINED": {
+        "ID": 2,
+        "DEADZONE": DEADZONE,
+        "LEFT_TRIGGER_AXIS": 2,
+        "RIGHT_TRIGGER_AXIS": 3
     }
 }
 

@@ -56,6 +56,8 @@ class MyRobot(wpilib.TimedRobot):
         self.swervometer = None
         self.driver = None
         self.operator = None
+        self.combined = None
+        self.combinedEnabled = True
         self.auton = None
         self.vision = None
 
@@ -84,6 +86,8 @@ class MyRobot(wpilib.TimedRobot):
                 controllers = self.controllerInit(config)
                 self.driver = controllers[0]
                 self.operator = controllers[1]
+                if self.combinedEnabled:
+                    self.combined = controllers[2]
             if key == 'VISION':
                 self.vision = self.initVision(config)
             if key == 'SWERVOMETER':
@@ -580,6 +584,26 @@ class MyRobot(wpilib.TimedRobot):
             b = -64.5634
             y = a * math.log(distance) + b
             self.mechanism.sprocketToPosition(y)"""
+        
+        if(self.combinedEnabled):
+            # Combined controller stuff
+            #rotate sprocket down
+            if self.combined.xboxController.getAButton():
+                self.mechanism.sprocketDown()
+                self.allowDropArm = False
+            #rotate sprocket up
+            elif self.combined.xboxController.getYButton():
+                self.mechanism.sprocketUp()
+                self.allowDropArm = False
+            else:
+                if not self.inADropDownThisCycle:
+                    self.mechanism.stopSprocket()
+            #intake
+            if(self.combined.xboxController.getLeftTriggerAxis() > 0.5):
+                self.mechanism.intakeNote()
+            #shoot
+            if(self.combined.xboxController.getRightTriggerAxis() > 0.5):
+                self.mechanism.fullIndex()
 
 
 
@@ -592,7 +616,7 @@ class MyRobot(wpilib.TimedRobot):
         driver = self.driver.xboxController
 
         # Implement clutch on driving and rotating.
-        translational_clutch = 0.357#1.0
+        translational_clutch = 0.5#1.0
         rotational_clutch = 0.5#1.0 
         if (driver.getRightBumper()):
             translational_clutch *= 0.5#0.5
@@ -602,6 +626,14 @@ class MyRobot(wpilib.TimedRobot):
             rotational_clutch = 0.35 #0.2 was a little too slow for rotation, but perfect for translation #out of data comment
         if (driver.getLeftTriggerAxis() > 0.7):
             rotational_clutch *= 0.5
+        if(self.combinedEnabled):
+            translational_clutch *= 0.5#0.5
+            rotational_clutch = 0.5#0.5 
+        if(self.combinedEnabled and self.combined.xboxController.getLeftBumper() and self.combined.xboxController.getRightBumper()):
+            #translational_clutch *= 2#0.5
+            #rotational_clutch = 2#0.5
+            pass
+        
 
         # Reset the gyro in the direction bot is facing.
         # Note this is a bad idea in competition, since it's reset automatically in robotInit.
@@ -620,6 +652,15 @@ class MyRobot(wpilib.TimedRobot):
             strafe = self.deadzoneCorrection(driver.getLeftX() * translational_clutch, self.driver.deadzone)
             fwd = self.deadzoneCorrection(driver.getLeftY() * translational_clutch, self.driver.deadzone)
             rcw = self.deadzoneCorrection(driver.getRightX() * rotational_clutch, self.driver.deadzone)
+
+        #combined controller stuff
+            if (self.combinedEnabled):
+                strafe = self.deadzoneCorrection(self.combined.xboxController.getLeftX() * translational_clutch, self.combined.deadzone)
+                fwd = self.deadzoneCorrection(self.combined.xboxController.getLeftY() * translational_clutch, self.combined.deadzone)
+                rcw = self.deadzoneCorrection(self.combined.xboxController.getRightX() * rotational_clutch, self.combined.deadzone)
+
+                if (self.combined.xboxController.getLeftTriggerAxis() > 0.7 and self.combined.xboxController.getRightTriggerAxis() > 0.7 and self.combined.xboxController.getXButton()):
+                    self.drivetrain.resetGyro()
 
             fwd *= -1 # Because controller is backwards from you think
 
@@ -703,6 +744,7 @@ class MyRobot(wpilib.TimedRobot):
             # Otherwise, make sure we are explicitly doing nothing, so bot does not drift.
             else:
                 self.drivetrain.idle()
+
         return False
 
     def getPOVCorner(self, value):
